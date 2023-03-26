@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "774657796898",
+    "project_id": "foodzik-61d17",
+    "storage_bucket": "foodzik-61d17.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774657796898:android:d26758d216dce192b8537b",
+        "android_client_info": {
+          "package_name": "com.example.foodzik"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "774657796898-9cgt0c6ietdib8b4ep4eaq1vc100bcgn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdIocc93zBftUxwJbOWTKaQlrTsobAUfI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "774657796898-9cgt0c6ietdib8b4ep4eaq1vc100bcgn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
