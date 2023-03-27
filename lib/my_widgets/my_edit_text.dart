@@ -23,8 +23,8 @@ Widget child;
                   end: Alignment.bottomLeft,
                   colors:
               [
-                Colors.grey.withOpacity(0.6),
-                Colors.white.withOpacity(0.1),
+                Colors.grey.withOpacity(0.2),
+                Colors.grey.withOpacity(0.7),
               ]),
               borderRadius: BorderRadius.circular(50),
               border: Border.all(color: greenTextColor,width: 1),
