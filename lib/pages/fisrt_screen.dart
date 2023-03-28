@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodzik/my_widgets/my_button.dart';
+import 'package:foodzik/pages/login_page.dart';
 import 'package:foodzik/pages/sign_up.dart';
 import 'package:foodzik/theme/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,7 +31,6 @@ class _FirstScreenState extends State<FirstScreen> {
        // width: size.width,
         child: Stack(
           children:[
-
             Positioned(
               bottom: -170,
               child: SizedBox(
@@ -47,7 +47,9 @@ class _FirstScreenState extends State<FirstScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 10),
                 child: CustomButton(
-                  onTap: (){},
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const LoginPage()));
+                  },
                   title: "Login",
                   padding: 10,
                 fontSize: 25,),
@@ -65,8 +67,6 @@ class _FirstScreenState extends State<FirstScreen> {
                   padding: 10,
                   fontSize: 25,),
               ),
-
-
             ],
           ),
 

@@ -1,4 +1,4 @@
-class User {
+class MyUser {
   String firstName;
   String lastName;
   String email;
@@ -8,7 +8,7 @@ class User {
   String address;
   int pin;
 
-  User({
+  MyUser({
      this.firstName="",
     this.lastName="",
     this.email="",

@@ -1,18 +1,22 @@
 import 'dart:math';
 import 'dart:ui';
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzik/my_widgets/my_button.dart';
 import 'package:foodzik/my_widgets/my_edit_text.dart';
+import 'package:foodzik/pages/home_page.dart';
 import 'package:foodzik/theme/colors.dart';
 import 'package:foodzik/utils/dialogs.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../model classes/user.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -22,6 +26,7 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  final databaseRef=FirebaseDatabase.instance.ref("/PendingApprovalUsers/");
   final _formKey = GlobalKey<FormState>();
   TextEditingController firstNameController=TextEditingController();
   TextEditingController lastNameController=TextEditingController();
@@ -30,17 +35,38 @@ class _SignupPageState extends State<SignupPage> {
   TextEditingController passwordController=TextEditingController();
   TextEditingController pinController=TextEditingController();
   TextEditingController addressController=TextEditingController();
-  User user=User();
+  MyUser user=MyUser();
   bool visiblePass=false;
   final picker = ImagePicker();
   File? titleImage;
   double? lat;
   double? long;
   String address = "";
+  bool loading=false;
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: Text(
+        "Sign up",
+        style: GoogleFonts.aBeeZee(color: greenTextColor, fontSize: 30),
+      ),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios_rounded,
+              color: Colors.black,
+              size: 30,
+            )),
+      ),
       body: SingleChildScrollView(
         child: Stack(children: [
           Positioned(
@@ -52,22 +78,6 @@ class _SignupPageState extends State<SignupPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SafeArea(
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back_ios_rounded,
-                      color: Colors.black,
-                      size: 30,
-                    )),
-              ),
-              Center(
-                  child: Text(
-                "Sign up",
-                style: GoogleFonts.aBeeZee(color: greenTextColor, fontSize: 30),
-              )),
               const SizedBox(height: 10,),
               //image
               Center(
@@ -219,7 +229,7 @@ class _SignupPageState extends State<SignupPage> {
                                      visiblePass=false;
                                    }
                                    setState(() {});
-                                 }, icon: visiblePass? Icon(Icons.visibility_off,color: Colors.grey[600],):  Icon(Icons.visibility,color: Colors.grey[600],)),
+                                 }, icon: visiblePass? const Icon(Icons.visibility_off,color: Colors.white,):  Icon(Icons.visibility,color: Colors.white,)),
                              border: InputBorder.none,
                              hintText: "Password",
                              hintStyle: const TextStyle(color: Colors.white70,fontSize: 18),
@@ -287,7 +297,7 @@ class _SignupPageState extends State<SignupPage> {
                                    borderRadius: BorderRadius.circular(20),
                                    border: Border.all(color: greenTextColor,width: 1),
                                  ),
-                                 child: Icon(Icons.location_on,color: Colors.grey,),
+                                 child:  const Icon(Icons.location_on,color: Colors.white,),
                                ),
                              ),
                            ),
@@ -323,19 +333,26 @@ class _SignupPageState extends State<SignupPage> {
                          ),
                        ),
                       ),
+                      //register button
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-                        child: CustomButton(onTap: (){
-                          if(_formKey.currentState!.validate()){
-                            print(user.firstName);
-                            print(user.lastName);
-                            print(user.email);
-                            print(user.password);
-                            print(user.phoneNumber);
-                            print(user.pin);
-                          }
-                        }, title: "Register",
-                        fontSize: 18,),
+                        child: LoadingButton(
+                          isLoading:loading,
+                          text: 'Register',
+                          click: () {
+                            setState(() {
+                              loading=true;
+                            });
+                            if(_formKey.currentState!.validate()&& titleImage!=null){
+                              registerUser(emailController.text, passwordController.text);
+                            }else{
+                              setState(() {
+                                loading=false;
+                              });
+                              Utils.showError("Complete Form","Complete the Form fields also add the image", context);
+                            }
+                          },
+                        ),
                       )
               ],),
                   ))
@@ -345,6 +362,63 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
   }
+  registerUser(String email,String password)async{
+    FirebaseAuth auth=FirebaseAuth.instance;
+
+    try{
+      //creating user
+      await auth.createUserWithEmailAndPassword(email: email, password: password).then((value)async{
+        //after user created uploading image to storage
+      firebase_storage.Reference storageRef = firebase_storage
+          .FirebaseStorage.instance
+          .ref("UsersImages/${user.firstName}_${user.lastName}");
+      firebase_storage.UploadTask imageUploadTask= storageRef.putFile(titleImage!.absolute);
+      await Future.value(imageUploadTask).then((value) async{
+        //after image uploaded get the getting the download url of the stored image
+        var imageUrl = await storageRef.getDownloadURL();
+        user.imagePath=imageUrl;
+        //upload detail to database in the pending approval list for registration
+        databaseRef.child(auth.currentUser!.uid.toString()).set({
+          "userId": auth.currentUser!.uid,
+          "email": email,
+          "firstName": user.firstName,
+          "lastName":user.lastName,
+          "address":user.address,
+          "phoneNumber":user.phoneNumber,
+          "pin":user.phoneNumber,
+          "imagePath":user.imagePath,
+        }).then((value){
+          Utils.showToast("user Created Successfully");
+          setState(() {
+            loading=false;
+          });
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+        })
+            .onError((error, stackTrace){ Utils.showError("Registration Error", error.toString(),context);
+        setState(() {
+          loading=false;
+        });
+            });
+      });
+
+      });
+    }on FirebaseAuthException catch (e) {
+      setState(() {
+        loading=false;
+      });
+      Utils.showError("Registration Error", e.message.toString(),context);
+      // Your logic for Firebase related exceptions
+    } catch (e) {
+      Utils.showToast(e.toString());
+      setState(() {
+        loading=false;
+      });
+      // your logic for other exceptions!
+    }
+
+  }
+
+
   pickImage() async {
     final pickerFile = await picker.pickImage(source: ImageSource.gallery,imageQuality: 40);
     setState(() {
@@ -363,8 +437,7 @@ class _SignupPageState extends State<SignupPage> {
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      Utils.showToast(
-          "Location services are disabled!\n Go to Settings>>Location>>Location Turn On.");
+      Utils.showError("Location Access","Location services are disabled!\n Go to Settings>>Location>>Location Turn On.", context);
       return Future.error('Location services are disabled.');
     }
 
@@ -377,15 +450,14 @@ class _SignupPageState extends State<SignupPage> {
         // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
-        Utils.showToast("Location permissions are denied !");
+       Utils.showError("Location Access","Location permissions are denied !", context);
         return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      Utils.showToast(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      Utils.showError("Location Access",   'Location permissions are permanently denied, we cannot request permissions.', context);
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
