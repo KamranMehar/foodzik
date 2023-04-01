@@ -149,7 +149,9 @@ class _LoginPageState extends State<LoginPage> {
       await auth.signInWithEmailAndPassword(email: email, password:password).then((value)
       =>{
         Utils.showToast("Login Successfully"),
-        
+      setState(() {
+      loading=false;
+      }),
         Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomePage())),
       } );
     } on FirebaseAuthException catch (e) {

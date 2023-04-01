@@ -1,10 +1,14 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodzik/my_widgets/my_button.dart';
+import 'package:foodzik/pages/home_page.dart';
 import 'package:foodzik/pages/login_page.dart';
 import 'package:foodzik/pages/sign_up.dart';
 import 'package:foodzik/theme/colors.dart';
+import 'package:foodzik/utils/dialogs.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FirstScreen extends StatefulWidget {
   const FirstScreen({Key? key}) : super(key: key);
@@ -15,6 +19,57 @@ class FirstScreen extends StatefulWidget {
 
 class _FirstScreenState extends State<FirstScreen> {
 
+  @override
+  void initState() {
+
+    checkAppPin();
+    // TODO: implement initState
+    super.initState();
+  }
+
+  checkAppPin()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? value = prefs.getString('pin');
+    if(value!=null){
+      print(value);
+      Utils.showToast("pin found");
+      TextEditingController textController = TextEditingController();
+
+      AwesomeDialog(
+        onDismissCallback: checkAppPin(),
+        context: context,
+        dialogType: DialogType.warning,
+        animType: AnimType.SCALE,
+        title: 'Enter Pin',
+        desc: 'Enter your Pin:',
+        body: TextFormField(
+          controller: textController,
+          decoration: InputDecoration(
+            hintText: 'pin',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+        ),
+        btnOkText: 'OK',
+        dismissOnBackKeyPress: false,
+        dismissOnTouchOutside: false,
+        isDense: true,
+        btnOkOnPress: () {
+          if(textController.text.contains(value)){
+            Utils.showToast("Correct Pin");
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
+          }else{
+            Utils.showToast("Wrong Pin");
+          }
+        },
+        btnCancelOnPress: () {},
+      ).show();
+     // Utils.showInputTextDialog(context);
+    }else{
+      Utils.showToast("pin  not found");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

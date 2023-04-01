@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -385,9 +385,12 @@ class _SignupPageState extends State<SignupPage> {
           "lastName":user.lastName,
           "address":user.address,
           "phoneNumber":user.phoneNumber,
-          "pin":user.phoneNumber,
+          "pin":user.pin,
           "imagePath":user.imagePath,
-        }).then((value){
+        }).then((value)async{
+          //save pin Locally
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('pin', pinController.text).then((value) => print('pin saved locally'));
           Utils.showToast("user Created Successfully");
           setState(() {
             loading=false;

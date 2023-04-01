@@ -45,6 +45,8 @@ dependencies:
   geocoding: any
   awesome_dialog: ^3.0.2
   firebase_storage: ^11.0.16
+  http:
+  shared_preferences:
 
 dev_dependencies:
   flutter_test:

@@ -2,7 +2,9 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:foodzik/pages/home_page.dart';
 import 'package:foodzik/theme/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Utils{
   static showToast(String text){
@@ -25,4 +27,5 @@ class Utils{
       btnOkColor: greenPrimary
     ).show();
   }
+
 }
