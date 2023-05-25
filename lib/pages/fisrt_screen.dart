@@ -1,8 +1,10 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodzik/my_widgets/my_button.dart';
-import 'package:foodzik/pages/home_page.dart';
+import 'package:foodzik/pages/home/home_page.dart';
+import 'package:foodzik/pages/home/ui_componets/foodzik_title.dart';
 import 'package:foodzik/pages/login_page.dart';
 import 'package:foodzik/pages/sign_up.dart';
 import 'package:foodzik/theme/colors.dart';
@@ -11,7 +13,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FirstScreen extends StatefulWidget {
-  const FirstScreen({Key? key}) : super(key: key);
+  bool showPinDialog;
+   FirstScreen({Key? key,this.showPinDialog=true}) : super(key: key);
 
   @override
   State<FirstScreen> createState() => _FirstScreenState();
@@ -21,10 +24,18 @@ class _FirstScreenState extends State<FirstScreen> {
 
   @override
   void initState() {
-
-    checkAppPin();
-    // TODO: implement initState
+    checkIfUserIsLoggedIn();
+     checkAppPin();
     super.initState();
+  }
+  checkIfUserIsLoggedIn() async {
+    // Check if the current user is null
+    User? user = FirebaseAuth.instance.currentUser;
+    if(user==null){
+      isLoggedIn=false;
+    }else{
+      isLoggedIn=true;
+    }
   }
 
   checkAppPin()async{
@@ -32,53 +43,65 @@ class _FirstScreenState extends State<FirstScreen> {
     String? value = prefs.getString('pin');
     if(value!=null){
       print(value);
-      Utils.showToast("pin found");
-      TextEditingController textController = TextEditingController();
-
-      AwesomeDialog(
-        onDismissCallback: checkAppPin(),
-        context: context,
-        dialogType: DialogType.warning,
-        animType: AnimType.SCALE,
-        title: 'Enter Pin',
-        desc: 'Enter your Pin:',
-        body: TextFormField(
-          controller: textController,
-          decoration: InputDecoration(
-            hintText: 'pin',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
-        ),
-        btnOkText: 'OK',
-        dismissOnBackKeyPress: false,
-        dismissOnTouchOutside: false,
-        isDense: true,
-        btnOkOnPress: () {
-          if(textController.text.contains(value)){
-            Utils.showToast("Correct Pin");
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
-          }else{
-            Utils.showToast("Wrong Pin");
-          }
-        },
-        btnCancelOnPress: () {},
-      ).show();
-     // Utils.showInputTextDialog(context);
+      if(widget.showPinDialog) {
+        showPinDialog(value);
+      }
     }else{
       Utils.showToast("pin  not found");
     }
   }
-
+  showPinDialog(String value){
+    TextEditingController textController = TextEditingController();
+    AwesomeDialog(
+      onDismissCallback: (type) {
+        // SystemNavigator.pop();
+      },
+      context: context,
+      dialogType: DialogType.warning,
+      animType: AnimType.SCALE,
+      title: 'Enter Pin',
+      desc: 'Enter your Pin:',
+      body: TextFormField(
+        maxLength: 4,
+        keyboardType: TextInputType.number,
+        obscureText: true,
+        controller: textController,
+        decoration: InputDecoration(
+          hintText: 'pin',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+      ),
+      btnOkText: 'OK',
+      dismissOnBackKeyPress: false,
+      dismissOnTouchOutside: false,
+      isDense: true,
+      btnOkOnPress: () async {
+        if (textController.text.contains(value)) {
+          Utils.showToast("Correct Pin");
+          if (isLoggedIn) {
+            Navigator.pushNamedAndRemoveUntil(context, "/mainScreen",(route) => false,);
+          } else {
+            Navigator.pushNamedAndRemoveUntil(context, "/login",(route) => false,);
+          }
+        } else {
+          Utils.showToast("Wrong Pin");
+          showPinDialog(value);
+        }
+      },
+    ).show();
+  }
+  bool isLoggedIn=false;
   @override
   Widget build(BuildContext context) {
     Size size= MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text("Foodzik",style: GoogleFonts.kolkerBrush(color: Colors.black,fontSize:70),),
+        title: FoodzikTitle(fontSize: 70,),
         centerTitle: true,
       ),
       body: Container(
@@ -103,15 +126,16 @@ class _FirstScreenState extends State<FirstScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 10),
                 child: CustomButton(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const LoginPage()));
+                      Navigator.pushNamed(context, "/login");
+                    //  Navigator.push(context, MaterialPageRoute(builder: (context)=>const LoginPage()));
                   },
                   title: "Login",
                   padding: 10,
                 fontSize: 25,),
               ),
               const SizedBox(height: 50,),
-              Padding(padding: const EdgeInsets.all(15),
-              child: Text("Don\'t have account",style: GoogleFonts.aBeeZee(color: Colors.black54,),),),
+               Padding(padding: const EdgeInsets.all(15),
+              child: Text("Don\'t have account",style: GoogleFonts.aBeeZee(fontSize: 16),),),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 10),
                 child: CustomButton(

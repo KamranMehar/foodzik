@@ -47,6 +47,10 @@ dependencies:
   firebase_storage: ^11.0.16
   http:
   shared_preferences:
+  flutter_zoom_drawer: ^3.0.4+1
+  package_info: ^2.0.0
+  badges:
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_test:

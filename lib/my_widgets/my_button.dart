@@ -72,8 +72,9 @@ class LoadingButton extends StatelessWidget {
         child:isLoading?
         const Center(
             child: SizedBox(
-                height: 30,
-                child: CircularProgressIndicator(color: Colors.white,))):
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(color: Colors.white,strokeWidth: 1,))):
         Center(child: Text(text,style:const TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.white),)),
       ),
     );

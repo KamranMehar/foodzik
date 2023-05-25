@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzik/my_widgets/my_button.dart';
 import 'package:foodzik/my_widgets/my_edit_text.dart';
-import 'package:foodzik/pages/home_page.dart';
+import 'package:foodzik/pages/home/home_page.dart';
 import 'package:foodzik/theme/colors.dart';
 import 'package:foodzik/utils/dialogs.dart';
 import 'package:geocoding/geocoding.dart';
@@ -35,7 +35,7 @@ class _SignupPageState extends State<SignupPage> {
   TextEditingController passwordController=TextEditingController();
   TextEditingController pinController=TextEditingController();
   TextEditingController addressController=TextEditingController();
-  MyUser user=MyUser();
+ late MyUser user;
   bool visiblePass=false;
   final picker = ImagePicker();
   File? titleImage;
@@ -239,7 +239,7 @@ class _SignupPageState extends State<SignupPage> {
                             if(value!.isEmpty){
                               return "Password is Empty";
                             }else{
-                              user.password=passwordController.text;
+                             // user.password=passwordController.text;
                             }
                            },
                          ),

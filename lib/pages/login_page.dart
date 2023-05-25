@@ -7,7 +7,7 @@ import 'package:foodzik/utils/dialogs.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../theme/colors.dart';
-import 'home_page.dart';
+import 'home/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -20,14 +20,14 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController=TextEditingController();
   TextEditingController passwordController=TextEditingController();
   bool visiblePass=false;
-  MyUser user=MyUser();
+  late MyUser user;
   bool loading=false;
   @override
   Widget build(BuildContext context) {
     Size size=MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+       // backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
         centerTitle: true,
@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                         if(value!.isEmpty){
                           return "Password is Empty";
                         }else{
-                          user.password=passwordController.text;
+                         // user.password=passwordController.text;
                         }
                       },
                     ),
@@ -125,6 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: size.width* 3/5,),
                   //Button
                   LoadingButton(
+                    padding: 15,
                     isLoading: loading,
                       text: "Login",
                       click: (){
@@ -152,7 +153,8 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
       loading=false;
       }),
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomePage())),
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false)
+        //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomePage()), (route) => true)
       } );
     } on FirebaseAuthException catch (e) {
       setState(() {

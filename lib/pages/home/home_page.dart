@@ -2,8 +2,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:foodzik/admin%20pages/approval_pending_users.dart';
-import 'package:foodzik/theme/colors.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:foodzik/model%20classes/user.dart';
+import 'package:foodzik/pages/home/ui_componets/foodzik_title.dart';
+import 'package:foodzik/pages/home/ui_componets/user_profile.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
@@ -14,53 +16,65 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+enum MenuAction{
+  logout,
+  settings,
+  approveNewUsers,
+  }
+
 class _HomePageState extends State<HomePage> {
 
   FirebaseAuth auth=FirebaseAuth.instance;
   bool isAdmin=false;
   bool isRegistrationApproved=false;
-
+  String userImage='';
   @override
   Widget build(BuildContext context) {
     Size size=MediaQuery.of(context).size;
+    bool isDark=false;
+    ThemeData theme = Theme.of(context);
     return Scaffold(
+      // backgroundColor: ,
+      appBar: AppBar(
+       // backgroundColor: Colors.white,
+        elevation: 0,
+        leadingWidth: 60,
+        leading:   InkWell(
+          onTap: ()=>ZoomDrawer.of(context)!.toggle(),
+          child:  Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child:ProfileImage(userImageFuture: fetchUserImage(),size: 40,)
+          ),
+        ),
+        title:  FoodzikTitle(),
+          centerTitle: true,
+        actions: [
+          ///notifications
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Badge(
+                alignment: Alignment.center,
+                label: Text("5",style: GoogleFonts.aBeeZee(),),
+                child: IconButton(onPressed: (){},
+                    icon:  Icon(Icons.notifications,size: 35,color: theme.brightness==Brightness.light?Colors.black:
+                      Colors.white,))),
+          )
+        ],
+      ),
      body: SafeArea(
        child: Column(
        mainAxisAlignment: MainAxisAlignment.start,
        crossAxisAlignment: CrossAxisAlignment.start,
        children: [
-         //app bar
-         Padding(
+        ///admin banner
+       AdminBanner(isAdmin: isAdmin, size: size),
+         //Slogan
+          Padding(
            padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-           child: Row(
-             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-             children: [
-               CircleAvatar(radius: 25,
-                 backgroundColor: Colors.grey[300],
-                 backgroundImage: const NetworkImage("https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),),
-               Text("Foodzik",style: GoogleFonts.kolkerBrush(color: Colors.black,fontSize:40),),
-               SizedBox(
-                   height: 40,
-                   width: 40,
-                   child: Image.asset("assets/menu.png")),
-
-             ],),
-         ),
-        Visibility(
-          visible: isAdmin,
-          child: Container(
-            height: 12,
-            width: size.width,
-            color: greenPrimary,
-            child: Center(child: Text("Admin",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 12),),),
-          ),
-        ),
-         //slogan
-         Padding(
-           padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-           child: Text("Let\'s find\nWhat to cock today",style: GoogleFonts.viga(fontSize: 21,color: Colors.black),),
+           child: SloganText(fontSize: 16,)
          ),
          const Spacer(),
+          //Approval Waiting Text fo user
           Visibility(
             visible: isRegistrationApproved,
             child: Padding(
@@ -69,23 +83,6 @@ class _HomePageState extends State<HomePage> {
                style: GoogleFonts.readexPro(color: Colors.red,fontSize: 18),),),
             ),
           ),
-         Visibility(
-             visible: isAdmin,
-             child: Center(
-               child: InkWell(
-                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const UserApprovalPage()));
-                 },
-                 child: Container(
-                   margin: const EdgeInsets.all(15),
-                   decoration: BoxDecoration(color: greenPrimary,
-                      borderRadius: BorderRadius.circular(15)
-                   ),
-                   padding:const EdgeInsets.all(10),
-                  child:Text("Approve new Users Registration",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 15),),
-         ),
-               ),
-             )),
          const Spacer(),
        ],
      ),
@@ -96,7 +93,32 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     checkUserIsAdmin();
     checkRegistrationApproval();
+
     super.initState();
+  }
+  Future<String> fetchUserImage() async {
+    try {
+      var userId = FirebaseAuth.instance.currentUser!.uid;
+      DatabaseReference ref =
+      FirebaseDatabase.instance.ref('/Users/$userId');
+      var snapshot = await ref.get();
+      if (snapshot.exists) {
+        Map<dynamic, dynamic> mapList = snapshot.value as dynamic;
+        if (mapList.isNotEmpty) {
+          MyUser myUser = MyUser.fromJson(mapList);
+          return myUser.imagePath;
+        } else {
+          print("No user data found");
+          return '';
+        }
+      } else {
+        print("No snapshot found");
+        return '';
+      }
+    } catch (error) {
+      print("Error fetching user image: $error");
+      return '';
+    }
   }
 
   checkUserIsAdmin()async{
