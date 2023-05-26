@@ -4,7 +4,6 @@ import 'package:foodzik/theme/colors.dart';
 class NumericKeyboardButton extends StatefulWidget {
   final String number;
   final void Function(String) onNumberPressed;
-
   NumericKeyboardButton({
     required this.number,
     required this.onNumberPressed,
