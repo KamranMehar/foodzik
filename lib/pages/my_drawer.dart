@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzik/model%20classes/theme_model.dart';
 import 'package:foodzik/my_widgets/drawer_tile.dart';
@@ -34,9 +35,6 @@ class _MyDrawerState extends State<MyDrawer> {
             children: [
 
               const SizedBox(height: 50,),
-              DrawerTile(onTap: (){
-
-              }, text: "change Theme"),
                 SizedBox(height: height,),
               DrawerTile(onTap: (){}, text: "Profile"),
                SizedBox(height: height,),
@@ -109,13 +107,17 @@ class _ThemeChangeWidgetState extends State<ThemeChangeWidget> {
      width: MediaQuery.of(context).size.width* 4/5,
       child: Row(
         children: [
-          Text("Dark Theme",style:GoogleFonts.aBeeZee(fontSize: 16,color: Colors.white)),
+          Text("Dark Theme",style:GoogleFonts.aBeeZee(fontSize: 14,color: Colors.white)),
           const Spacer(),
-          Switch.adaptive(
-            inactiveThumbColor: Colors.white,
-              value: modelTheme.isDark, onChanged: (value){
+          SizedBox(
+            child: CupertinoSwitch(
+              activeColor: CupertinoColors.activeGreen,
+              value: modelTheme.isDark,
+              onChanged: (value) {
                 modelTheme.isDark=value;
-          }),
+              },
+            ),
+          ),
         ],
       ),
     );
