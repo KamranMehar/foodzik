@@ -8,10 +8,10 @@ import 'package:foodzik/pages/main_screen.dart';
 import 'package:foodzik/pages/sign_up.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-
 import 'model classes/theme_model.dart';
 
 void main() async{
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([
@@ -22,36 +22,30 @@ void main() async{
   ));
 }
 
-
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-
-   return  ChangeNotifierProvider<ThemeProvider>(
-     create: (context) =>ThemeProvider(),
-     child: Consumer<ThemeProvider>(
-       builder: (context,ThemeProvider themeProvider,child) {
-         return MaterialApp(
-                themeMode: themeProvider.themeMode,
-                theme: MyTheme.lightTheme,
-                darkTheme: MyTheme.darkTheme,
-                routes: {
-                  '/home': (context) => HomePage(),
-                  '/firstScreen': (context) => FirstScreen(),
-                  '/login': (context) => LoginPage(),
-                  '/signup': (context) => SignupPage(),
-                  '/approveUser': (context) => UserApprovalPage(),
-                  '/mainScreen': (context) => MainScreen(),
-                },
-                debugShowCheckedModeBanner: false,
-                title: 'Theme Manager Demo',
-                home: FirstScreen()
+    return ChangeNotifierProvider(
+      create: (_) => ModelTheme(),
+      child: Consumer<ModelTheme>(
+          builder: (context, ModelTheme themeNotifier, child) {
+            return MaterialApp(
+              theme: themeNotifier.isDark
+                  ? MyTheme.darkTheme
+                  : MyTheme.lightTheme,
+              title: 'Flutter Demo',
+              routes: {
+                '/home': (context) => HomePage(),
+                '/firstScreen': (context) => FirstScreen(),
+                '/login': (context) => LoginPage(),
+                '/signup': (context) => SignupPage(),
+                '/approveUser': (context) => UserApprovalPage(),
+                '/mainScreen': (context) => MainScreen(),
+              },
+              home: FirstScreen(),
+              debugShowCheckedModeBanner: false,
+            );
+          }),
     );
-       }
-     )
-
-   );
-
   }
 }

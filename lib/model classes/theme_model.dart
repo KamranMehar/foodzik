@@ -1,14 +1,28 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:foodzik/theme/colors.dart';
+import 'package:foodzik/model%20classes/theme_shared_pref.dart';
+import '../theme/colors.dart';
 
-class ThemeProvider extends ChangeNotifier{
-  ThemeMode themeMode=ThemeMode.dark;
-  bool get isDarkMode=>themeMode==ThemeMode.dark;
+class ModelTheme extends ChangeNotifier {
+  late bool _isDark;
+  late MyThemePreferences _preferences;
+  bool get isDark => _isDark;
 
-  void toggleTheme(bool isOn){
-    themeMode=isOn?ThemeMode.dark:ThemeMode.light;
+  ModelTheme() {
+    _isDark = false;
+    _preferences = MyThemePreferences();
+    getPreferences();
+  }
+//Switching the themes
+  set isDark(bool value) {
+    _isDark = value;
+    _preferences.setTheme(value);
+    notifyListeners();
+  }
+
+  getPreferences() async {
+    _isDark = await _preferences.getTheme();
     notifyListeners();
   }
 }
@@ -16,25 +30,20 @@ class ThemeProvider extends ChangeNotifier{
 
 class MyTheme {
   static final darkTheme=ThemeData(
-    scaffoldBackgroundColor: Colors.grey.shade800,
-        appBarTheme:
-           const AppBarTheme(
-               iconTheme: IconThemeData(color: Colors.white,),
-             backgroundColor: Colors.transparent,
-             systemOverlayStyle: SystemUiOverlayStyle(
-               statusBarIconBrightness: Brightness.light,
-               statusBarColor: Colors.transparent,
-             ),
-             /* systemOverlayStyle: SystemUiOverlayStyle(
-                  statusBarIconBrightness: Brightness.light,
-                  statusBarColor: Colors.transparent,
-                  statusBarBrightness: Brightness.light
-              )*/
+      scaffoldBackgroundColor: Colors.grey.shade800,
+      appBarTheme:
+      const AppBarTheme(
+        iconTheme: IconThemeData(color: Colors.white,),
+        backgroundColor: Colors.transparent,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.light,
+          statusBarColor: Colors.transparent,
         ),
-        colorScheme: const ColorScheme.dark(
-            primary: greenPrimary,
-            secondary: greenTextColor
-        )
+      ),
+      colorScheme: const ColorScheme.dark(
+          primary: greenPrimary,
+          secondary: greenTextColor
+      )
   );
 
   static final lightTheme=ThemeData(
@@ -46,16 +55,11 @@ class MyTheme {
         statusBarIconBrightness: Brightness.dark,
         statusBarColor: Colors.transparent,
       ),
-       /* systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarIconBrightness: Brightness.light,
-            statusBarColor: Colors.transparent,
-            statusBarBrightness: Brightness.light
-        )*/
     ),
-      scaffoldBackgroundColor: Colors.white,
-      colorScheme: const ColorScheme.light(
+    scaffoldBackgroundColor: Colors.white,
+    colorScheme: const ColorScheme.light(
         primary: greenPrimary,
         secondary: greenTextColor
-      ),
+    ),
   );
 }

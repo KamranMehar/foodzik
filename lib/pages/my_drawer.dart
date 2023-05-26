@@ -87,7 +87,7 @@ class ThemeChangeWidget extends StatefulWidget {
 class _ThemeChangeWidgetState extends State<ThemeChangeWidget> {
   @override
   Widget build(BuildContext context) {
-    final themeProvider =Provider.of<ThemeProvider>(context);
+    final modelTheme =Provider.of<ModelTheme>(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
@@ -103,7 +103,6 @@ class _ThemeChangeWidgetState extends State<ThemeChangeWidget> {
             Colors.blue,
             greenTextColor,
           ]),
-
           // color: greenTextColor,
           borderRadius: BorderRadius.circular(15)
       ),
@@ -114,8 +113,8 @@ class _ThemeChangeWidgetState extends State<ThemeChangeWidget> {
           const Spacer(),
           Switch.adaptive(
             inactiveThumbColor: Colors.white,
-              value: themeProvider.isDarkMode, onChanged: (value){
-                themeProvider.toggleTheme(value);
+              value: modelTheme.isDark, onChanged: (value){
+                modelTheme.isDark=value;
           }),
         ],
       ),

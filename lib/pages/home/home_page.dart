@@ -31,7 +31,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Size size=MediaQuery.of(context).size;
-    bool isDark=false;
     ThemeData theme = Theme.of(context);
     return Scaffold(
       // backgroundColor: ,
@@ -56,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                 alignment: Alignment.center,
                 label: Text("5",style: GoogleFonts.aBeeZee(),),
                 child: IconButton(onPressed: (){},
-                    icon:  Icon(Icons.notifications,size: 35,color: theme.brightness==Brightness.light?Colors.black:
+                    icon:  Icon(Icons.shopping_cart,size: 35,color: theme.brightness==Brightness.light?Colors.black:
                       Colors.white,))),
           )
         ],
