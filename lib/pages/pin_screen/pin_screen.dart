@@ -24,7 +24,7 @@ class _PinScreenState extends State<PinScreen> {
     ///temperary
    // savePin();
     checkIfUserIsLoggedIn();
-    Future.delayed(Duration(seconds: 5),(){
+    Future.delayed(const Duration(seconds: 3),(){
       setState(() {
         isLoading=false;
       });
@@ -154,22 +154,7 @@ class _PinScreenState extends State<PinScreen> {
                   Utils.showToast("Wrong Pin");
                   inputProvider.clearInput();
                 }
-
-    }
-/*
-              else if(inputProvider.input.length==4){
-                  if(inputProvider.input.contains(pin)){
-                    print("Correct Pin");
-                    if(isLoggedIn){
-                      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-                    }else{
-                      Navigator.pushNamedAndRemoveUntil(context, '/firstScreen', (route) => false);
-                    }
-                  }else{
-                    Utils.showToast("Wrong Pin");
-                    inputProvider.clearInput();
-                  }
-              }*/
+              }
             },
           ),
         ],
