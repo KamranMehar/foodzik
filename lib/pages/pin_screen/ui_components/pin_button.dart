@@ -26,7 +26,7 @@ class _NumericKeyboardButtonState extends State<NumericKeyboardButton> {
     setState(() {
       _isPressed = false;
     });
-    _handleNumberPressed(widget.number);
+    _handleNumberPressed(widget.number.trim());
   }
 
   void _handleTapCancel() {
@@ -37,7 +37,7 @@ class _NumericKeyboardButtonState extends State<NumericKeyboardButton> {
 
   void _handleNumberPressed(String number) {
     if (widget.onNumberPressed != null) {
-      widget.onNumberPressed(number);
+      widget.onNumberPressed(number.trim());
     }
   }
 

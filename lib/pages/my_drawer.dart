@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:foodzik/model%20classes/theme_model.dart';
+import 'package:foodzik/provider%20classes/theme_model.dart';
 import 'package:foodzik/my_widgets/drawer_tile.dart';
 import 'package:foodzik/pages/home/ui_componets/foodzik_title.dart';
 import 'package:google_fonts/google_fonts.dart';

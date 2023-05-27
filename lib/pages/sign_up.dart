@@ -395,7 +395,7 @@ class _SignupPageState extends State<SignupPage> {
           setState(() {
             loading=false;
           });
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+          Navigator.pushNamedAndRemoveUntil(context, '/mainScreen', (route) => false);
         })
             .onError((error, stackTrace){ Utils.showError("Registration Error", error.toString(),context);
         setState(() {

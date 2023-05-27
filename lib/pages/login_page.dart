@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
       loading=false;
       }),
-        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false)
+        Navigator.pushNamedAndRemoveUntil(context, '/mainScreen', (route) => false)
         //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomePage()), (route) => true)
       } );
     } on FirebaseAuthException catch (e) {
