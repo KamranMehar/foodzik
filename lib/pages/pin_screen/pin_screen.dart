@@ -1,4 +1,3 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzik/pages/home/ui_componets/foodzik_title.dart';
@@ -21,8 +20,6 @@ class PinScreen extends StatefulWidget {
 class _PinScreenState extends State<PinScreen> {
   @override
   void initState() {
-    ///temperary
-   // savePin();
     checkIfUserIsLoggedIn();
     Future.delayed(const Duration(seconds: 3),(){
       setState(() {
@@ -178,50 +175,5 @@ class _PinScreenState extends State<PinScreen> {
     print(value);
     return value;
   }
-
-  showPinDialog(String value){
-    TextEditingController textController = TextEditingController();
-    AwesomeDialog(
-      onDismissCallback: (type) {
-        // SystemNavigator.pop();
-      },
-      context: context,
-      dialogType: DialogType.warning,
-      animType: AnimType.SCALE,
-      title: 'Enter Pin',
-      desc: 'Enter your Pin:',
-      body: TextFormField(
-        maxLength: 4,
-        keyboardType: TextInputType.number,
-        obscureText: true,
-        controller: textController,
-        decoration: InputDecoration(
-          hintText: 'pin',
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-      ),
-      btnOkText: 'OK',
-      dismissOnBackKeyPress: false,
-      dismissOnTouchOutside: false,
-      isDense: true,
-      btnOkOnPress: () async {
-        if (textController.text.contains(value)) {
-          Utils.showToast("Correct Pin");
-          if (isLoggedIn) {
-            Navigator.pushNamedAndRemoveUntil(context, "/mainScreen",(route) => false,);
-          } else {
-            Navigator.pushNamedAndRemoveUntil(context, "/login",(route) => false,);
-          }
-        } else {
-          Utils.showToast("Wrong Pin");
-          showPinDialog(value);
-        }
-      },
-    ).show();
-  }
-
-
 }
 

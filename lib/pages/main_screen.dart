@@ -19,6 +19,8 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
      // backgroundColor: greenPrimary,
       body: ZoomDrawer(
+        androidCloseOnBackTap: true,
+        isRtl: true,
         menuScreen: const MyDrawer() ,
         mainScreen: HomePage(),
         showShadow: true,

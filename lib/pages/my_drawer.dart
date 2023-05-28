@@ -107,7 +107,8 @@ class _ThemeChangeWidgetState extends State<ThemeChangeWidget> {
      width: MediaQuery.of(context).size.width* 4/5,
       child: Row(
         children: [
-          Text("Dark Theme",style:GoogleFonts.aBeeZee(fontSize: 14,color: Colors.white)),
+          const SizedBox(width: 10,),
+          Icon(modelTheme.isDark==true?Icons.brightness_2:Icons.brightness_7),
           const Spacer(),
           SizedBox(
             child: CupertinoSwitch(
