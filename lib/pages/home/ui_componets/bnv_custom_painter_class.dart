@@ -1,5 +1,6 @@
 //Copy this CustomPainter code to the Bottom of the File
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class RPSCustomPainter extends CustomPainter {
   Color filColor;
@@ -55,7 +56,7 @@ class RPSCustomPainter extends CustomPainter {
     path_0.cubicTo(size.width*0.001292035,size.height*0.2454393,size.width*0.0009955752,size.height*0.3179907,size.width*0.0009955752,size.height*0.4953271);
 
     Paint paint_0_fill = Paint()..style=PaintingStyle.fill;
-    paint_0_fill.color = stockColor;//.withOpacity(1.0);
+    paint_0_fill.color =stockColor;//.withOpacity(1.0);
     canvas.drawPath(path_0,paint_0_fill);
 
     Path path_1 = Path();

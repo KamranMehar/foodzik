@@ -4,7 +4,7 @@ import 'package:flutter_zoom_drawer/config.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:foodzik/pages/home/home_page.dart';
 import 'package:foodzik/theme/colors.dart';
-import 'my_drawer.dart';
+import 'drawer/my_drawer.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -21,16 +21,15 @@ class _MainScreenState extends State<MainScreen> {
       body: ZoomDrawer(
         androidCloseOnBackTap: true,
         isRtl: true,
-        menuScreen: const MyDrawer() ,
-        mainScreen: HomePage(),
+        menuScreen:  MyDrawer(),
+        mainScreen: const HomePage(),
         showShadow: true,
         style: DrawerStyle.defaultStyle,
         drawerShadowsBackgroundColor: greenPrimary,
         borderRadius: 35,
         mainScreenTapClose: false,
         slideWidth:  MediaQuery.of(context).size.width * 0.65,
-        angle: 0.0//180*(pi/180.0),
-
+        angle: 0.0,//180*(pi/180.0),
       ),
     );
   }

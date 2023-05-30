@@ -6,10 +6,10 @@ import 'package:foodzik/model%20classes/user.dart';
 import 'package:foodzik/page_view_tabs/cart_tab.dart';
 import 'package:foodzik/page_view_tabs/favourite_tab.dart';
 import 'package:foodzik/page_view_tabs/home_tab.dart';
-import 'package:foodzik/pages/home/ui_componets/bnv_custom_painter_class.dart';
 import 'package:foodzik/pages/home/ui_componets/bnv_home_page.dart';
 import 'package:foodzik/pages/home/ui_componets/foodzik_title.dart';
 import 'package:foodzik/pages/home/ui_componets/user_profile.dart';
+import 'package:foodzik/pages/drawer/my_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {

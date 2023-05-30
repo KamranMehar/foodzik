@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzik/pages/drawer/components/drawer_greeting.dart';
 import 'package:foodzik/provider%20classes/theme_model.dart';
 import 'package:foodzik/my_widgets/drawer_tile.dart';
-import 'package:foodzik/pages/home/ui_componets/foodzik_title.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
-import '../theme/colors.dart';
+import '../../theme/colors.dart';
 
 
 class MyDrawer extends StatefulWidget {
-  const MyDrawer({Key? key}) : super(key: key);
+
+   MyDrawer({Key? key, }) : super(key: key);
 
   @override
   State<MyDrawer> createState() => _MyDrawerState();
@@ -20,43 +21,37 @@ class MyDrawer extends StatefulWidget {
 
 
 class _MyDrawerState extends State<MyDrawer> {
-
-
-
   double height=10;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: FoodzikTitle(fontSize: 70),elevation: 0,),
+      appBar: AppBar(elevation: 0,),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Column(
-            children: [
-
-              const SizedBox(height: 50,),
-                SizedBox(height: height,),
-              DrawerTile(onTap: (){}, text: "Profile"),
-               SizedBox(height: height,),
-              DrawerTile(onTap: (){}, text: "History"),
-               SizedBox(height: height,),
-              DrawerTile(onTap: (){}, text: "Logout"),
-               SizedBox(height: height,),
-              const ThemeChangeWidget(),
+        child: Column(
+          children: [
+            const DrawerGreetingText(),
+            const SizedBox(height: 10,),
               SizedBox(height: height,),
-              //app version
-              FutureBuilder<PackageInfo>(
-                future: PackageInfo.fromPlatform(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text('Version : ${snapshot.data!.version}',style: GoogleFonts.aBeeZee(fontSize: 14),);
-                  } else   {
-                    return Text('');
-                  }
-                },
-              ),
-            ],
-          ),
+            DrawerTile(onTap: (){}, text: "Profile"),
+             SizedBox(height: height,),
+            DrawerTile(onTap: (){}, text: "History"),
+             SizedBox(height: height,),
+            DrawerTile(onTap: (){}, text: "Logout"),
+             SizedBox(height: height,),
+            const ThemeChangeWidget(),
+            SizedBox(height: height,),
+            //app version
+            FutureBuilder<PackageInfo>(
+              future: PackageInfo.fromPlatform(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text('Version : ${snapshot.data!.version}',style: GoogleFonts.aBeeZee(fontSize: 14),);
+                } else   {
+                  return Text('');
+                }
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -72,6 +67,7 @@ class _MyDrawerState extends State<MyDrawer> {
     super.initState();
   }
 
+
 }
 
 
@@ -86,32 +82,22 @@ class _ThemeChangeWidgetState extends State<ThemeChangeWidget> {
   @override
   Widget build(BuildContext context) {
     final modelTheme =Provider.of<ModelTheme>(context);
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 600),
       padding: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
-          boxShadow: const [
-            BoxShadow(
-                color: Colors.black26,
-                offset: Offset(4,4),
-                blurRadius: 7,
-                spreadRadius: 2
-            )
-          ],
-          gradient:  const LinearGradient(colors: [
-            Colors.blue,
-            greenTextColor,
-          ]),
-          // color: greenTextColor,
+          color: modelTheme.isDark?Color(0xffD9D9D9):Color(0xff888282),
           borderRadius: BorderRadius.circular(15)
       ),
      width: MediaQuery.of(context).size.width* 4/5,
       child: Row(
         children: [
           const SizedBox(width: 10,),
-          Icon(modelTheme.isDark==true?Icons.brightness_2:Icons.brightness_7),
+          Icon(modelTheme.isDark==true?Icons.brightness_2:Icons.brightness_7,color: modelTheme.isDark?Colors.black:Colors.white,),
           const Spacer(),
           SizedBox(
             child: CupertinoSwitch(
+              trackColor: Colors.grey.shade800,
               activeColor: CupertinoColors.activeGreen,
               value: modelTheme.isDark,
               onChanged: (value) {
