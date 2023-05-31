@@ -52,7 +52,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 return Visibility(
                   visible: isAdminProvider.isAdmin,
                   child: DrawerTile(onTap: (){
-
+                    Navigator.pushNamed(context, "/addRecipe");
                   }, text: "Add Recipe"),
                 );
               }

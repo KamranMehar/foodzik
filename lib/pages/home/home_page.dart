@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
         title: FoodzikTitle(),
         centerTitle: true,
         actions: [
-          ///notifications
+          ///Drawer
           Badge(
               isLabelVisible: false,
               alignment: Alignment.center,
