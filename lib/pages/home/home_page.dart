@@ -9,8 +9,9 @@ import 'package:foodzik/page_view_tabs/home_tab.dart';
 import 'package:foodzik/pages/home/ui_componets/bnv_home_page.dart';
 import 'package:foodzik/pages/home/ui_componets/foodzik_title.dart';
 import 'package:foodzik/pages/home/ui_componets/user_profile.dart';
-import 'package:foodzik/pages/drawer/my_drawer.dart';
+import 'package:foodzik/provider%20classes/is_admin_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,17 +20,10 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-enum MenuAction {
-  logout,
-  settings,
-  approveNewUsers,
-}
-
 class _HomePageState extends State<HomePage> {
   final PageController _pageController = PageController(initialPage: 1);
   int selectedIndex = 1;
   FirebaseAuth auth = FirebaseAuth.instance;
-  bool isAdmin = false;
   String userImage = '';
   @override
   Widget build(BuildContext context) {
@@ -79,7 +73,11 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ///admin banner
-              AdminBanner(isAdmin: isAdmin, size: size),
+              Consumer<IsAdminProvider>(
+                builder: (context,isAdminProvider,_) {
+                  return AdminBanner(isAdmin: isAdminProvider.isAdmin, size: size);
+                }
+              ),
               Expanded(
                 child: PageView(
                   controller: _pageController,
@@ -104,12 +102,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  @override
-  void initState() {
-    checkUserIsAdmin();
-    super.initState();
-  }
-
   Future<String> fetchUserImage() async {
     try {
       var userId = FirebaseAuth.instance.currentUser!.uid;
@@ -132,25 +124,5 @@ class _HomePageState extends State<HomePage> {
       print("Error fetching user image: $error");
       return '';
     }
-  }
-
-  checkUserIsAdmin() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    final uId = auth.currentUser!.uid;
-    DatabaseReference ref = FirebaseDatabase.instance.ref("admin_uid/$uId");
-    ref.once().then((event) {
-      final dataSnapshot = event.snapshot;
-      if (dataSnapshot.exists) {
-        print("Is Admin");
-        setState(() {});
-        isAdmin = true;
-        final myValue = dataSnapshot.value;
-        print(myValue);
-      } else {
-        setState(() {});
-        print("Not Admin");
-        isAdmin = false;
-      }
-    });
   }
 }

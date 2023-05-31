@@ -1,18 +1,21 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzik/pages/drawer/components/drawer_greeting.dart';
 import 'package:foodzik/provider%20classes/theme_model.dart';
 import 'package:foodzik/my_widgets/drawer_tile.dart';
+import 'package:foodzik/utils/dialogs.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
-import '../../theme/colors.dart';
+
+import '../../provider classes/is_admin_provider.dart';
 
 
 class MyDrawer extends StatefulWidget {
-
-   MyDrawer({Key? key, }) : super(key: key);
+  bool isAdmin;
+   MyDrawer({Key? key,this.isAdmin=false, }) : super(key: key);
 
   @override
   State<MyDrawer> createState() => _MyDrawerState();
@@ -32,11 +35,28 @@ class _MyDrawerState extends State<MyDrawer> {
             const DrawerGreetingText(),
             const SizedBox(height: 10,),
               SizedBox(height: height,),
-            DrawerTile(onTap: (){}, text: "Profile"),
+            DrawerTile(onTap: (){}, text: "Notifications"),
              SizedBox(height: height,),
             DrawerTile(onTap: (){}, text: "History"),
              SizedBox(height: height,),
-            DrawerTile(onTap: (){}, text: "Logout"),
+            DrawerTile(onTap: (){
+              Utils.showAlertDialog("Are you Sure to Logout", context, ()async{
+                await FirebaseAuth.instance.signOut().then((value){
+                  Navigator.pushNamedAndRemoveUntil(context, "/firstScreen", (route) => false);
+                });
+              });
+            }, text: "Logout"),
+            SizedBox(height: height,),
+            Consumer<IsAdminProvider>(
+              builder: (context,isAdminProvider,_) {
+                return Visibility(
+                  visible: isAdminProvider.isAdmin,
+                  child: DrawerTile(onTap: (){
+
+                  }, text: "Add Recipe"),
+                );
+              }
+            ),
              SizedBox(height: height,),
             const ThemeChangeWidget(),
             SizedBox(height: height,),

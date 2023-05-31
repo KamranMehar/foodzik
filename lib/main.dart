@@ -8,6 +8,7 @@ import 'package:foodzik/pages/main_screen.dart';
 import 'package:foodzik/pages/pin_screen/pin_screen.dart';
 import 'package:foodzik/pages/sign_up.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:foodzik/provider%20classes/is_admin_provider.dart';
 import 'package:foodzik/provider%20classes/pin_input_provider.dart';
 import 'package:provider/provider.dart';
 import 'provider classes/theme_model.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<ModelTheme>(create: (_) => ModelTheme()),
         ChangeNotifierProvider<InputProvider>(create: (_) => InputProvider(),),
+        ChangeNotifierProvider<IsAdminProvider>(create: (_) => IsAdminProvider()),
         // Add more providers here if needed
       ],
       child: Consumer<ModelTheme>(
