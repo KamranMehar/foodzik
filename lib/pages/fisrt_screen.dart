@@ -54,7 +54,7 @@ class _FirstScreenState extends State<FirstScreen> {
                SizedBox(height: size.width*1/5,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 10),
-                child: CustomButton(
+                child: MyButton(
                   onTap: (){
                       Navigator.pushNamed(context, "/login");
                     //  Navigator.push(context, MaterialPageRoute(builder: (context)=>const LoginPage()));
@@ -68,7 +68,7 @@ class _FirstScreenState extends State<FirstScreen> {
               child: Text("Don\'t have account",style: GoogleFonts.aBeeZee(fontSize: 16),),),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 10),
-                child: CustomButton(
+                child: MyButton(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>SignupPage()));
                   },

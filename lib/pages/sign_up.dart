@@ -99,7 +99,6 @@ class _SignupPageState extends State<SignupPage> {
                           color: Colors.white24,
                           shape: BoxShape.circle
                         ),
-
                       ),
                     ),
                   ),

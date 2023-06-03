@@ -7,8 +7,7 @@ import 'package:provider/provider.dart';
 
 class RecipeImage extends StatelessWidget {
   Size size;
-  Function(String?) imagePath;
-  RecipeImage({Key? key,required this.size,required this.imagePath}) : super(key: key);
+  RecipeImage({Key? key,required this.size}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +33,6 @@ class RecipeImage extends StatelessWidget {
                   ),
                   child: IconButton(onPressed: (){
                       imageProvider.pickRecipeImage();
-                      imagePath(imageProvider.recipeImagePath);
                   },icon:const Icon(Icons.camera_alt_rounded,size: 35,)),
                 ),
               ),

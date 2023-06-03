@@ -10,13 +10,13 @@ Widget child;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(50),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
           child: Container(
-            padding: const EdgeInsets.only(left: 10),
+            padding: const EdgeInsets.only(left: 10,),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                   begin: Alignment.topRight,
@@ -31,18 +31,6 @@ Widget child;
             ),
             child:
               child
-            /* TextFormField(
-              controller: controller,
-              style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 18),
-              decoration:  InputDecoration(
-                  border: InputBorder.none,
-                  hintText: hint,
-                  hintStyle: const TextStyle(color: Colors.white70,fontSize: 18),
-              ),
-              validator: (value){
-                validator(value);
-              },
-            ),*/
           ),
         ),
       ),

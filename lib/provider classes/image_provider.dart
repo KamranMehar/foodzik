@@ -1,11 +1,12 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageProviderClass with ChangeNotifier {
   String? _foregroundImagePath;
   String? _recipeImagePath;
+  String? _ingredientImagePath;
 
+  String? get ingredientImagePath => _ingredientImagePath;
   String? get recipeImagePath => _recipeImagePath;
   String? get foregroundImagePath => _foregroundImagePath;
 
@@ -26,9 +27,21 @@ class ImageProviderClass with ChangeNotifier {
       notifyListeners();
     }
   }
-
-  void clearImage() {
+  Future<void> pickIngredientImage() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.getImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      _ingredientImagePath = pickedImage.path;
+      notifyListeners();
+    }
+  }
+  void clearImages() {
     _foregroundImagePath = null;
+    _recipeImagePath = null;
+    notifyListeners();
+  }
+  void clearIngredientImage(){
+    _ingredientImagePath=null;
     notifyListeners();
   }
 }

@@ -3,8 +3,8 @@ import 'package:foodzik/theme/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
-class CustomButton extends StatelessWidget {
-   CustomButton({Key? key,required this.onTap,required this.title,this.fontSize=32.0,
+class MyButton extends StatelessWidget {
+   MyButton({Key? key,required this.onTap,required this.title,this.fontSize=32.0,
    this.padding=10,
    }) : super(key: key);
 VoidCallback onTap;

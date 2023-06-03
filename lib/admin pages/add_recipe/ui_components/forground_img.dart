@@ -11,42 +11,49 @@ class ForegroundRecipeImg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  return  Consumer<ImageProviderClass>(
-        builder: (context,imageProvider,_) {
-           if(imageProvider.foregroundImagePath!=null) {
-            return
-              Container(
-                height: size.height * 4 / 10,
-                width: size.width,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: FileImage(File(imageProvider.foregroundImagePath.toString())),
-                    fit: BoxFit.cover, // Set the desired BoxFit
-                  ),
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(80)),
-                ),
-              );
-          }else{
-            return
-              Container(
-                height: size.height * 4 / 10,
-                width: size.width,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(80)),
-                ),
-              );
-          }
-        }
-    );
+  return  Stack(
+    children: [
+      Consumer<ImageProviderClass>(
+            builder: (context,imageProvider,_) {
+               if(imageProvider.foregroundImagePath!=null) {
+                return
+                  Container(
+                    height: size.height * 4 / 10,
+                    width: size.width,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: FileImage(File(imageProvider.foregroundImagePath.toString())),
+                        fit: BoxFit.cover, // Set the desired BoxFit
+                      ),
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(80)),
+                    ),
+                  );
+              }else{
+                return
+                  Container(
+                    height: size.height * 4 / 10,
+                    width: size.width,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(80)),
+                    ),
+                  );
+              }
+            }
+        ),
+      Positioned(
+          right: 0,
+          bottom: 10,
+          child: GetForegroundImgBtn()),
+    ],
+  );
 
   }
 }
 
 class GetForegroundImgBtn extends StatelessWidget {
-  Function(String?) imagePath;
-   GetForegroundImgBtn({Key? key,required this.imagePath}) : super(key: key);
+   GetForegroundImgBtn({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +67,6 @@ class GetForegroundImgBtn extends StatelessWidget {
       ),
       child: IconButton(onPressed: (){
         imageProvider_.pickImageFromGallery();
-        imagePath(imageProvider_.foregroundImagePath);
       }, icon: Icon(Icons.camera_alt,size: 30,color: isDarkTheme?Colors.white:Colors.black,)),
     );
   }
