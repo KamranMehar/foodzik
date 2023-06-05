@@ -10,6 +10,7 @@ import 'package:foodzik/pages/main_screen.dart';
 import 'package:foodzik/pages/pin_screen/pin_screen.dart';
 import 'package:foodzik/pages/sign_up.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:foodzik/provider%20classes/baking_steps_provider.dart';
 import 'package:foodzik/provider%20classes/image_provider.dart';
 import 'package:foodzik/provider%20classes/ingredients_provider.dart';
 import 'package:foodzik/provider%20classes/is_admin_provider.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<IsAdminProvider>(create: (_) => IsAdminProvider()),
         ChangeNotifierProvider<ImageProviderClass>(create: (_) => ImageProviderClass()),
         ChangeNotifierProvider<IngredientsProvider>(create: (_) => IngredientsProvider()),
+        ChangeNotifierProvider<BakingStepsProvider>(create: (_) => BakingStepsProvider()),
         // Add more providers here if needed
       ],
       child: Consumer<ModelTheme>(
@@ -52,7 +54,8 @@ class MyApp extends StatelessWidget {
               '/signup': (context) => const SignupPage(),
               '/approveUser': (context) => const UserApprovalPage(),
               '/mainScreen': (context) => const MainScreen(),
-              '/addRecipe': (context) => const AddRecipePage(),
+              '/addRecipe': (context) =>  const AddRecipePage(),
+              '/userApprovalPage': (context) =>  const UserApprovalPage(),
             },
             home: PinScreen(),
             debugShowCheckedModeBanner: false,

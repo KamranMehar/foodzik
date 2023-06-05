@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -67,7 +68,7 @@ class GetForegroundImgBtn extends StatelessWidget {
       ),
       child: IconButton(onPressed: (){
         imageProvider_.pickImageFromGallery();
-      }, icon: Icon(Icons.camera_alt,size: 30,color: isDarkTheme?Colors.white:Colors.black,)),
+      }, icon: Icon(CupertinoIcons.camera_fill,size: 30,color: isDarkTheme?Colors.white:Colors.black,)),
     );
   }
 }

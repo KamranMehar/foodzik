@@ -8,6 +8,7 @@ import 'package:foodzik/my_widgets/my_edit_text.dart';
 import 'package:foodzik/provider%20classes/image_provider.dart';
 import 'package:foodzik/theme/colors.dart';
 import 'package:foodzik/utils/dialogs.dart';
+import 'package:foodzik/utils/time_to_bake.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -28,13 +29,13 @@ class _AddRecipeDialogState extends State<AddRecipeDialog> {
   final quantityController = TextEditingController();
   final priceController = TextEditingController();
   Ingredient ingredient = Ingredient();
-
   Widget nameField() {
     final modelTheme = Provider.of<ModelTheme>(context);
     bool isThemeDark = modelTheme.isDark;
 
     return MyEditText(
       child: TextFormField(
+        textInputAction: TextInputAction.next,
         maxLines: 1,
         controller: nameController,
         style: GoogleFonts.aBeeZee(
@@ -65,6 +66,7 @@ class _AddRecipeDialogState extends State<AddRecipeDialog> {
 
     return MyEditText(
       child: TextFormField(
+        textInputAction: TextInputAction.next,
         keyboardType: TextInputType.number,
         maxLines: 1,
         controller: priceController,
@@ -96,6 +98,7 @@ class _AddRecipeDialogState extends State<AddRecipeDialog> {
 
     return MyEditText(
       child: TextFormField(
+        textInputAction: TextInputAction.done,
         keyboardType: TextInputType.number,
         maxLines: 1,
         controller: quantityController,
@@ -200,7 +203,6 @@ class _AddRecipeDialogState extends State<AddRecipeDialog> {
                       }
                     },
                   ),
-
                   nameField(),
                   priceField(),
                   Row(
@@ -261,6 +263,56 @@ class _AddRecipeDialogState extends State<AddRecipeDialog> {
   }
 }
 
+class TimeInputButton extends StatefulWidget {
+  bool isThemeDark;
+  Size size;
+
+  void Function(String) onInputTimeDone;
+  TimeInputButton({Key? key,required this.isThemeDark,required this.size,
+  required this.onInputTimeDone}) : super(key: key);
+
+  @override
+  State<TimeInputButton> createState() => _TimeInputButtonState();
+}
+
+class _TimeInputButtonState extends State<TimeInputButton> {
+  String timeToBake="Time To Bake";
+  @override
+  Widget build(BuildContext context) {
+    return  Center(
+      child: GestureDetector(
+        onTap: (){
+          showDialog(
+            barrierDismissible: true, // false, //Tap outside the dialog to dismiss
+            context: context,
+            builder: (BuildContext context) => InputTimeDialog( size: widget.size,
+              onTimeInputDone: (time ){
+              widget.onInputTimeDone(time);
+              setState(() {
+                timeToBake=time;
+              });
+              },),
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 50,),
+          child: MyEditText(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(timeToBake,
+                    style: TextStyle(color: widget.isThemeDark?Colors.white70:Colors.black54,fontSize: 18),),
+                  Icon(CupertinoIcons.time_solid,color: widget.isThemeDark?Colors.white70:Colors.black54,)
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),);
+  }
+}
 
 class UnitDropDownButton extends StatefulWidget {
   final void Function(String? selectedValue)? onChanged;

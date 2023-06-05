@@ -5,7 +5,7 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:foodzik/model%20classes/user.dart';
 import 'package:foodzik/page_view_tabs/cart_tab.dart';
 import 'package:foodzik/page_view_tabs/favourite_tab.dart';
-import 'package:foodzik/page_view_tabs/home_tab.dart';
+import 'package:foodzik/page_view_tabs/home_tab/home_tab.dart';
 import 'package:foodzik/pages/home/ui_componets/bnv_home_page.dart';
 import 'package:foodzik/pages/home/ui_componets/foodzik_title.dart';
 import 'package:foodzik/pages/home/ui_componets/user_profile.dart';

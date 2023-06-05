@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzik/provider%20classes/image_provider.dart';
 import 'package:foodzik/theme/colors.dart';
@@ -7,7 +8,8 @@ import 'package:provider/provider.dart';
 
 class RecipeImage extends StatelessWidget {
   Size size;
-  RecipeImage({Key? key,required this.size}) : super(key: key);
+  bool isThemeDark;
+  RecipeImage({Key? key,required this.size,required this.isThemeDark}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class RecipeImage extends StatelessWidget {
                   ),
                   child: IconButton(onPressed: (){
                       imageProvider.pickRecipeImage();
-                  },icon:const Icon(Icons.camera_alt_rounded,size: 35,)),
+                  },icon: Icon(CupertinoIcons.camera_fill,size: 35,color:isThemeDark?Colors.white:Colors.black,)),
                 ),
               ),
                Positioned(

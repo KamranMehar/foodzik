@@ -129,7 +129,7 @@ class IngredientTile extends StatelessWidget {
               child:image!=null?
                   ClipRRect(
                       borderRadius: BorderRadius.circular(25),
-                      child: Image.file(File(image!),fit: BoxFit.cover,))
+                      child: Image.file(File(image!.toString()),fit: BoxFit.cover,))
                   :  const Icon(Icons.image,color: Colors.white,size: 60,),
             ),
             Positioned(

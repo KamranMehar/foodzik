@@ -4,10 +4,11 @@ class Ingredient {
   String? image;
   int? price;
   String? unit;
+
   Ingredient({
     this.quantity,
-     this.name,
-     this.image,
+    this.name,
+    this.image,
     this.price,
     this.unit,
   });
@@ -28,7 +29,7 @@ class Ingredient {
       'name': name,
       'image': image,
       'price': price,
-      'unit': price,
+      'unit': unit,
     };
   }
 }

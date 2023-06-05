@@ -57,6 +57,17 @@ class _MyDrawerState extends State<MyDrawer> {
                 );
               }
             ),
+            SizedBox(height: height,),
+            Consumer<IsAdminProvider>(
+              builder: (context,isAdminProvider,_) {
+                return Visibility(
+                  visible: isAdminProvider.isAdmin,
+                  child: DrawerTile(onTap: (){
+                    Navigator.pushNamed(context, "/userApprovalPage");
+                  }, text: "Approve User"),
+                );
+              }
+            ),
              SizedBox(height: height,),
             const ThemeChangeWidget(),
             SizedBox(height: height,),
