@@ -3,15 +3,16 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:foodzik/model%20classes/user.dart';
-import 'package:foodzik/page_view_tabs/cart_tab.dart';
-import 'package:foodzik/page_view_tabs/favourite_tab.dart';
-import 'package:foodzik/page_view_tabs/home_tab/home_tab.dart';
 import 'package:foodzik/pages/home/ui_componets/bnv_home_page.dart';
 import 'package:foodzik/pages/home/ui_componets/foodzik_title.dart';
 import 'package:foodzik/pages/home/ui_componets/user_profile.dart';
 import 'package:foodzik/provider%20classes/is_admin_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
+import '../../tab_pages/cart_tab.dart';
+import '../../tab_pages/favourite_tab.dart';
+import '../../tab_pages/home_tab/home_tab.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -80,6 +81,7 @@ class _HomePageState extends State<HomePage> {
               ),
               Expanded(
                 child: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
                   controller: _pageController,
                   children: const [
                     FavouriteTab(),

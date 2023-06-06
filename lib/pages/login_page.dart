@@ -6,7 +6,7 @@ import 'package:foodzik/my_widgets/my_edit_text.dart';
 import 'package:foodzik/utils/dialogs.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../theme/colors.dart';
+import '../const/colors.dart';
 import 'home/home_page.dart';
 
 class LoginPage extends StatefulWidget {

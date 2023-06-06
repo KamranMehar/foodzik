@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../theme/colors.dart';
+import '../../../const/colors.dart';
 
 class BackLeadingBtn extends StatelessWidget {
   const BackLeadingBtn({Key? key}) : super(key: key);

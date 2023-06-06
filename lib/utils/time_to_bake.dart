@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodzik/my_widgets/my_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../theme/colors.dart';
+import '../const/colors.dart';
 
 class InputTimeDialog extends StatelessWidget {
   Size size;

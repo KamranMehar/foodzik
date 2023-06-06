@@ -1,13 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzik/const/catefories_list.dart';
 import 'package:foodzik/model%20classes/Recipe.dart';
-import 'package:foodzik/page_view_tabs/home_tab/ui_components/loading_recipe_widget.dart';
-import 'package:foodzik/page_view_tabs/home_tab/ui_components/recipe_tile.dart';
+import 'package:foodzik/tab_pages/home_tab/ui_components/loading_recipe_widget.dart';
+import 'package:foodzik/tab_pages/home_tab/ui_components/recipe_tile.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
-import '../../pages/home/ui_componets/bnv_custom_painter_class.dart';
+import 'dart:developer' as developer show log;
+import '../../const/colors.dart';
 import '../../pages/home/ui_componets/foodzik_title.dart';
 import '../../provider classes/theme_model.dart';
 
@@ -26,12 +28,15 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   bool isRegistrationApproved=false;
-  final ref=FirebaseDatabase.instance.ref("/Recipes/Rice Dishes/");
+  String category="all";
+
   @override
   Widget build(BuildContext context) {
+    final ref=FirebaseDatabase.instance.ref("/Recipes/$category/");
     Size size=MediaQuery.of(context).size;
     final modelTheme=Provider.of<ModelTheme>(context);
     bool isThemeDark=modelTheme.isDark;
+    developer.log(category);
     return Scaffold(
       body:
         Column(
@@ -51,6 +56,56 @@ class _HomeTabState extends State<HomeTab> {
                   style: GoogleFonts.readexPro(color: Colors.red,fontSize: 18),),),
               ),
             ),
+            SizedBox(
+              width: size.width,
+              height: size.width* 1/8,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: categories.length,
+                itemBuilder: (context,index){
+                  Color color=isThemeDark?Colors.grey.shade700:Colors.grey.shade300;
+                  if(index==0){
+                    return GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          category="all";
+                        });
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 600),
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        decoration: BoxDecoration(
+                          color: isThemeDark?Colors.grey.shade700:Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Center(child: Text("All",style: GoogleFonts.aBeeZee(color: isThemeDark?Colors.white:Colors.black),)),
+                      ),
+                    );
+                  }else {
+                    return GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          category=categories.elementAt(index);
+                          developer.log(category);
+                        });
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 600),
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                        decoration: BoxDecoration(
+                          color: category.contains(categories[index])?greenPrimary:color,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Center(child: Text(categories[index].toString(),
+                          style: GoogleFonts.aBeeZee(color: isThemeDark ? Colors
+                              .white : Colors.black),)),
+                      ),
+                    );
+                  }
+            }),
+            ),
             Expanded(
                 child: StreamBuilder(
                   stream: ref.onValue,
@@ -69,8 +124,10 @@ class _HomeTabState extends State<HomeTab> {
                               child: LoadingRecipe(isThemeDark: isThemeDark,),
                             );
                           });
+                    }else if(snapshot.hasError){
+                      return const Center(child: Text("Something went wrong\nTry again"),);
                     }else{
-                      Map<dynamic, dynamic> map = snapshot.data!.snapshot
+                      Map<dynamic, dynamic>? map = snapshot.data!.snapshot
                           .value as dynamic;
                       List<dynamic> list = [];
                       list.clear();
@@ -78,17 +135,18 @@ class _HomeTabState extends State<HomeTab> {
                         list = map.values.toList();
                         return GridView.builder(
                             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                                childAspectRatio: 1 / 1.6,
-                                maxCrossAxisExtent: 200
+                                childAspectRatio: 1 / 1.7,
+                                maxCrossAxisExtent: 180,
                             ),
                             itemCount: list.length,
                             itemBuilder: (context,index){
 
                               return
                                 RecipeTile(
-                                  isThemeDark: isThemeDark, name: list![index]['name'],
-                                  price:list![index]["price"],
-                                  image:list![index]["image"],
+                                  recipeMap: list[index],
+                                  isThemeDark: isThemeDark, name: list[index]!['name'],
+                                  price:list[index]!["price"],
+                                  image:list[index]!["image"],
                                 );
                             });
                       }else{

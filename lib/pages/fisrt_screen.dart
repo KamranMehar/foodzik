@@ -7,7 +7,7 @@ import 'package:foodzik/pages/home/home_page.dart';
 import 'package:foodzik/pages/home/ui_componets/foodzik_title.dart';
 import 'package:foodzik/pages/login_page.dart';
 import 'package:foodzik/pages/sign_up.dart';
-import 'package:foodzik/theme/colors.dart';
+import 'package:foodzik/const/colors.dart';
 import 'package:foodzik/utils/dialogs.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';

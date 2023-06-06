@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:foodzik/pages/home/home_page.dart';
-import 'package:foodzik/theme/colors.dart';
+import 'package:foodzik/const/colors.dart';
 import 'drawer/my_drawer.dart';
 
 class MainScreen extends StatefulWidget {

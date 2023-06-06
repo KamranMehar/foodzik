@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzik/my_widgets/my_button.dart';
 import 'package:foodzik/my_widgets/my_edit_text.dart';
-import 'package:foodzik/theme/colors.dart';
+import 'package:foodzik/const/colors.dart';
 import 'package:foodzik/utils/dialogs.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';

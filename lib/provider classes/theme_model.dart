@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodzik/model%20classes/theme_shared_pref.dart';
-import '../theme/colors.dart';
+import '../const/colors.dart';
 
 class ModelTheme extends ChangeNotifier {
   late bool _isDark;

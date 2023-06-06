@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../theme/colors.dart';
+import '../../../const/colors.dart';
 class FoodzikTitle extends StatelessWidget {
   double fontSize;
    FoodzikTitle({Key? key,this.fontSize=55}) : super(key: key);

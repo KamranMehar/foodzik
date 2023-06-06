@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../const/catefories_list.dart';
+
 class CategoryDropDownMenu extends StatefulWidget {
   final void Function(String? selectedValue)? onChanged;
   bool isThemeDark;
@@ -14,24 +16,7 @@ class CategoryDropDownMenu extends StatefulWidget {
 class _CategoryDropDownMenuState extends State<CategoryDropDownMenu> {
   String? _selectedOption;
 
-  List<String> categories = [
-    "Select Category", // Added "Select Category" as the first item
-    "Snacks",
-    "Breakfast",
-    "Lunch",
-    "Dinner",
-    "Desserts",
-    "Beverages",
-    "Salads",
-    "Soups",
-    "Pasta",
-    "Rice Dishes",
-    "Vegetarian",
-    "Meat",
-    "Seafood",
-    "Gluten-Free",
-    "Dairy-Free",
-  ];
+
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzik/my_widgets/user_approval_tile.dart';
-import 'package:foodzik/theme/colors.dart';
+import 'package:foodzik/const/colors.dart';
 import 'package:foodzik/utils/dialogs.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
