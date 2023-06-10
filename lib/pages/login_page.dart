@@ -160,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         loading=false;
       });
-      Utils.showError("Login Error", e.message.toString(),context);
+      Utils.showAlertDialog( e.message.toString(),context,() => Navigator.pop(context),);
       // Your logic for Firebase related exceptions
     } catch (e) {
       Utils.showToast(e.toString());

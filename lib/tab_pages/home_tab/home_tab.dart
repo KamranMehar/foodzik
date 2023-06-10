@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzik/const/catefories_list.dart';
 import 'package:foodzik/model%20classes/Recipe.dart';
+import 'package:foodzik/provider%20classes/delete_recipe_provider.dart';
 import 'package:foodzik/tab_pages/home_tab/ui_components/loading_recipe_widget.dart';
 import 'package:foodzik/tab_pages/home_tab/ui_components/recipe_tile.dart';
+import 'package:foodzik/utils/dialogs.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -56,6 +59,7 @@ class _HomeTabState extends State<HomeTab> {
                   style: GoogleFonts.readexPro(color: Colors.red,fontSize: 18),),),
               ),
             ),
+            ///Categories
             SizedBox(
               width: size.width,
               height: size.width* 1/8,
@@ -106,58 +110,62 @@ class _HomeTabState extends State<HomeTab> {
                   }
             }),
             ),
-            Expanded(
-                child: StreamBuilder(
-                  stream: ref.onValue,
-                  builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot){
-                    if(!snapshot.hasData){
-                      return  GridView.builder(
-                          padding: const EdgeInsets.only(bottom: 30),
-                          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                              childAspectRatio: 1/1.6,
-                              maxCrossAxisExtent: 200
-                          ),
-                          itemCount: 4,
-                          itemBuilder: (context,index){
-                            return Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: LoadingRecipe(isThemeDark: isThemeDark,),
-                            );
-                          });
-                    }else if(snapshot.hasError){
-                      return const Center(child: Text("Something went wrong\nTry again"),);
-                    }else{
-                      Map<dynamic, dynamic>? map = snapshot.data!.snapshot
-                          .value as dynamic;
-                      List<dynamic> list = [];
-                      list.clear();
-                      if(map!=null){
-                        list = map.values.toList();
-                        return GridView.builder(
+            Visibility(
+              visible: !isRegistrationApproved,
+              child: Expanded(
+                  child: StreamBuilder(
+                    stream: ref.onValue,
+                    builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot){
+                      if(!snapshot.hasData){
+                        return  GridView.builder(
+                            padding: const EdgeInsets.only(bottom: 30),
                             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                                childAspectRatio: 1 / 1.7,
-                                maxCrossAxisExtent: 180,
+                                childAspectRatio: 1/1.6,
+                                maxCrossAxisExtent: 200
                             ),
-                            itemCount: list.length,
+                            itemCount: 4,
                             itemBuilder: (context,index){
-
-                              return
-                                RecipeTile(
-                                  recipeMap: list[index],
-                                  isThemeDark: isThemeDark, name: list[index]!['name'],
-                                  price:list[index]!["price"],
-                                  image:list[index]!["image"],
-                                );
+                              return Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: LoadingRecipe(isThemeDark: isThemeDark,),
+                              );
                             });
+                      }else if(snapshot.hasError){
+                        return const Center(child: Text("Something went wrong\nTry again"),);
                       }else{
-                        return Center(child: Text("No Recipe Found"),);
+                        Map<dynamic, dynamic>? map = snapshot.data!.snapshot
+                            .value as dynamic;
+                        List<dynamic> list = [];
+                        list.clear();
+                        if(map!=null){
+                          list = map.values.toList();
+                          return GridView.builder(
+                              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  childAspectRatio: 1 / 1.7,
+                                  maxCrossAxisExtent: 180,
+                              ),
+                              itemCount: list.length,
+                              itemBuilder: (context,index){
+
+                                return
+                                  RecipeTile(
+                                    recipeMap: list[index],
+                                    isThemeDark: isThemeDark, name: list[index]!['name'],
+                                    price:list[index]!["price"],
+                                    image:list[index]!["image"],
+                                  );
+                              });
+                        }else{
+                          return const Center(child: Text("No Recipe Found"),);
+                        }
                       }
-                    }
-                  },
-                ),
+                    },
+                  ),
+              ),
             )
           ],
         ),
+
       );
 
   }

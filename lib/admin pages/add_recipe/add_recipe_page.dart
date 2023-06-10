@@ -344,7 +344,9 @@ class _AddRecipePageState extends State<AddRecipePage> {
       });
       return downloadUrl;
     }on FirebaseException catch (e){
-      Utils.showAlertDialog("Something went wrong", context, e.message);
+      Utils.showAlertDialog( e.message??"Something went wrong", context,(){
+        print("call back pressed");
+      });
     }
     return null;
   }
@@ -370,7 +372,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
         print(error);
       });
     }on FirebaseException catch (e){
-      Utils.showAlertDialog("Something went wrong", context,e.message );
+      Utils.showAlertDialog(e.message??"Something went wrong", context,()=>Navigator.pop(context));
     }
 
   }

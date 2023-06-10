@@ -347,7 +347,7 @@ class _SignupPageState extends State<SignupPage> {
                               setState(() {
                                 loading=false;
                               });
-                              Utils.showError("Complete Form","Complete the Form fields also add the image", context);
+                              Utils.showAlertDialog("Complete the Form fields also add the image", context,() => Navigator.pop(context),);
                             }
                           },
                         ),
@@ -395,7 +395,9 @@ class _SignupPageState extends State<SignupPage> {
           });
           Navigator.pushNamedAndRemoveUntil(context, '/mainScreen', (route) => false);
         })
-            .onError((error, stackTrace){ Utils.showError("Registration Error", error.toString(),context);
+            .onError((error, stackTrace){ Utils.showErrorDialog("Registration Error", error.toString(),context,
+        () => Navigator.pop(context),
+        );
         setState(() {
           loading=false;
         });
@@ -407,7 +409,7 @@ class _SignupPageState extends State<SignupPage> {
       setState(() {
         loading=false;
       });
-      Utils.showError("Registration Error", e.message.toString(),context);
+      Utils.showErrorDialog("Registration Error", e.message.toString(),context,() => Navigator.pop(context),);
       // Your logic for Firebase related exceptions
     } catch (e) {
       Utils.showToast(e.toString());
@@ -438,7 +440,7 @@ class _SignupPageState extends State<SignupPage> {
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      Utils.showError("Location Access","Location services are disabled!\n Go to Settings>>Location>>Location Turn On.", context);
+      Utils.showErrorDialog("Location Access","Location services are disabled!\n Go to Settings>>Location>>Location Turn On.", context,() => Navigator.pop(context),);
       return Future.error('Location services are disabled.');
     }
 
@@ -451,14 +453,15 @@ class _SignupPageState extends State<SignupPage> {
         // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
-       Utils.showError("Location Access","Location permissions are denied !", context);
+       Utils.showErrorDialog("Location Access","Location permissions are denied !", context,() => Navigator.pop(context),);
         return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      Utils.showError("Location Access",   'Location permissions are permanently denied, we cannot request permissions.', context);
+      Utils.showErrorDialog("Location Access",   'Location permissions are permanently denied, we cannot request permissions.', context
+        ,() => Navigator.pop(context));
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
