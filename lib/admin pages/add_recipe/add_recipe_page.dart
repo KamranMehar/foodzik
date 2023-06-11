@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzik/admin%20pages/add_recipe/ui_components/categories_drop_menu.dart';
 import 'package:foodzik/admin%20pages/add_recipe/ui_components/recipe_image.dart';
@@ -10,7 +8,6 @@ import 'package:foodzik/admin%20pages/add_recipe/ui_components/back_button.dart'
 import 'package:foodzik/admin%20pages/add_recipe/ui_components/forground_img.dart';
 import 'package:foodzik/admin%20pages/add_recipe/ui_components/ingrediants_tile.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:foodzik/admin%20pages/add_recipe/ui_components/steps_template.dart';
 import 'package:foodzik/admin%20pages/add_recipe/ui_components/steps_widget.dart';
 import 'package:foodzik/model%20classes/Recipe.dart';
 import 'package:foodzik/model%20classes/ingredient.dart';
@@ -25,7 +22,6 @@ import 'package:foodzik/utils/add_reci_dialog.dart';
 import 'package:foodzik/utils/dialogs.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
 
 class AddRecipePage extends StatefulWidget {
   const AddRecipePage({Key? key}) : super(key: key);
@@ -354,17 +350,27 @@ class _AddRecipePageState extends State<AddRecipePage> {
     DatabaseReference ref=FirebaseDatabase.instance.ref("Recipes/${recipe.category}/${recipe.name}");
     try{
       ref.set(recipe.toJson()).then((value){
-        setState(() {
-          isLoading=false;
+        //Also add to all Category
+        DatabaseReference refAll=FirebaseDatabase.instance.ref("Recipes/all/${recipe.name}");
+        refAll.set(recipe.toJson()).then((value){
+          setState(() {
+            isLoading=false;
+          });
+          final ingredientProvider=Provider.of<IngredientsProvider>(context,listen: false);
+          final imageProvider=Provider.of<ImageProviderClass>(context,listen: false);
+          final stepsProvider=Provider.of<BakingStepsProvider>(context,listen: false);
+          ingredientProvider.clearIngredientList();
+          imageProvider.clearImages();
+          imageProvider.clearIngredientImage();
+          stepsProvider.clearList();
+          Utils.showToast("${recipe.name} is Added Successfully");
+        }).onError((error, stackTrace) {
+          setState(() {
+            isLoading=false;
+          });
+          print(error);
         });
-        final ingredientProvider=Provider.of<IngredientsProvider>(context,listen: false);
-        final imageProvider=Provider.of<ImageProviderClass>(context,listen: false);
-        final stepsProvider=Provider.of<BakingStepsProvider>(context,listen: false);
-        ingredientProvider.clearIngredientList();
-        imageProvider.clearImages();
-        imageProvider.clearIngredientImage();
-        stepsProvider.clearList();
-        Utils.showToast("${recipe.name} is Added Successfully");
+
       }).onError((error, stackTrace){
         setState(() {
           isLoading=false;

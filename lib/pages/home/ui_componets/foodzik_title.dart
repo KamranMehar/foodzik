@@ -24,10 +24,10 @@ class AdminBanner extends StatelessWidget {
     return  Visibility(
       visible: isAdmin,
       child: Container(
-        height: 12,
+        //height: 11,
         width: size.width,
         color: greenPrimary,
-        child: Center(child: Text("Admin",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 12),),),
+        child: Center(child: Text("Admin",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 10,),),),
       ),
     );
   }

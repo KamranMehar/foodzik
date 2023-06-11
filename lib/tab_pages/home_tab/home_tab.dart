@@ -80,7 +80,7 @@ class _HomeTabState extends State<HomeTab> {
                         margin: const EdgeInsets.symmetric(horizontal: 5),
                         padding: const EdgeInsets.symmetric(horizontal: 30),
                         decoration: BoxDecoration(
-                          color: isThemeDark?Colors.grey.shade700:Colors.grey.shade300,
+                          color: category.contains("all")?greenPrimary:color,
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: Center(child: Text("All",style: GoogleFonts.aBeeZee(color: isThemeDark?Colors.white:Colors.black),)),
