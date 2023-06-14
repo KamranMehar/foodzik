@@ -14,4 +14,8 @@ class BakingStepsProvider with ChangeNotifier{
      _stepsList!.clear();
      notifyListeners();
    }
+   void deleteStep(int index){
+     _stepsList!.removeAt(index);
+     notifyListeners();
+   }
 }

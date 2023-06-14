@@ -5,9 +5,8 @@ import 'package:foodzik/my_widgets/my_button.dart';
 import 'package:foodzik/my_widgets/my_edit_text.dart';
 import 'package:foodzik/utils/dialogs.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../const/colors.dart';
-import 'home/home_page.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -68,6 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                   child:  Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: TextFormField(
+                      autofillHints: const [AutofillHints.email],
                       keyboardType: TextInputType.emailAddress,
                       controller: emailController,
                       style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 18),
@@ -92,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                   child:  Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: TextFormField(
+                      autofillHints: const [AutofillHints.password],
                       obscureText: visiblePass? false:true,
                       keyboardType: TextInputType.visiblePassword,
                       controller: passwordController,

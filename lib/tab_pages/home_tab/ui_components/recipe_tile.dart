@@ -1,12 +1,9 @@
 
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzik/const/colors.dart';
 import 'package:foodzik/provider%20classes/delete_recipe_provider.dart';
 import 'package:foodzik/provider%20classes/is_admin_provider.dart';
-import 'package:foodzik/utils/dialogs.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:developer' as developer show log;
 
@@ -43,13 +40,13 @@ class RecipeTile extends StatelessWidget {
           child: SizedBox(
             child: Stack(
               children: [
+                ///Card
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Consumer<DeleteRecipeProvider>(
                     builder: (context,deleteProvider,_) {
                       Color color=isThemeDark?Colors.grey.shade700:Colors.grey.shade300;
                       developer.log(deleteProvider.deleteRecipeList.toString());
-
                       return Container(
                         width: 145,
                         height: 160,//size.height* ((1/10)/2),
@@ -61,6 +58,7 @@ class RecipeTile extends StatelessWidget {
                     }
                   ),
                 ),
+                ///Image
                 Align(
                   alignment: Alignment.topCenter,
                   child: Column(
@@ -79,8 +77,10 @@ class RecipeTile extends StatelessWidget {
                       ),
                      // const Spacer(flex: 5),
                       Text(name,style: GoogleFonts.aBeeZee(color: isThemeDark?Colors.white:Colors.black,
-                          fontSize: 22,fontWeight: FontWeight.bold),
-                        overflow: TextOverflow.ellipsis,),
+                          fontSize: 20,fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
                       Text("Rs:/ $price",
                         style: GoogleFonts.aBeeZee(color: isThemeDark?Colors.white:Colors.black,fontSize: 18),
                         overflow: TextOverflow.ellipsis,),
@@ -97,7 +97,6 @@ class RecipeTile extends StatelessWidget {
                     ],
                   ),
                 ),
-
               ],
             ),
           ),

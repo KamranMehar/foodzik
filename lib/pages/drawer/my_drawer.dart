@@ -46,25 +46,35 @@ class _MyDrawerState extends State<MyDrawer> {
                 });
               });
             }, text: "Logout"),
-            SizedBox(height: height,),
+
             Consumer<IsAdminProvider>(
               builder: (context,isAdminProvider,_) {
                 return Visibility(
                   visible: isAdminProvider.isAdmin,
-                  child: DrawerTile(onTap: (){
-                    Navigator.pushNamed(context, "/addRecipe");
-                  }, text: "Add Recipe"),
+                  child: Column(
+                    children: [
+                      SizedBox(height: height,),
+                      DrawerTile(onTap: (){
+                        Navigator.pushNamed(context, "/addRecipe");
+                      }, text: "Add Recipe"),
+                    ],
+                  ),
                 );
               }
             ),
-            SizedBox(height: height,),
+
             Consumer<IsAdminProvider>(
               builder: (context,isAdminProvider,_) {
                 return Visibility(
                   visible: isAdminProvider.isAdmin,
-                  child: DrawerTile(onTap: (){
-                    Navigator.pushNamed(context, "/userApprovalPage");
-                  }, text: "Approve User"),
+                  child: Column(
+                    children: [
+                      SizedBox(height: height,),
+                      DrawerTile(onTap: (){
+                        Navigator.pushNamed(context, "/userApprovalPage");
+                      }, text: "Approve User"),
+                    ],
+                  ),
                 );
               }
             ),

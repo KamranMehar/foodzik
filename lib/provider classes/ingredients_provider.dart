@@ -16,4 +16,15 @@ class IngredientsProvider with ChangeNotifier{
     _ingredientList.clear();
     notifyListeners();
   }
+  void deleteIngredient(Ingredient ingredient){
+    _ingredientList.remove(ingredient);
+    notifyListeners();
+  }
+  int getTotalPrice(){
+    int total=0;
+    for(Ingredient ingredient in _ingredientList){
+      total=total+(ingredient.price??0);
+    }
+    return total;
+  }
 }

@@ -189,13 +189,22 @@ class _AddRecipeDialogState extends State<AddRecipeDialog> {
                           onTap: () =>
                               imageProvideClass.pickIngredientImage(),
                           child: CircleAvatar(
+                            backgroundColor: Colors.transparent,
                             radius: 70,
-                            backgroundImage: FileImage(File(imageProvideClass.ingredientImagePath ?? "")),
+                            backgroundImage: FileImage(File(imageProvideClass.ingredientImagePath ?? "",)),
                             child: Text(
                               "Change",
                               style: TextStyle(
                                 color:
-                                isThemeDark ? Colors.white : Colors.black,
+                               isThemeDark ? Colors.white : Colors.black,
+                                shadows: [
+                                  BoxShadow(
+                                    color: isThemeDark?Colors.grey.shade900: Colors.grey.shade500,
+                                    spreadRadius: 12,
+                                    blurRadius: 8,
+                                    offset: const Offset(0,0)
+                                  )
+                                ]
                               ),
                             ),
                           ),
@@ -204,7 +213,6 @@ class _AddRecipeDialogState extends State<AddRecipeDialog> {
                     },
                   ),
                   nameField(),
-                  priceField(),
                   Row(
                     children: [
                       Expanded(
@@ -216,6 +224,7 @@ class _AddRecipeDialogState extends State<AddRecipeDialog> {
                       }),
                     ],
                   ),
+                  priceField(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                     child: MyButton(

@@ -3,12 +3,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzik/const/catefories_list.dart';
-import 'package:foodzik/model%20classes/Recipe.dart';
-import 'package:foodzik/provider%20classes/delete_recipe_provider.dart';
 import 'package:foodzik/tab_pages/home_tab/ui_components/loading_recipe_widget.dart';
 import 'package:foodzik/tab_pages/home_tab/ui_components/recipe_tile.dart';
-import 'package:foodzik/utils/dialogs.dart';
-
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'dart:developer' as developer show log;
@@ -27,6 +23,7 @@ class _HomeTabState extends State<HomeTab> {
   @override
   void initState() {
     checkRegistrationApproval();
+
     super.initState();
   }
 

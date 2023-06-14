@@ -25,6 +25,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    final isAdminProvider=Provider.of<IsAdminProvider>(context,listen: false);
+    isAdminProvider.checkUserIsAdmin();
+    super.initState();
+  }
   final PageController _pageController = PageController(initialPage: 1);
   int selectedIndex = 1;
   FirebaseAuth auth = FirebaseAuth.instance;
