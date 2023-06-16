@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodzik/const/colors.dart';
 
 import 'bnv_custom_painter_class.dart';
 
@@ -40,28 +39,29 @@ class BNV extends StatelessWidget {
                 onPress(1);
               },
               child: AnimatedContainer(
-                duration: Duration(milliseconds: 600),
-                margin: EdgeInsets.only(bottom: 10),
-                height: 60,
-                width: 60,
-                decoration:    BoxDecoration(
-                    border: Border.all(color: isThemeLight?Colors.white:Colors.grey.shade800,width: 0.5),
-                    color: Color(0xff00FFE1),
+                duration: const Duration(milliseconds: 600),
+                margin: const EdgeInsets.only(bottom: 10),
+                height: 70,
+                width: 70,
+                decoration:
+                 BoxDecoration(
+                    border: Border.all(color: isThemeLight?Colors.white:Colors.grey.shade800,width: 0.6),
+                 //  color: Colors.white,//const Color(0xff00FFE1),
                     shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                        stops: [0.1, 0.4],
-                        radius: 1.6,
-                        colors: [Color(0xff00FFE1), isThemeLight?Colors.grey.shade500:Colors.white.withOpacity(0.5)]),
-                    boxShadow:  const [
+                    gradient: const RadialGradient(
+                        stops: [0.2, 0.7],
+                        radius: 1,
+                        colors: [Color(0xff00FFE1),Color(0xff009987)]),
+                    boxShadow:   [
                       BoxShadow(
-                          color: greenPrimary,//Color(0xff1F8171),
-                          spreadRadius: 3,
-                          blurRadius: 15,
-                          offset: Offset(0,0)
+                          color: const Color(0xff00FFE1).withOpacity(0.6),//Color(0xff1F8171),
+                          spreadRadius: 2,
+                          blurRadius: 20,
+                          offset: const Offset(0,0)
                       ),
                     ]
                 ),
-                child: Icon(Icons.home_filled,color: isThemeLight?Colors.grey.shade500:Colors.white,size: 30,),
+                child: const Icon(Icons.home_filled,color: Colors.white,size: 30,),
               ),
             ),
           ),

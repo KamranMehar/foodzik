@@ -9,6 +9,7 @@ import 'package:foodzik/admin%20pages/add_recipe/ui_components/forground_img.dar
 import 'package:foodzik/admin%20pages/add_recipe/ui_components/ingrediants_tile.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:foodzik/admin%20pages/add_recipe/ui_components/steps_widget.dart';
+import 'package:foodzik/const/colors.dart';
 import 'package:foodzik/model%20classes/Recipe.dart';
 import 'package:foodzik/model%20classes/ingredient.dart';
 import 'package:foodzik/model%20classes/steps_to_bake.dart';
@@ -18,7 +19,7 @@ import 'package:foodzik/provider%20classes/baking_steps_provider.dart';
 import 'package:foodzik/provider%20classes/image_provider.dart';
 import 'package:foodzik/provider%20classes/ingredients_provider.dart';
 import 'package:foodzik/provider%20classes/theme_model.dart';
-import 'package:foodzik/utils/add_reci_dialog.dart';
+import 'package:foodzik/utils/add_ingredient_dialog.dart';
 import 'package:foodzik/utils/dialogs.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -132,23 +133,56 @@ class _AddRecipePageState extends State<AddRecipePage> {
   Widget descriptionEditText(){
     final modelTheme=Provider.of<ModelTheme>(context);
     bool isThemeDark=modelTheme.isDark;
-    return MyEditText(
-        child: TextFormField(
-          controller: descriptionController,
-          textInputAction: TextInputAction.done,
-          style: GoogleFonts.aBeeZee(color: isThemeDark?Colors.white:Colors.black,fontSize: 18),
-          decoration:   InputDecoration(
-            border: InputBorder.none,
-            hintText: "Description",
-            hintStyle: TextStyle(color: isThemeDark?Colors.white70:Colors.black54,fontSize: 18),
+    return  Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+              Colors.grey.withOpacity(0.2),
+              Colors.grey.withOpacity(0.7),
+            ],
           ),
-          validator: (value){
-            if(titleController.text.isEmpty){
-              return "   Description is Empty";
-            }
-            return null;
-          },
-        ));
+          borderRadius: BorderRadius.circular(50),
+          border: Border.all(color: greenTextColor, width: 1),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(50),
+          child: TextFormField(
+            keyboardType: TextInputType.multiline,
+            controller: descriptionController,
+            textInputAction: TextInputAction.newline,
+            style: GoogleFonts.aBeeZee(
+              color: isThemeDark ? Colors.white : Colors.black,
+              fontSize: 18,
+            ),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: "Description",
+              hintStyle: TextStyle(
+                color: isThemeDark ? Colors.white70 : Colors.black54,
+                fontSize: 18,
+              ),
+              contentPadding:
+              const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            ),
+            onChanged: (value) {
+              // Handle the text change event if needed
+            },
+            validator: (value) {
+              if (value?.isEmpty ?? true) {
+                return "Description is empty";
+              }
+              return null;
+            },
+            maxLines: null, // Allow unlimited number of lines
+          ),
+        ),
+      ),
+    );
+
   }
   @override
   Widget build(BuildContext context) {

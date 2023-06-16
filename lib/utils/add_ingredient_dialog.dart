@@ -349,7 +349,7 @@ class _UnitDropDownButtonState extends State<UnitDropDownButton> {
           widget.onChanged!(_selectedOption);
         }
       },
-      items: <String>['Grams', 'KG', 'Ltr']
+      items: <String>['Grams', 'KG', 'Ltr','ml']
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,

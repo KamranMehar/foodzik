@@ -25,6 +25,9 @@ class RecipeTile extends StatelessWidget {
     return Consumer<IsAdminProvider>(
       builder: (context,adminProvider,_) {
         return GestureDetector(
+          onTap: (){
+            Navigator.pushNamed(context, 'recipeDetailPage', arguments: recipeMap);
+          },
           onLongPress: (){
             if(adminProvider.isAdmin){
               final deleteRecipeProvider=Provider.of<DeleteRecipeProvider>(context,listen: false);

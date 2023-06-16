@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodzik/admin%20pages/add_recipe/add_recipe_page.dart';
 import 'package:foodzik/admin%20pages/approval_pending_users.dart';
-import 'package:foodzik/pages/drawer/my_drawer.dart';
 import 'package:foodzik/pages/fisrt_screen.dart';
 import 'package:foodzik/pages/home/home_page.dart';
 import 'package:foodzik/pages/login_page.dart';
 import 'package:foodzik/pages/main_screen.dart';
 import 'package:foodzik/pages/pin_screen/pin_screen.dart';
+import 'package:foodzik/pages/recipe_details_screen/recipe_details_screen.dart';
 import 'package:foodzik/pages/sign_up.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:foodzik/provider%20classes/baking_steps_provider.dart';
@@ -26,11 +26,13 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]).then((value) => runApp(
-    MyApp(),
+    const MyApp(),
   ));
 }
 //test push
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -58,8 +60,9 @@ class MyApp extends StatelessWidget {
               '/mainScreen': (context) => const MainScreen(),
               '/addRecipe': (context) =>  const AddRecipePage(),
               '/userApprovalPage': (context) =>  const UserApprovalPage(),
+              'recipeDetailPage': (context, {arguments}) => RecipeDetailScreen(recipeMap: arguments),
             },
-            home: PinScreen(),
+            home: const PinScreen(),
             debugShowCheckedModeBanner: false,
           );
         },

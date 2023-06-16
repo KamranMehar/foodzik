@@ -45,11 +45,15 @@ class RecipeImage extends StatelessWidget {
                 child:  Builder(
                   builder: (context) {
                     if(imageProvider.recipeImagePath!=null) {
-                      return CircleAvatar(
-                        radius: 100,
-                        backgroundColor: Colors.transparent,
-                        foregroundImage: FileImage(File(imageProvider.recipeImagePath??"")),
+                      return ClipOval(
+                        child: Image(
+                          image: FileImage(File(imageProvider.recipeImagePath ?? "")),
+                          fit: BoxFit.contain,
+                          width: 200,
+                          height: 200,
+                        ),
                       );
+
                     }else{
                       return const CircleAvatar(
                         radius: 100,

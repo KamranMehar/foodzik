@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:foodzik/const/colors.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class MyEditText extends StatelessWidget {
    MyEditText({Key? key,required this.child}) : super(key: key);

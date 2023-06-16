@@ -30,69 +30,72 @@ class _MyDrawerState extends State<MyDrawer> {
     return Scaffold(
       appBar: AppBar(elevation: 0,),
       body: SafeArea(
-        child: Column(
-          children: [
-            const DrawerGreetingText(),
-            const SizedBox(height: 10,),
-              SizedBox(height: height,),
-            DrawerTile(onTap: (){}, text: "Notifications"),
-             SizedBox(height: height,),
-            DrawerTile(onTap: (){}, text: "History"),
-             SizedBox(height: height,),
-            DrawerTile(onTap: (){
-              Utils.showAlertDialog("Are you Sure to Logout", context, ()async{
-                await FirebaseAuth.instance.signOut().then((value){
-                  Navigator.pushNamedAndRemoveUntil(context, "/firstScreen", (route) => false);
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Column(
+            children: [
+              const DrawerGreetingText(),
+              const SizedBox(height: 10,),
+                SizedBox(height: height,),
+              DrawerTile(onTap: (){}, text: "Notifications"),
+               SizedBox(height: height,),
+              DrawerTile(onTap: (){}, text: "Order History"),
+               SizedBox(height: height,),
+              DrawerTile(onTap: (){
+                Utils.showAlertDialog("Are you Sure to Logout", context, ()async{
+                  await FirebaseAuth.instance.signOut().then((value){
+                    Navigator.pushNamedAndRemoveUntil(context, "/firstScreen", (route) => false);
+                  });
                 });
-              });
-            }, text: "Logout"),
+              }, text: "Logout"),
 
-            Consumer<IsAdminProvider>(
-              builder: (context,isAdminProvider,_) {
-                return Visibility(
-                  visible: isAdminProvider.isAdmin,
-                  child: Column(
-                    children: [
-                      SizedBox(height: height,),
-                      DrawerTile(onTap: (){
-                        Navigator.pushNamed(context, "/addRecipe");
-                      }, text: "Add Recipe"),
-                    ],
-                  ),
-                );
-              }
-            ),
-
-            Consumer<IsAdminProvider>(
-              builder: (context,isAdminProvider,_) {
-                return Visibility(
-                  visible: isAdminProvider.isAdmin,
-                  child: Column(
-                    children: [
-                      SizedBox(height: height,),
-                      DrawerTile(onTap: (){
-                        Navigator.pushNamed(context, "/userApprovalPage");
-                      }, text: "Approve User"),
-                    ],
-                  ),
-                );
-              }
-            ),
-             SizedBox(height: height,),
-            const ThemeChangeWidget(),
-            SizedBox(height: height,),
-            //app version
-            FutureBuilder<PackageInfo>(
-              future: PackageInfo.fromPlatform(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Text('Version : ${snapshot.data!.version}',style: GoogleFonts.aBeeZee(fontSize: 14),);
-                } else   {
-                  return Text('');
+              Consumer<IsAdminProvider>(
+                builder: (context,isAdminProvider,_) {
+                  return Visibility(
+                    visible: isAdminProvider.isAdmin,
+                    child: Column(
+                      children: [
+                        SizedBox(height: height,),
+                        DrawerTile(onTap: (){
+                          Navigator.pushNamed(context, "/addRecipe");
+                        }, text: "Add Recipe"),
+                      ],
+                    ),
+                  );
                 }
-              },
-            ),
-          ],
+              ),
+
+              Consumer<IsAdminProvider>(
+                builder: (context,isAdminProvider,_) {
+                  return Visibility(
+                    visible: isAdminProvider.isAdmin,
+                    child: Column(
+                      children: [
+                        SizedBox(height: height,),
+                        DrawerTile(onTap: (){
+                          Navigator.pushNamed(context, "/userApprovalPage");
+                        }, text: "Approve User"),
+                      ],
+                    ),
+                  );
+                }
+              ),
+               SizedBox(height: height,),
+              const ThemeChangeWidget(),
+              SizedBox(height: height,),
+              //app version
+              FutureBuilder<PackageInfo>(
+                future: PackageInfo.fromPlatform(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text('Version : ${snapshot.data!.version}',style: GoogleFonts.aBeeZee(fontSize: 14),);
+                  } else   {
+                    return Text('');
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

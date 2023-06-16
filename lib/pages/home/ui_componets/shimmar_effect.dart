@@ -4,8 +4,8 @@ import 'package:foodzik/const/colors.dart';
 class ShimmerEffect extends StatefulWidget {
   final double width;
   final double height;
-
-  const ShimmerEffect({required this.width, required this.height});
+  bool isCircular;
+   ShimmerEffect({required this.width, required this.height,this.isCircular=true});
 
   @override
   _ShimmerEffectState createState() => _ShimmerEffectState();
@@ -48,7 +48,7 @@ class _ShimmerEffectState extends State<ShimmerEffect>
           width: widget.width,
           height: widget.height,
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
+            shape:widget.isCircular? BoxShape.circle:BoxShape.rectangle,
             gradient: LinearGradient(
               colors: gradientColors,
               begin: begin,
