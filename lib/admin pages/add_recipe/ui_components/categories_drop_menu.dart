@@ -16,8 +16,6 @@ class CategoryDropDownMenu extends StatefulWidget {
 class _CategoryDropDownMenuState extends State<CategoryDropDownMenu> {
   String? _selectedOption;
 
-
-
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(

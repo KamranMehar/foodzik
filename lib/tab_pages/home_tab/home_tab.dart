@@ -143,7 +143,6 @@ class _HomeTabState extends State<HomeTab> {
                               ),
                               itemCount: list.length,
                               itemBuilder: (context,index){
-
                                 return
                                   RecipeTile(
                                     recipeMap: list[index],

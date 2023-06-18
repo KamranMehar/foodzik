@@ -18,3 +18,13 @@ const List<String> categories = [
   "Gluten-Free",
   "Dairy-Free",
 ];
+
+
+const List<String> difficultyLevelList = [
+  'Very Easy',
+  'Easy',
+  'Medium',
+  'Hard',
+  'Very Hard',
+  'Expert',
+];

@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzik/admin%20pages/add_recipe/ui_components/categories_drop_menu.dart';
+import 'package:foodzik/admin%20pages/add_recipe/ui_components/defficulty_of_recipe.dart';
 import 'package:foodzik/admin%20pages/add_recipe/ui_components/recipe_image.dart';
 import 'package:foodzik/admin%20pages/add_recipe/ui_components/back_button.dart';
 import 'package:foodzik/admin%20pages/add_recipe/ui_components/forground_img.dart';
@@ -23,6 +24,7 @@ import 'package:foodzik/utils/add_ingredient_dialog.dart';
 import 'package:foodzik/utils/dialogs.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'dart:developer' as developer show log;
 
 class AddRecipePage extends StatefulWidget {
   const AddRecipePage({Key? key}) : super(key: key);
@@ -39,9 +41,11 @@ class _AddRecipePageState extends State<AddRecipePage> {
   final personsController=TextEditingController();
   final titleController=TextEditingController();
   final descriptionController=TextEditingController();
+  final infoController=TextEditingController();
 
   String? timeToBake;
   String? category;
+  String? difficulty;
   bool isLoading=false;
   Widget nameEditText(){
     final modelTheme=Provider.of<ModelTheme>(context);
@@ -184,6 +188,64 @@ class _AddRecipePageState extends State<AddRecipePage> {
     );
 
   }
+  Widget infoEditText(){
+    final modelTheme=Provider.of<ModelTheme>(context);
+    bool isThemeDark=modelTheme.isDark;
+    return  Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+              Colors.grey.withOpacity(0.2),
+              Colors.grey.withOpacity(0.7),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(50),
+          border: Border.all(color: greenTextColor, width: 1),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(50),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: TextFormField(
+              minLines: 10,
+              keyboardType: TextInputType.multiline,
+              controller: infoController,
+              textInputAction: TextInputAction.newline,
+              style: GoogleFonts.aBeeZee(
+                color: isThemeDark ? Colors.white : Colors.black,
+                fontSize: 18,
+              ),
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: "   Write Some Information About Recipe",
+                hintStyle: TextStyle(
+                  color: isThemeDark ? Colors.white70 : Colors.black54,
+                  fontSize: 18,
+                ),
+                contentPadding:
+                const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              ),
+              onChanged: (value) {
+                // Handle the text change event if needed
+              },
+              validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  return "Information is empty";
+                }
+                return null;
+              },
+              maxLines: 10, // Allow unlimited number of lines
+            ),
+          ),
+        ),
+      ),
+    );
+
+  }
   @override
   Widget build(BuildContext context) {
     Size size=MediaQuery.of(context).size;
@@ -195,7 +257,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 0,
-      leading: const BackLeadingBtn(),
+      leading:  BackLeadingBtn(),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -204,7 +266,8 @@ class _AddRecipePageState extends State<AddRecipePage> {
            ForegroundRecipeImg(size: size),
             const SizedBox(height: 5,),
             RecipeImage(size: size,isThemeDark: isThemeDark,),
-            Center(child: Text("Add Ingredients",style: GoogleFonts.aBeeZee(fontSize: 21,fontWeight: FontWeight.bold))),
+            Center(
+                child: Text("Add Ingredients",style: GoogleFonts.aBeeZee(fontSize: 21,fontWeight: FontWeight.bold))),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: IngredientsListWidget(size: size,),
@@ -223,6 +286,8 @@ class _AddRecipePageState extends State<AddRecipePage> {
                     priceEditText(),
                     //Per Person
                     perPersonEditText(),
+                    //info about recipe
+                    infoEditText()
                   ],
                 ),) ),
             StepsWidget(),
@@ -254,6 +319,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
                 onInputTimeDone: (value){
                   timeToBake=value;
                 }),
+            ///Add Category
             Center(
               child: SizedBox(
                 width: size.width* 3/5,
@@ -268,7 +334,18 @@ class _AddRecipePageState extends State<AddRecipePage> {
                 ),
               ),
             ),
-            //ADD Button
+            ///Difficulty
+            Center(
+              child: SizedBox(
+                width: size.width* 4.5/10,
+                child: MyEditText(
+                    child: Center(child:
+                      DifficultyDropDownMenu(isThemeDark: isThemeDark, onChanged: (value){
+                        difficulty=value;
+                      }),)),
+              ),
+            ),
+            ///ADD Button
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 30),
               child: LoadingButton(
@@ -290,6 +367,8 @@ class _AddRecipePageState extends State<AddRecipePage> {
                     Utils.showToast("Add ingredients");
                   }else if(stepsProvider.stepsList!.isEmpty){
                     Utils.showToast("Add Steps To Bake");
+                  }else if(difficulty==null){
+                    Utils.showToast("Add Difficulty level");
                   }else{
                     setState(() {
                       isLoading=true;
@@ -330,11 +409,13 @@ class _AddRecipePageState extends State<AddRecipePage> {
                               price: int.tryParse(priceController.text),
                               ingredients: ingredientListWithURL,
                               perPerson: int.tryParse(personsController.text),
-                              stepsToBakeList: bakingSteps
+                              stepsToBakeList: bakingSteps,
+                            difficulty: difficulty,
+                            info: infoController.text,
                           );
                           addRecipeToDB(recipe);
                         }).onError((error, stackTrace){
-                          print(error.toString());
+                          developer.log(error.toString());
                           setState(() {
                             isLoading=false;
                           });
@@ -361,7 +442,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
           .FirebaseStorage.instance
           .ref("Recipe/$recipeName/$imageName");
       firebase_storage.UploadTask imageUploadTask = storageRef.putFile(
-          file.absolute);
+          file.absolute,);
       await Future.value(imageUploadTask).then((value) async {
         downloadUrl = await storageRef.getDownloadURL();
         return downloadUrl;
@@ -369,13 +450,13 @@ class _AddRecipePageState extends State<AddRecipePage> {
         setState(() {
           isLoading=false;
         });
-        print(error.toString());
+        developer.log(error.toString());
         return null;
       });
       return downloadUrl;
     }on FirebaseException catch (e){
       Utils.showAlertDialog( e.message??"Something went wrong", context,(){
-        print("call back pressed");
+        developer.log("call back pressed");
       });
     }
     return null;
@@ -402,14 +483,14 @@ class _AddRecipePageState extends State<AddRecipePage> {
           setState(() {
             isLoading=false;
           });
-          print(error);
+          developer.log(error.toString());
         });
 
       }).onError((error, stackTrace){
         setState(() {
           isLoading=false;
         });
-        print(error);
+        developer.log(error.toString());
       });
     }on FirebaseException catch (e){
       Utils.showAlertDialog(e.message??"Something went wrong", context,()=>Navigator.pop(context));

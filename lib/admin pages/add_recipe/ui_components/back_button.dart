@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import '../../../const/colors.dart';
 
 class BackLeadingBtn extends StatelessWidget {
-  const BackLeadingBtn({Key? key}) : super(key: key);
+   BackLeadingBtn({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-        Navigator.pop(context);
+      onTap: ()async{
+        FocusManager.instance.primaryFocus?.unfocus();
+       await Future.delayed(const Duration(milliseconds: 600),(){
+          Navigator.of(context).pop();
+        });
       },
       child: Container(
         height: 30,
         width: 90,
-        decoration: const BoxDecoration(
+        decoration:  const BoxDecoration(
           color: greenPrimary,
           borderRadius: BorderRadius.only(topRight: Radius.circular(50),bottomRight: Radius.circular(50)),
         ),

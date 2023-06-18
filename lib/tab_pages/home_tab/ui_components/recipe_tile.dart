@@ -9,19 +9,23 @@ import 'dart:developer' as developer show log;
 
 import 'package:provider/provider.dart';
 
+import '../../../pages/home/ui_componets/shimmar_effect.dart';
+
 class RecipeTile extends StatelessWidget {
-  bool isThemeDark;
-  String name;
-  int price;
-  String image;
-  Map recipeMap;
-   RecipeTile({Key? key,required this.isThemeDark,required this.name,required this.price,
+  final bool isThemeDark;
+  final String name;
+  final int price;
+  final String image;
+ final Map recipeMap;
+   const RecipeTile({Key? key,required this.isThemeDark,required this.name,required this.price,
      required this.image,required this.recipeMap,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
   //  developer.log(recipeMap.toString());
-
+  String timeToBake=recipeMap['timeToBake'];
+  String hours = timeToBake.substring(0, 2);
+  String minutes = timeToBake.substring(2, 4);
     return Consumer<IsAdminProvider>(
       builder: (context,adminProvider,_) {
         return GestureDetector(
@@ -54,6 +58,14 @@ class RecipeTile extends StatelessWidget {
                         width: 145,
                         height: 160,//size.height* ((1/10)/2),
                         decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                                spreadRadius: 4,
+                                blurRadius: 20,
+                                color: Colors.black54,
+                                offset:Offset(0,10)
+                            )
+                          ],
                           color: deleteProvider.deleteRecipeList.contains("${recipeMap["category"]}/$name")?greenPrimary:color,
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -72,7 +84,20 @@ class RecipeTile extends StatelessWidget {
                         width: 165,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: NetworkImage(image.toString()),),
+                              image: Image.network(image.toString(),
+                                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  } else {
+                                    return
+                                      ShimmerEffect(
+                                        height: 165,//size.height* ((1/10)/2),
+                                        width: 165
+                                        ,isCircular: true,);
+                                  }
+                                },
+                              ).image,
+                          ),
                           color: Colors.transparent,
                           shape: BoxShape.circle,
                         ),
@@ -88,15 +113,15 @@ class RecipeTile extends StatelessWidget {
                         style: GoogleFonts.aBeeZee(color: isThemeDark?Colors.white:Colors.black,fontSize: 18),
                         overflow: TextOverflow.ellipsis,),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(CupertinoIcons.time_solid,color: isThemeDark?Colors.white:Colors.black,size: 20,),
-                          Text(recipeMap['timeToBake'],
+                          Text("${hours=="00"?"":"$hours hr"} ${minutes=="00"?"":"$minutes min"}",
                             style: GoogleFonts.aBeeZee(color: isThemeDark?Colors.white:Colors.black,fontSize: 14),
                             overflow: TextOverflow.ellipsis,),
                         ],
                       ),
-                      Spacer()
+                      const Spacer()
                     ],
                   ),
                 ),

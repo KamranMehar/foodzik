@@ -31,16 +31,17 @@ class InputTimeDialog extends StatelessWidget {
             Center(
               child: Row(
                 children: [
+                  ///Hours Wheel
                   Expanded(
                     child: ListWheelScrollView.useDelegate(
                         itemExtent:50,
                         perspective: 0.01,
                         onSelectedItemChanged: (currentIndex){
-                         hour='${currentIndex.toString()} hr ';
+                         hour=currentIndex.toString();
                         },
                         physics: const FixedExtentScrollPhysics(),
                         childDelegate: ListWheelChildBuilderDelegate(
-                            childCount: 24,
+                            childCount: 25,
                             builder: (context,index){
                               return Container(
                                 child: Text("$index",style: GoogleFonts.aBeeZee(color:Colors.white,fontSize: 25),),
@@ -48,26 +49,34 @@ class InputTimeDialog extends StatelessWidget {
                             }
                         )),
                   ),
+                  ///Minutes Wheel
                   Expanded(
                     child: ListWheelScrollView.useDelegate(
                         itemExtent:50,
                         perspective: 0.01,
-                        physics: FixedExtentScrollPhysics(),
+                        physics: const FixedExtentScrollPhysics(),
                         onSelectedItemChanged: (currentIndex){
-                         minute='${currentIndex.toString()} min';
+                         minute=currentIndex.toString();
                         },
                         childDelegate: ListWheelChildBuilderDelegate(
                             childCount: 60,
                             builder: (context,index){
+                              if(index<10){
                               return Container(
-                                child: Text("$index",style: GoogleFonts.aBeeZee(color:Colors.white,fontSize: 25),),
+                                child: Text("0$index",style: GoogleFonts.aBeeZee(color:Colors.white,fontSize: 25),),
                               );
+                              }else{
+                                return Container(
+                                  child: Text("$index",style: GoogleFonts.aBeeZee(color:Colors.white,fontSize: 25),),
+                                );
+                              }
                             }
                         )),
                   )
                 ],
               ),
             ),
+            ///Center Container for current value seeing
             Center(
               child: Container(
                 margin: const EdgeInsets.only(bottom: 10),
