@@ -79,31 +79,35 @@ class RecipeTile extends StatelessWidget {
                   child: Column(
                     children: [
                      const Spacer(flex: 2,),
-                      Container(
-                        height: 165,//size.height* ((1/10)/2),
-                        width: 165,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: Image.network(image.toString(),
-                                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                                  if (loadingProgress == null) {
-                                    return child;
-                                  } else {
-                                    return
-                                      ShimmerEffect(
-                                        height: 165,//size.height* ((1/10)/2),
-                                        width: 165
-                                        ,isCircular: true,);
-                                  }
-                                },
-                              ).image,
-                          ),
-                          color: Colors.transparent,
-                          shape: BoxShape.circle,
-                        ),
-
+                  Container(
+                    height: 165,
+                    width: 165,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    child: ClipOval(
+                      child: Image.network(
+                        image.toString(),
+                        fit: BoxFit.cover,
+                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          } else {
+                            return ShimmerEffect(
+                              height: 165,
+                              width: 165,
+                              isCircular: true,
+                            );
+                          }
+                        },
+                        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                          return const Icon(Icons.error); // Display an error icon if image fails to load
+                        },
                       ),
-                     // const Spacer(flex: 5),
+                    ),
+                  ),
+
+                  // const Spacer(flex: 5),
                       Text(name,style: GoogleFonts.aBeeZee(color: isThemeDark?Colors.white:Colors.black,
                           fontSize: 20,fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,

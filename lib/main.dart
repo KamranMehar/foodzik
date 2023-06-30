@@ -7,6 +7,7 @@ import 'package:foodzik/pages/home/home_page.dart';
 import 'package:foodzik/pages/login_page.dart';
 import 'package:foodzik/pages/main_screen.dart';
 import 'package:foodzik/pages/pin_screen/pin_screen.dart';
+import 'package:foodzik/pages/recipe_details_screen/components/add_person_dialog.dart';
 import 'package:foodzik/pages/recipe_details_screen/recipe_details_screen.dart';
 import 'package:foodzik/pages/sign_up.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,6 +18,7 @@ import 'package:foodzik/provider%20classes/ingredients_provider.dart';
 import 'package:foodzik/provider%20classes/is_admin_provider.dart';
 import 'package:foodzik/provider%20classes/pin_input_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'provider classes/theme_model.dart';
 
 void main() async {
@@ -44,26 +46,31 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<IngredientsProvider>(create: (_) => IngredientsProvider()),
         ChangeNotifierProvider<BakingStepsProvider>(create: (_) => BakingStepsProvider()),
         ChangeNotifierProvider<DeleteRecipeProvider>(create: (_) => DeleteRecipeProvider()),
+        ChangeNotifierProvider<PersonDialogProvider>(create: (_) => PersonDialogProvider()),
         // Add more providers here if needed
       ],
       child: Consumer<ModelTheme>(
         builder: (context, ModelTheme themeNotifier, child) {
-          return MaterialApp(
-            theme: themeNotifier.isDark ? MyTheme.darkTheme : MyTheme.lightTheme,
-            title: 'Flutter Demo',
-            routes: {
-              '/home': (context) => const HomePage(),
-              '/firstScreen': (context) => FirstScreen(),
-              '/login': (context) => const LoginPage(),
-              '/signup': (context) => const SignupPage(),
-              '/approveUser': (context) => const UserApprovalPage(),
-              '/mainScreen': (context) => const MainScreen(),
-              '/addRecipe': (context) =>  const AddRecipePage(),
-              '/userApprovalPage': (context) =>  const UserApprovalPage(),
-              'recipeDetailPage': (context, {arguments}) => RecipeDetailScreen(recipeMap: arguments),
-            },
-            home: const PinScreen(),
-            debugShowCheckedModeBanner: false,
+          return ResponsiveSizer(
+            builder: (context,orientation,screenType) {
+              return MaterialApp(
+                theme: themeNotifier.isDark ? MyTheme.darkTheme : MyTheme.lightTheme,
+                title: 'Flutter Demo',
+                routes: {
+                  '/home': (context) => const HomePage(),
+                  '/firstScreen': (context) => FirstScreen(),
+                  '/login': (context) => const LoginPage(),
+                  '/signup': (context) => const SignupPage(),
+                  '/approveUser': (context) => const UserApprovalPage(),
+                  '/mainScreen': (context) => const MainScreen(),
+                  '/addRecipe': (context) =>  const AddRecipePage(),
+                  '/userApprovalPage': (context) =>  const UserApprovalPage(),
+                  'recipeDetailPage': (context, {arguments}) => RecipeDetailScreen(recipeMap: arguments),
+                },
+                home: const PinScreen(),
+                debugShowCheckedModeBanner: false,
+              );
+            }
           );
         },
       ),

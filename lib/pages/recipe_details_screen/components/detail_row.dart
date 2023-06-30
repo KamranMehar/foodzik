@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:developer'as developer show log;
-import '../../../model classes/ingredient.dart';
 
 class DetailRowRecipe extends StatelessWidget {
   final bool isThemeDark;
@@ -30,6 +29,12 @@ class DetailRowRecipe extends StatelessWidget {
             height: 25,width: 25,
           child: Icon(CupertinoIcons.time,color: isThemeDark?Colors.white70:Colors.grey.shade800,),),
         text: "${hours=="00"?"":"$hours hr"} ${minutes=="00"?"":"$minutes min"}",
+        ),
+        IconUnderTextWidget(
+          icon: SizedBox(
+            height: 25,width: 25,
+          child: Icon(CupertinoIcons.person_2,color: isThemeDark?Colors.white70:Colors.grey.shade800,),),
+        text: recipeMap['perPerson'].toString(),
         ),
         IconUnderTextWidget(
           icon: SizedBox(

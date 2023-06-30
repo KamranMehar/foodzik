@@ -77,7 +77,7 @@ class _HowToBakeTabState extends State<HowToBakeTab> {
                   style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold,fontSize: 18),
                 ),
                 subtitle: Text(step['details'],style: GoogleFonts.abel(fontSize: 16),),
-                content: SizedBox.shrink(),
+                content: const SizedBox.shrink(),
                 isActive: widget.stepList.indexOf(step) <= currentIndex,
                 state: widget.stepList.indexOf(step) == currentIndex
                     ? StepState.editing

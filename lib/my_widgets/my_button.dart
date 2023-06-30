@@ -39,16 +39,21 @@ double padding;
 }
 
 class LoadingButton extends StatelessWidget {
-  String text;
-  bool isLoading;
-  double padding;
-
-  VoidCallback click;
-  LoadingButton({Key? key,
+ final String text;
+ final bool isLoading;
+ final double padding;
+ final  double fontSize;
+ final VoidCallback click;
+ final double spreadShadow;
+ final double blurShadow;
+  const LoadingButton({Key? key,
     required this.text,
     required this.click,
     this.padding=10,
     this.isLoading=false,
+    this.fontSize=20,
+    this.spreadShadow=4,
+    this.blurShadow=20,
   }) : super(key: key);
 
   @override
@@ -62,11 +67,11 @@ class LoadingButton extends StatelessWidget {
             color: greenPrimary,
             borderRadius: BorderRadius.circular(50),
             border: Border.all(color: Colors.greenAccent,width: 1),
-            boxShadow: const [
+            boxShadow:  [
               BoxShadow(color: greenPrimary,
-                  spreadRadius: 4,
-                  blurRadius: 20,
-                  offset: Offset(4, 4))
+                  spreadRadius: spreadShadow,
+                  blurRadius: blurShadow,
+                  offset: const Offset(4, 4))
             ]
         ),
         child:isLoading?
@@ -75,7 +80,7 @@ class LoadingButton extends StatelessWidget {
                 height: 20,
                 width: 20,
                 child: CircularProgressIndicator(color: Colors.white,strokeWidth: 1,))):
-        Center(child: Text(text,style:const TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.white),)),
+        Center(child: Text(text,style: TextStyle(fontWeight: FontWeight.bold,fontSize: fontSize,color: Colors.white),)),
       ),
     );
   }

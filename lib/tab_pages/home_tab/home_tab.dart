@@ -114,6 +114,7 @@ class _HomeTabState extends State<HomeTab> {
                     stream: ref.onValue,
                     builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot){
                       if(!snapshot.hasData){
+                        //Shimmer effect of items
                         return  GridView.builder(
                             padding: const EdgeInsets.only(bottom: 30),
                             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -130,6 +131,7 @@ class _HomeTabState extends State<HomeTab> {
                       }else if(snapshot.hasError){
                         return const Center(child: Text("Something went wrong\nTry again"),);
                       }else{
+                        //if data found
                         Map<dynamic, dynamic>? map = snapshot.data!.snapshot
                             .value as dynamic;
                         List<dynamic> list = [];

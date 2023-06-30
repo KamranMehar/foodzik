@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foodzik/admin%20pages/add_recipe/ui_components/back_button.dart';
 import 'package:foodzik/const/colors.dart';
+import 'package:foodzik/my_widgets/my_button.dart';
+import 'package:foodzik/pages/recipe_details_screen/components/add_person_dialog.dart';
 import 'package:foodzik/pages/recipe_details_screen/components/detail_row.dart';
 import 'package:foodzik/pages/recipe_details_screen/components/forground_img_details.dart';
 import 'package:foodzik/pages/recipe_details_screen/components/tabs/info.dart';
@@ -104,6 +106,32 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
                 isThemeDark: isThemeDark,
                 recipeMap: recipeMap,
             ),),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  LoadingButton(
+                    blurShadow: 10,
+                    spreadShadow: 1,
+                      fontSize: 13,
+                      text: "Add To Cart", click: (){
+                    //show dialog to add more persons
+                    showDialog(context: context, builder: (context){
+                      return  PersonDialog(recipeMap: recipeMap,);
+                    });
+                  }),
+                  LoadingButton(
+                    blurShadow: 10,
+                    spreadShadow: 1,
+                      fontSize: 13,
+                      text: "Special Order",
+                      click: (){
+
+                      })
+                ],
+              ),
+            ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 10),
               color: Colors.transparent, // Set the background color of the TabBar
