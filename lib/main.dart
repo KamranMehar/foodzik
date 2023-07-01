@@ -12,6 +12,7 @@ import 'package:foodzik/pages/recipe_details_screen/recipe_details_screen.dart';
 import 'package:foodzik/pages/sign_up.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:foodzik/provider%20classes/baking_steps_provider.dart';
+import 'package:foodzik/provider%20classes/cart_provider.dart';
 import 'package:foodzik/provider%20classes/delete_recipe_provider.dart';
 import 'package:foodzik/provider%20classes/image_provider.dart';
 import 'package:foodzik/provider%20classes/ingredients_provider.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<BakingStepsProvider>(create: (_) => BakingStepsProvider()),
         ChangeNotifierProvider<DeleteRecipeProvider>(create: (_) => DeleteRecipeProvider()),
         ChangeNotifierProvider<PersonDialogProvider>(create: (_) => PersonDialogProvider()),
+        ChangeNotifierProvider<CartProvider>(create: (_) => CartProvider()),
         // Add more providers here if needed
       ],
       child: Consumer<ModelTheme>(

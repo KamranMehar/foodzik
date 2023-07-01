@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzik/const/colors.dart';
 import 'package:foodzik/my_widgets/my_button.dart';
+import 'package:foodzik/provider%20classes/cart_provider.dart';
 import 'package:foodzik/provider%20classes/theme_model.dart';
 import 'package:foodzik/utils/dialogs.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -33,7 +34,8 @@ class _PersonDialogState extends State<PersonDialog> {
   Widget build(BuildContext context) {
     final modelTheme = Provider.of<ModelTheme>(context, listen: false);
     bool isThemeDark = modelTheme.isDark;
-
+    final cartProvider=Provider.of<CartProvider>(context,listen: false);
+    Map recipe=widget.recipeMap;
     return Dialog(
       backgroundColor: Colors.transparent,
       child: Consumer<PersonDialogProvider>(
@@ -107,7 +109,14 @@ class _PersonDialogState extends State<PersonDialog> {
                     padding: 5,
                     fontSize: 15.sp,
                     text: "Add To Cart",
-                    click: () {},
+                    click: () {
+
+                     recipe["perPerson"]=personProvider._person;
+                      cartProvider.addToCart(recipe);
+                      Utils.showToast("${widget.recipeMap["name"]} is Added To Cart");
+                      personProvider.minPerson=0;
+                      Navigator.pop(context);
+                    },
                   ),
                 )
               ],
