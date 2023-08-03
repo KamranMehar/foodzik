@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodzik/model%20classes/Recipe.dart';
 
 import '../../home/ui_componets/shimmar_effect.dart';
 import 'bookmark.dart';
@@ -36,9 +37,11 @@ class ForegroundImageDetailPage extends StatelessWidget {
             ),
           ),
           Positioned(
-              right: 12,
-              bottom: 12,
-              child: BookmarkRecipe(recipeName: recipeMap!['name'])),
+            right: 12,
+            bottom: 12,
+            child: BookmarkRecipe(recipe: recipeMap??{}),
+          ),
+
         ],
       ),
     );

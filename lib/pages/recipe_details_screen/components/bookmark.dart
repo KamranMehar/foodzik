@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import '../../../utils/dialogs.dart';
 import 'dart:developer' as developer show log;
 class BookmarkRecipe extends StatefulWidget {
-  const BookmarkRecipe({Key? key, required this.recipeName}) : super(key: key);
+  const BookmarkRecipe({Key? key, required this.recipe}) : super(key: key);
 
-  final String recipeName;
+  final Map recipe;
 
   @override
   State<BookmarkRecipe> createState() => _BookmarkRecipeState();
@@ -33,13 +33,13 @@ class _BookmarkRecipeState extends State<BookmarkRecipe> {
     }
   }
 
-  Future<void> addBookmark(String userId, String recipeName) async {
+  Future<void> addBookmark(String userId, Map recipe) async {
     try {
       final database = FirebaseDatabase.instance;
       final userBookmarksRef =
-      database.ref().child('Users/$userId/bookmarks');
+      database.ref().child('Users/$userId/bookmarks/');
 
-      await userBookmarksRef.child(recipeName).set(true);
+      await userBookmarksRef.child(recipe['name']).set(recipe);
 
       Utils.showToast("Added To Bookmarks");
       setState(() {});
@@ -52,7 +52,7 @@ class _BookmarkRecipeState extends State<BookmarkRecipe> {
     try {
       final database = FirebaseDatabase.instance;
       final userBookmarksRef =
-      database.ref().child('Users/$userId/bookmarks');
+      database.ref().child('Users/$userId/bookmarks/');
 
       await userBookmarksRef.child(recipeName).remove();
 
@@ -66,7 +66,7 @@ class _BookmarkRecipeState extends State<BookmarkRecipe> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
-      future: checkBookmark(userId, widget.recipeName),
+      future: checkBookmark(userId, widget.recipe['name']),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const SizedBox(
@@ -81,9 +81,9 @@ class _BookmarkRecipeState extends State<BookmarkRecipe> {
           return IconButton(
             onPressed: () async {
               if (isBookmarked) {
-                await removeBookmark(userId, widget.recipeName);
+                await removeBookmark(userId, widget.recipe['name']);
               } else {
-                await addBookmark(userId, widget.recipeName);
+                await addBookmark(userId, widget.recipe);
               }
             },
             icon: Icon(

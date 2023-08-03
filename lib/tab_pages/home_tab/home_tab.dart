@@ -115,19 +115,23 @@ class _HomeTabState extends State<HomeTab> {
                     builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot){
                       if(!snapshot.hasData){
                         //Shimmer effect of items
-                        return  GridView.builder(
-                            padding: const EdgeInsets.only(bottom: 30),
-                            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                                childAspectRatio: 1/1.6,
-                                maxCrossAxisExtent: 200
-                            ),
-                            itemCount: 4,
-                            itemBuilder: (context,index){
-                              return Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: LoadingRecipe(isThemeDark: isThemeDark,),
-                              );
-                            });
+                        return  MediaQuery.removePadding(
+                          context: context,
+                          removeTop: true,
+                          child: GridView.builder(
+                              padding: const EdgeInsets.only(bottom: 30),
+                              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  childAspectRatio: 1/1.6,
+                                  maxCrossAxisExtent: 200
+                              ),
+                              itemCount: 4,
+                              itemBuilder: (context,index){
+                                return Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: LoadingRecipe(isThemeDark: isThemeDark,),
+                                );
+                              }),
+                        );
                       }else if(snapshot.hasError){
                         return const Center(child: Text("Something went wrong\nTry again"),);
                       }else{
@@ -138,21 +142,25 @@ class _HomeTabState extends State<HomeTab> {
                         list.clear();
                         if(map!=null){
                           list = map.values.toList();
-                          return GridView.builder(
-                              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                                  childAspectRatio: 1 / 1.7,
-                                  maxCrossAxisExtent: 180,
-                              ),
-                              itemCount: list.length,
-                              itemBuilder: (context,index){
-                                return
-                                  RecipeTile(
-                                    recipeMap: list[index],
-                                    isThemeDark: isThemeDark, name: list[index]!['name'],
-                                    price:list[index]!["price"],
-                                    image:list[index]!["image"],
-                                  );
-                              });
+                          return MediaQuery.removePadding(
+                            context: context,
+                            removeTop: true,
+                            child: GridView.builder(
+                                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                                    childAspectRatio: 1 / 1.7,
+                                    maxCrossAxisExtent: 180,
+                                ),
+                                itemCount: list.length,
+                                itemBuilder: (context,index){
+                                  return
+                                    RecipeTile(
+                                      recipeMap: list[index],
+                                      isThemeDark: isThemeDark, name: list[index]!['name'],
+                                      price:list[index]!["price"],
+                                      image:list[index]!["image"],
+                                    );
+                                }),
+                          );
                         }else{
                           return const Center(child: Text("No Recipe Found"),);
                         }

@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
                   '/mainScreen': (context) => const MainScreen(),
                   '/addRecipe': (context) =>  const AddRecipePage(),
                   '/userApprovalPage': (context) =>  const UserApprovalPage(),
-                  'recipeDetailPage': (context, {arguments}) => RecipeDetailScreen(recipeMap: arguments),
+                  'recipeDetailPage': (context, {arguments}) => const RecipeDetailScreen(),
                 },
                 home: const PinScreen(),
                 debugShowCheckedModeBanner: false,

@@ -29,8 +29,9 @@ class _IngredientsTabState extends State<IngredientsTab> {
           Expanded(
             child: SingleChildScrollView(
               controller: widget.childScrollController,
-              child: Container(
-                margin: EdgeInsets.zero,
+              child: MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
                 child: GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),

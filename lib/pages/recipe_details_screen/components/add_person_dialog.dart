@@ -1,18 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:foodzik/const/colors.dart';
 import 'package:foodzik/my_widgets/my_button.dart';
-import 'package:foodzik/provider%20classes/cart_provider.dart';
-import 'package:foodzik/provider%20classes/theme_model.dart';
 import 'package:foodzik/utils/dialogs.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../../const/colors.dart';
+import '../../../provider classes/cart_provider.dart';
+import '../../../provider classes/theme_model.dart';
+
 class PersonDialog extends StatefulWidget {
   final Map recipeMap;
+  final VoidCallback onClose;
 
-  const PersonDialog({Key? key, required this.recipeMap}) : super(key: key);
+  const PersonDialog({Key? key, required this.recipeMap, required this.onClose}) : super(key: key);
 
   @override
   State<PersonDialog> createState() => _PersonDialogState();
@@ -25,24 +27,29 @@ class _PersonDialogState extends State<PersonDialog> {
   void initState() {
     super.initState();
     personProvider = Provider.of<PersonDialogProvider>(context, listen: false);
-    personProvider.minPerson = widget.recipeMap["perPerson"];
-    personProvider._price = (widget.recipeMap["price"]/widget.recipeMap["perPerson"]).toInt();
-    personProvider._totalPrice = (widget.recipeMap["price"]).toInt();
+    Future.delayed(Duration.zero,(){
+      personProvider.minPerson = widget.recipeMap["perPerson"];
+      personProvider.price = (widget.recipeMap["price"] / widget.recipeMap["perPerson"]).toInt();
+      personProvider.reset();
+    });
+
   }
 
   @override
   Widget build(BuildContext context) {
     final modelTheme = Provider.of<ModelTheme>(context, listen: false);
     bool isThemeDark = modelTheme.isDark;
-    final cartProvider=Provider.of<CartProvider>(context,listen: false);
-    Map recipe=widget.recipeMap;
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    Map recipe = widget.recipeMap;
+
     return Dialog(
       backgroundColor: Colors.transparent,
       child: Consumer<PersonDialogProvider>(
         builder: (context, personProvider, child) {
           return Container(
             width: 80.w,
-            height: 35.h,
+            height: 40.h,
+            alignment: Alignment.center,
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -87,20 +94,18 @@ class _PersonDialogState extends State<PersonDialog> {
                         ),
                         PersonDialogDec(
                           onTap: () {
-                            if (personProvider.person ==
-                                personProvider._minPerson) {
-                              Utils.showToast(
-                                  "Minimum Person Should be ${personProvider._minPerson}");
-                            } else {
-                              personProvider.decreasePerson();
-                            }
+                            personProvider.decreasePerson();
                           },
                         ),
                       ],
                     )
                   ],
                 ),
-                Text("RS:/ ${personProvider._totalPrice}",style:GoogleFonts.abel(fontSize: 16.sp) ,),
+                Text(
+                  "RS: ${personProvider.totalPrice}",
+                  style: GoogleFonts.abel(fontSize: 21.sp),
+                ),
+                SizedBox(height: 2.h),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: LoadingButton(
@@ -110,12 +115,16 @@ class _PersonDialogState extends State<PersonDialog> {
                     fontSize: 15.sp,
                     text: "Add To Cart",
                     click: () {
-
-                     recipe["perPerson"]=personProvider._person;
-                      cartProvider.addToCart(recipe);
+                      Map cartRecipe = Map.from(recipe);
+                      cartRecipe["perPerson"] = personProvider.person;
+                      cartRecipe["price"] = personProvider.totalPrice;
+                      cartProvider.addToCart(cartRecipe);
                       Utils.showToast("${widget.recipeMap["name"]} is Added To Cart");
-                      personProvider.minPerson=0;
-                      Navigator.pop(context);
+                      Future.delayed(Duration.zero, () {
+                        personProvider.reset();
+                        Navigator.pop(context);
+                        widget.onClose();
+                      });
                     },
                   ),
                 )
@@ -138,6 +147,7 @@ class PersonDialogBtnPlus extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
+        margin: const EdgeInsets.only(bottom: 3),
         decoration: const BoxDecoration(
           color: Colors.grey,
           borderRadius: BorderRadius.only(
@@ -184,32 +194,66 @@ class PersonDialogDec extends StatelessWidget {
   }
 }
 
+
+
 class PersonDialogProvider with ChangeNotifier {
   int _minPerson = 0;
   int _person = 0;
-  int _price=0;
-  int _totalPrice=0;
+  int _price = 0;
+  int _totalPrice = 0;
 
-
-  int get price => _price;
-
-  set minPerson(int value) {
-    _minPerson = value;
-    _person = _minPerson;
-  }
+  int get minPerson => _minPerson;
 
   int get person => _person;
 
-  addPerson() {
-    _person = _person + 1;
-   _totalPrice=(_price*_person).toInt();
+  int get price => _price;
+
+  int get totalPrice => _totalPrice;
+
+  set minPerson(int value) {
+    _minPerson = value;
+    if (_person < _minPerson) {
+      _person = _minPerson;
+    }
     notifyListeners();
   }
 
-  decreasePerson() {
-    _person = _person - 1;
-    _totalPrice=(_price*_person).toInt();
+  set person(int value) {
+    _person = value;
+    _totalPrice = _person * _price;
     notifyListeners();
   }
 
+  set price(int value) {
+    _price = value;
+    _totalPrice = _person * _price;
+    notifyListeners();
+  }
+
+  void reset() {
+    _person = _minPerson;
+    _totalPrice = _person * _price;
+    notifyListeners();
+  }
+
+  void addPerson() {
+    if (_person < 9) {
+      _person++;
+      _totalPrice = _person * _price;
+      notifyListeners();
+    } else {
+      Utils.showToast("Make Special Order");
+    }
+  }
+
+  void decreasePerson() {
+    if (_person > _minPerson) {
+      _person--;
+      _totalPrice = _person * _price;
+      notifyListeners();
+    } else {
+      Utils.showToast("Minimum Person Should be $_minPerson");
+    }
+  }
 }
+

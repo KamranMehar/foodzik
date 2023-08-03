@@ -17,4 +17,8 @@ class CartProvider with ChangeNotifier{
     totalPrice=(totalPrice-recipe["price"]).toInt();
     notifyListeners();
   }
+  bool isRecipeInCart(Map recipe) {
+    return recipeList.any((item) => item['name'] == recipe['name']);
+  }
+
 }

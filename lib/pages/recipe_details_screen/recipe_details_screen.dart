@@ -9,19 +9,21 @@ import 'package:foodzik/pages/recipe_details_screen/components/tabs/info.dart';
 import 'package:foodzik/pages/recipe_details_screen/components/tabs/ingredient_tab.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../../provider classes/cart_provider.dart';
 import '../../provider classes/theme_model.dart';
+import '../../utils/dialogs.dart';
 import 'components/main_image.dart';
 import 'components/tabs/bake_recipe.dart';
 
 class RecipeDetailScreen extends StatefulWidget {
- final Map? recipeMap;
-   const RecipeDetailScreen({Key? key,required this.recipeMap}) : super(key: key);
+   const RecipeDetailScreen({Key? key,}) : super(key: key);
 
   @override
   State<RecipeDetailScreen> createState() => _RecipeDetailScreenState();
 }
 
 class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTickerProviderStateMixin {
+  Map? recipeMap;
   late TabController _tabController;
   final ScrollController childScrollController = ScrollController();
   final ScrollController parentScrollController = ScrollController();
@@ -31,7 +33,12 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
     super.initState();
     childScrollController.addListener(_handleChildScroll);
     _tabController = TabController(length: 3, vsync: this);
+  }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    recipeMap = ModalRoute.of(context)?.settings.arguments as Map?;
   }
 
   @override
@@ -61,10 +68,13 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
 
   @override
   Widget build(BuildContext context) {
+    final personProvider = Provider.of<PersonDialogProvider>(context);
     final modelTheme=Provider.of<ModelTheme>(context);
     bool isThemeDark=modelTheme.isDark;
     Map? recipeMap = ModalRoute.of(context)?.settings.arguments as Map?;
     Size size=MediaQuery.of(context).size;
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+
     return  Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -100,12 +110,14 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
             style: GoogleFonts.aBeeZee(color: isThemeDark?Colors.white:Colors.black,
                 fontWeight: FontWeight.bold,fontSize: 25),
             ),
+             ///Recipe Attributes
              Padding(
                padding: const EdgeInsets.symmetric(horizontal: 20),
-            child:DetailRowRecipe(
+                child:DetailRowRecipe(
                 isThemeDark: isThemeDark,
                 recipeMap: recipeMap,
             ),),
+            ///Buttons
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
               child: Row(
@@ -114,13 +126,28 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
                   LoadingButton(
                     blurShadow: 10,
                     spreadShadow: 1,
-                      fontSize: 13,
-                      text: "Add To Cart", click: (){
-                    //show dialog to add more persons
-                    showDialog(context: context, builder: (context){
-                      return  PersonDialog(recipeMap: recipeMap,);
-                    });
-                  }),
+                    fontSize: 13,
+                    text: cartProvider.isRecipeInCart(recipeMap) ? "In Cart ✔" : "Add To Cart",
+                    click: () {
+                      if (cartProvider.isRecipeInCart(recipeMap)) {
+                        Utils.showToast("Recipe is already in the cart.");
+                      } else {
+                        // Recipe is not in the cart, show the person dialog
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return PersonDialog(
+                              recipeMap: recipeMap,
+                              onClose: () {
+                                personProvider.reset();
+                                Navigator.pop(context);
+                              },
+                            );
+                          },
+                        );
+                      }
+                    },
+                  ),
                   LoadingButton(
                     blurShadow: 10,
                     spreadShadow: 1,
