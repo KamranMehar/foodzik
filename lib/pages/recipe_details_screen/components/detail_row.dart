@@ -51,15 +51,17 @@ class IconUnderTextWidget extends StatelessWidget {
   const IconUnderTextWidget({Key? key,
     required this.icon,
   required this.text,
+    this.fontSize=16,
     }) : super(key: key);
  final Widget icon;
  final String text;
+ final double fontSize;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         icon,
-        Text(text,style: GoogleFonts.robotoMono(fontSize: 16),)
+        Text(text,style: GoogleFonts.robotoMono(fontSize: fontSize),)
       ],
     );
   }

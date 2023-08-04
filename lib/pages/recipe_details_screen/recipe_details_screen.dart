@@ -154,7 +154,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
                       fontSize: 13,
                       text: "Special Order",
                       click: (){
-
+                        Navigator.pushNamed(context, "/createSpecialOrder",arguments:recipeMap);
                       })
                 ],
               ),

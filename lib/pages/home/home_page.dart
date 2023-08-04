@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../../provider classes/delete_recipe_provider.dart';
 import '../../tab_pages/cart_tab/cart_tab.dart';
-import '../../tab_pages/favourite_tab.dart';
+import '../../tab_pages/favourit_tab/favourite_tab.dart';
 import '../../tab_pages/home_tab/home_tab.dart';
 import '../../utils/dialogs.dart';
 

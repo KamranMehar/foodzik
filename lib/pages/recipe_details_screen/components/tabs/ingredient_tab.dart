@@ -17,7 +17,7 @@ class IngredientsTab extends StatefulWidget {
 class _IngredientsTabState extends State<IngredientsTab> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: widget.size.height*7/10,
       width: widget.size.width,
       child: Column(
@@ -97,16 +97,19 @@ class IngredientTabTile extends StatelessWidget {
           SizedBox(
             height: 90,
             width: 90,
-            child: Image.network(image,
-              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                if (loadingProgress == null) {
-                  return child;
-                } else {
-                  return
-                    ShimmerEffect(height: 90,
-                      width: 90,isCircular: false,);
-                }
-              },)
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(image,
+                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  } else {
+                    return
+                      ShimmerEffect(height: 90,
+                        width: 90,isCircular: false,);
+                  }
+                },),
+            )
           ),
           Text(name,style: GoogleFonts.aBeeZee(fontSize: 14,fontWeight: FontWeight.bold),overflow: TextOverflow.ellipsis,),
           Text("$quantity $unit",style: GoogleFonts.aBeeZee(fontSize: 12),overflow: TextOverflow.ellipsis,),

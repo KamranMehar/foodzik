@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodzik/admin%20pages/add_recipe/add_recipe_page.dart';
 import 'package:foodzik/admin%20pages/approval_pending_users.dart';
+import 'package:foodzik/pages/create_special_order/create_special_order.dart';
 import 'package:foodzik/pages/fisrt_screen.dart';
 import 'package:foodzik/pages/home/home_page.dart';
 import 'package:foodzik/pages/login_page.dart';
@@ -68,6 +69,7 @@ class MyApp extends StatelessWidget {
                   '/addRecipe': (context) =>  const AddRecipePage(),
                   '/userApprovalPage': (context) =>  const UserApprovalPage(),
                   'recipeDetailPage': (context, {arguments}) => const RecipeDetailScreen(),
+                  '/createSpecialOrder': (context, {arguments}) => const CreateSpecialOrderScreen(),
                 },
                 home: const PinScreen(),
                 debugShowCheckedModeBanner: false,
