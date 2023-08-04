@@ -36,7 +36,6 @@ class _HomeTabState extends State<HomeTab> {
     Size size=MediaQuery.of(context).size;
     final modelTheme=Provider.of<ModelTheme>(context);
     bool isThemeDark=modelTheme.isDark;
-    developer.log(category);
     return Scaffold(
       body:
         Column(
@@ -88,7 +87,6 @@ class _HomeTabState extends State<HomeTab> {
                       onTap: (){
                         setState(() {
                           category=categories.elementAt(index);
-                          developer.log(category);
                         });
                       },
                       child: AnimatedContainer(

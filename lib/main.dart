@@ -14,7 +14,9 @@ import 'package:foodzik/pages/sign_up.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:foodzik/provider%20classes/baking_steps_provider.dart';
 import 'package:foodzik/provider%20classes/cart_provider.dart';
+import 'package:foodzik/provider%20classes/create_special_order_provider.dart';
 import 'package:foodzik/provider%20classes/delete_recipe_provider.dart';
+import 'package:foodzik/provider%20classes/special_order_cart_provider.dart';
 import 'package:foodzik/provider%20classes/image_provider.dart';
 import 'package:foodzik/provider%20classes/ingredients_provider.dart';
 import 'package:foodzik/provider%20classes/is_admin_provider.dart';
@@ -50,6 +52,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<DeleteRecipeProvider>(create: (_) => DeleteRecipeProvider()),
         ChangeNotifierProvider<PersonDialogProvider>(create: (_) => PersonDialogProvider()),
         ChangeNotifierProvider<CartProvider>(create: (_) => CartProvider()),
+        ChangeNotifierProvider<CreateSpecialOrderProvider>(create: (_) => CreateSpecialOrderProvider()),
+        ChangeNotifierProvider<SpecialOrderCartProvider>(create: (_) => SpecialOrderCartProvider()),
         // Add more providers here if needed
       ],
       child: Consumer<ModelTheme>(

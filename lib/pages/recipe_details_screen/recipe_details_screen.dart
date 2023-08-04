@@ -7,6 +7,7 @@ import 'package:foodzik/pages/recipe_details_screen/components/detail_row.dart';
 import 'package:foodzik/pages/recipe_details_screen/components/forground_img_details.dart';
 import 'package:foodzik/pages/recipe_details_screen/components/tabs/info.dart';
 import 'package:foodzik/pages/recipe_details_screen/components/tabs/ingredient_tab.dart';
+import 'package:foodzik/provider%20classes/special_order_cart_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../provider classes/cart_provider.dart';
@@ -74,6 +75,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
     Map? recipeMap = ModalRoute.of(context)?.settings.arguments as Map?;
     Size size=MediaQuery.of(context).size;
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    final specialCartProvider = Provider.of<SpecialOrderCartProvider>(context, listen: false);
 
     return  Scaffold(
       extendBodyBehindAppBar: true,
@@ -146,15 +148,21 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
                           },
                         );
                       }
+
                     },
                   ),
                   LoadingButton(
                     blurShadow: 10,
                     spreadShadow: 1,
                       fontSize: 13,
-                      text: "Special Order",
+                      text: specialCartProvider.isRecipeInCart(recipeMap) ? "In Special Cart ✔" : "Create Special Order",
                       click: (){
-                        Navigator.pushNamed(context, "/createSpecialOrder",arguments:recipeMap);
+                        if (specialCartProvider.isRecipeInCart(recipeMap)) {
+                          Utils.showToast("Recipe is already in special cart.");
+                        } else{
+                          Navigator.pushNamed(context, "/createSpecialOrder",
+                              arguments: recipeMap);
+                        }
                       })
                 ],
               ),
