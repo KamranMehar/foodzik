@@ -5,9 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import '../const/colors.dart';
 
 class InputTimeDialog extends StatelessWidget {
-  Size size;
-  void Function(String) onTimeInputDone;
-  InputTimeDialog({Key? key,required this.size,
+ final Size size;
+ final void Function(String) onTimeInputDone;
+  const InputTimeDialog({Key? key,required this.size,
     required this.onTimeInputDone
   }) : super(key: key);
 
@@ -25,7 +25,7 @@ class InputTimeDialog extends StatelessWidget {
           children: [
             Row(children: [
               Text("Hours",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 30),),
-              Spacer(),
+              const Spacer(),
               Text("Minutes",style:  GoogleFonts.aBeeZee(color: Colors.white,fontSize: 30),),
             ],),
             Center(
@@ -43,9 +43,7 @@ class InputTimeDialog extends StatelessWidget {
                         childDelegate: ListWheelChildBuilderDelegate(
                             childCount: 25,
                             builder: (context,index){
-                              return Container(
-                                child: Text("$index",style: GoogleFonts.aBeeZee(color:Colors.white,fontSize: 25),),
-                              );
+                              return Text("$index",style: GoogleFonts.aBeeZee(color:Colors.white,fontSize: 25),);
                             }
                         )),
                   ),
@@ -96,8 +94,12 @@ class InputTimeDialog extends StatelessWidget {
                 child: MyButton(
                     fontSize: 15,
                     onTap: (){
-                          onTimeInputDone("$hour$minute");
-                          Navigator.pop(context);
+                      if(hour=="00"){
+                        onTimeInputDone("$minute min");
+                      }else{
+                        onTimeInputDone("$hour hr $minute min");
+                      }
+                      Navigator.pop(context);
                     }, title: "Done"))
           ],
         ),

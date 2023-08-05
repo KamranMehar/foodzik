@@ -7,8 +7,8 @@ import '../../../provider classes/image_provider.dart';
 
 
 class ForegroundRecipeImg extends StatelessWidget {
-  Size size;
-   ForegroundRecipeImg({Key? key,required this.size,}) : super(key: key);
+final  Size size;
+   const ForegroundRecipeImg({Key? key,required this.size,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

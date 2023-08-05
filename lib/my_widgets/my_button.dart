@@ -46,6 +46,7 @@ class LoadingButton extends StatelessWidget {
  final VoidCallback click;
  final double spreadShadow;
  final double blurShadow;
+ final Color shadowColor;
   const LoadingButton({Key? key,
     required this.text,
     required this.click,
@@ -54,6 +55,7 @@ class LoadingButton extends StatelessWidget {
     this.fontSize=20,
     this.spreadShadow=4,
     this.blurShadow=20,
+    this.shadowColor=greenPrimary
   }) : super(key: key);
 
   @override
@@ -68,7 +70,8 @@ class LoadingButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(50),
             border: Border.all(color: Colors.greenAccent,width: 1),
             boxShadow:  [
-              BoxShadow(color: greenPrimary,
+              BoxShadow(
+                  color: shadowColor,
                   spreadRadius: spreadShadow,
                   blurRadius: blurShadow,
                   offset: const Offset(4, 4))

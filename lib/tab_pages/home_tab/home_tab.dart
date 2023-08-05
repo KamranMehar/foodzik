@@ -7,10 +7,13 @@ import 'package:foodzik/tab_pages/home_tab/ui_components/loading_recipe_widget.d
 import 'package:foodzik/tab_pages/home_tab/ui_components/recipe_tile.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'dart:developer' as developer show log;
 import '../../const/colors.dart';
 import '../../pages/home/ui_componets/foodzik_title.dart';
+import '../../provider classes/delete_recipe_provider.dart';
 import '../../provider classes/theme_model.dart';
+import '../../utils/dialogs.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
@@ -23,7 +26,6 @@ class _HomeTabState extends State<HomeTab> {
   @override
   void initState() {
     checkRegistrationApproval();
-
     super.initState();
   }
 
@@ -37,6 +39,7 @@ class _HomeTabState extends State<HomeTab> {
     final modelTheme=Provider.of<ModelTheme>(context);
     bool isThemeDark=modelTheme.isDark;
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body:
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,9 +111,9 @@ class _HomeTabState extends State<HomeTab> {
             Visibility(
               visible: !isRegistrationApproved,
               child: Expanded(
-                  child: StreamBuilder(
-                    stream: ref.onValue,
-                    builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot){
+                  child: FutureBuilder(
+                    future: ref.get(),
+                    builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
                       if(!snapshot.hasData){
                         //Shimmer effect of items
                         return  MediaQuery.removePadding(
@@ -134,8 +137,7 @@ class _HomeTabState extends State<HomeTab> {
                         return const Center(child: Text("Something went wrong\nTry again"),);
                       }else{
                         //if data found
-                        Map<dynamic, dynamic>? map = snapshot.data!.snapshot
-                            .value as dynamic;
+                        Map<dynamic, dynamic>? map = snapshot.data.value as Map<dynamic, dynamic>;
                         List<dynamic> list = [];
                         list.clear();
                         if(map!=null){
@@ -145,15 +147,16 @@ class _HomeTabState extends State<HomeTab> {
                             removeTop: true,
                             child: GridView.builder(
                                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                                    childAspectRatio: 1 / 1.7,
-                                    maxCrossAxisExtent: 180,
+                                  childAspectRatio: 1 / 1.7,
+                                  maxCrossAxisExtent: 180,
                                 ),
                                 itemCount: list.length,
                                 itemBuilder: (context,index){
                                   return
                                     RecipeTile(
                                       recipeMap: list[index],
-                                      isThemeDark: isThemeDark, name: list[index]!['name'],
+                                      isThemeDark: isThemeDark,
+                                      name: list[index]!['name'],
                                       price:list[index]!["price"],
                                       image:list[index]!["image"],
                                     );
@@ -169,7 +172,96 @@ class _HomeTabState extends State<HomeTab> {
             )
           ],
         ),
+      floatingActionButton: Consumer<DeleteRecipeProvider>(
+        builder: (context,deleteRecipeProvider,_) {
+      return Visibility(
+          visible: deleteRecipeProvider.deleteRecipeList.isNotEmpty,
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: Column(
+              children: [
+                const Spacer(),
+                ///edit
+                InkWell(
+                  onTap: (){
+                    if(deleteRecipeProvider.deleteRecipeList.length==1){
+                        Navigator.pushNamed(context,"/editRecipeScreen",
+                            arguments: deleteRecipeProvider.editRecipe);
 
+                    }else{
+                      Utils.showToast("Only One Recipe is Editable at a time");
+                    }
+                  },
+                  child: Badge(
+                    alignment: Alignment.topLeft,
+                    label: Text(deleteRecipeProvider.deleteRecipeList.length.toString(),
+                      style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 16),),
+                    child: Container(
+                      margin: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white,width: 0.5),
+                          color: CupertinoColors.activeBlue,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                                color: CupertinoColors.activeBlue.withOpacity(0.5),
+                                offset: const Offset(0,0),
+                                blurRadius: 12,
+                                spreadRadius: 7
+                            )
+                          ]
+                      ),
+                      child: const Icon(Icons.edit,color: Colors.white,),
+                    ),
+                  ),
+                ),
+                ///remove
+                InkWell(
+                  onTap: (){
+                    Utils.showErrorDialog("Delete Recipes","Are you sure to Delete These Recipes", context,
+                            ()async{
+                          await deleteRecipeProvider.deleteFromDB();
+                          Navigator.pop(context);
+                        }
+                    );
+                  },
+                  child: Badge(
+                    alignment: Alignment.topLeft,
+                    label: Text(deleteRecipeProvider.deleteRecipeList.length.toString(),
+                      style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 16),),
+                    child: Container(
+                      margin: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white,width: 0.5),
+                          color: CupertinoColors.systemRed,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                                color: CupertinoColors.destructiveRed.withOpacity(0.5),
+                                offset: const Offset(0,0),
+                                blurRadius: 12,
+                                spreadRadius: 7
+                            )
+                          ]
+                      ),
+                      child: const Icon(CupertinoIcons.delete,color: Colors.white,),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+              ],
+            ),
+          ));
+    }
+    ),
       );
 
   }

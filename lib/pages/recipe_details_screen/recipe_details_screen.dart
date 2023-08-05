@@ -34,13 +34,9 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
     super.initState();
     childScrollController.addListener(_handleChildScroll);
     _tabController = TabController(length: 3, vsync: this);
+
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    recipeMap = ModalRoute.of(context)?.settings.arguments as Map?;
-  }
 
   @override
   void dispose() {
@@ -69,10 +65,10 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
 
   @override
   Widget build(BuildContext context) {
+    recipeMap = ModalRoute.of(context)?.settings.arguments as Map?;
     final personProvider = Provider.of<PersonDialogProvider>(context);
     final modelTheme=Provider.of<ModelTheme>(context);
     bool isThemeDark=modelTheme.isDark;
-    Map? recipeMap = ModalRoute.of(context)?.settings.arguments as Map?;
     Size size=MediaQuery.of(context).size;
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
     final specialCartProvider = Provider.of<SpecialOrderCartProvider>(context, listen: false);
@@ -108,7 +104,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
          const SizedBox(height: 3,),
             ///Name
             Text(
-              recipeMap["name"],overflow: TextOverflow.ellipsis,
+              recipeMap!["name"],overflow: TextOverflow.ellipsis,
             style: GoogleFonts.aBeeZee(color: isThemeDark?Colors.white:Colors.black,
                 fontWeight: FontWeight.bold,fontSize: 25),
             ),
@@ -117,7 +113,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child:DetailRowRecipe(
                 isThemeDark: isThemeDark,
-                recipeMap: recipeMap,
+                recipeMap: recipeMap!,
             ),),
             ///Buttons
             Padding(
@@ -129,9 +125,10 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
                     blurShadow: 10,
                     spreadShadow: 1,
                     fontSize: 13,
-                    text: cartProvider.isRecipeInCart(recipeMap) ? "In Cart ✔" : "Add To Cart",
+                    shadowColor: Colors.transparent,
+                    text: cartProvider.isRecipeInCart(recipeMap!) ? "In Cart ✔" : "Add To Cart",
                     click: () {
-                      if (cartProvider.isRecipeInCart(recipeMap)) {
+                      if (cartProvider.isRecipeInCart(recipeMap!)) {
                         Utils.showToast("Recipe is already in the cart.");
                       } else {
                         // Recipe is not in the cart, show the person dialog
@@ -139,7 +136,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
                           context: context,
                           builder: (context) {
                             return PersonDialog(
-                              recipeMap: recipeMap,
+                              recipeMap: recipeMap!,
                               onClose: () {
                                 personProvider.reset();
                                 Navigator.pop(context);
@@ -152,12 +149,13 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
                     },
                   ),
                   LoadingButton(
+                    shadowColor: Colors.transparent,
                     blurShadow: 10,
                     spreadShadow: 1,
                       fontSize: 13,
-                      text: specialCartProvider.isRecipeInCart(recipeMap) ? "In Special Cart ✔" : "Create Special Order",
+                      text: specialCartProvider.isRecipeInCart(recipeMap!) ? "In Special Cart ✔" : "Create Special Order",
                       click: (){
-                        if (specialCartProvider.isRecipeInCart(recipeMap)) {
+                        if (specialCartProvider.isRecipeInCart(recipeMap!)) {
                           Utils.showToast("Recipe is already in special cart.");
                         } else{
                           Navigator.pushNamed(context, "/createSpecialOrder",
@@ -198,10 +196,10 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                      InfoTab(size: size, info: recipeMap['info'], isThemeDark: isThemeDark),
-                      IngredientsTab(ingredients: List<Map<dynamic, dynamic>>.from(recipeMap['ingredients']),
+                      InfoTab(size: size, info: recipeMap!['info'], isThemeDark: isThemeDark),
+                      IngredientsTab(ingredients: List<Map<dynamic, dynamic>>.from(recipeMap!['ingredients']),
                         isThemeDark: isThemeDark, childScrollController: childScrollController, size: size,),
-                       HowToBakeTab(stepList: List<Map<dynamic, dynamic>>.from(recipeMap['steps']),),
+                       HowToBakeTab(stepList: List<Map<dynamic, dynamic>>.from(recipeMap!['steps']),),
                 ],
               ),
             ),

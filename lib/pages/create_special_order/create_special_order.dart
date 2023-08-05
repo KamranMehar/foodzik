@@ -120,9 +120,16 @@ class _CreateSpecialOrderScreenState extends State<CreateSpecialOrderScreen> {
                                 blurShadow: 20,
                                 click: (){
                                  // developer.log("${value.recipe['ingredients']}");
-                                      specialProvider.addToCart(value.recipe);
-                                      Navigator.pop(context);
-                                      Utils.showToast("${value.recipe['name']} is added to special cart");
+                                  Map cartRecipe = Map.from(value.recipe);
+                                  cartRecipe["perPerson"] = value.person;
+                                  cartRecipe["price"] = value.totalPrice;
+                                  specialProvider.addToCart(cartRecipe);
+                                  Utils.showToast("${value.recipe["name"]} is Added To Cart");
+                                  Future.delayed(Duration.zero, () {
+                                    value.reset();
+                                    Navigator.pop(context);
+                                  });
+
                                 });
                           }
                         ),

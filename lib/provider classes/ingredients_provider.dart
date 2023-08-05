@@ -6,6 +6,10 @@ import '../model classes/ingredient.dart';
 class IngredientsProvider with ChangeNotifier{
  static List<Ingredient> _ingredientList=[];
 
+  setAll(List<Ingredient> value){
+    _ingredientList= value;
+  }
+
   List<Ingredient>? get ingredientList => _ingredientList;
 
   void addIngredientToList(Ingredient ingredient){

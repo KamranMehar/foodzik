@@ -103,11 +103,24 @@ class IngredientExampleTile extends StatelessWidget {
                   color: const Color(0xff9DABA9),
                   borderRadius: BorderRadius.circular(25),
                 ),
-                child:ingredient.image!=null?
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(25),
-                        child: Image.file(File(ingredient.image!.toString()),fit: BoxFit.contain,))
-                    :  const Icon(Icons.image,color: Colors.white,size: 60,),
+                child: ingredient.image != null
+                    ? ingredient.image!.startsWith('http') // Check if it's a network URL
+                    ? ClipRRect(
+                  borderRadius: BorderRadius.circular(25),
+                  child: Image.network(
+                    ingredient.image!,
+                    fit: BoxFit.contain,
+                  ),
+                )
+                    : ClipRRect(
+                  borderRadius: BorderRadius.circular(25),
+                  child: Image.file(
+                    File(ingredient.image!),
+                    fit: BoxFit.contain,
+                  ),
+                )
+                    : const Icon(Icons.image, color: Colors.white, size: 60),
+
               ),
             ),
             Positioned(

@@ -6,6 +6,10 @@ class BakingStepsProvider with ChangeNotifier{
 
    List<StepsToBake>? get stepsList => _stepsList;
 
+   setAll(List<StepsToBake> value){
+     _stepsList=value;
+   }
+
    addStep(StepsToBake stepsToBake){
      _stepsList!.add(stepsToBake);
      notifyListeners();

@@ -7,9 +7,9 @@ import 'package:foodzik/const/colors.dart';
 import 'package:provider/provider.dart';
 
 class RecipeImage extends StatelessWidget {
-  Size size;
-  bool isThemeDark;
-  RecipeImage({Key? key,required this.size,required this.isThemeDark}) : super(key: key);
+  final Size size;
+ final bool isThemeDark;
+  const RecipeImage({Key? key,required this.size,required this.isThemeDark}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

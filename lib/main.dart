@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:foodzik/admin%20pages/Edit_recipe/edit_recipe.dart';
 import 'package:foodzik/admin%20pages/add_recipe/add_recipe_page.dart';
 import 'package:foodzik/admin%20pages/approval_pending_users.dart';
 import 'package:foodzik/pages/create_special_order/create_special_order.dart';
@@ -72,8 +73,9 @@ class MyApp extends StatelessWidget {
                   '/mainScreen': (context) => const MainScreen(),
                   '/addRecipe': (context) =>  const AddRecipePage(),
                   '/userApprovalPage': (context) =>  const UserApprovalPage(),
-                  'recipeDetailPage': (context, {arguments}) => const RecipeDetailScreen(),
+                  'recipeDetailPage': (context, {arguments}) =>  const RecipeDetailScreen(),
                   '/createSpecialOrder': (context, {arguments}) => const CreateSpecialOrderScreen(),
+                  '/editRecipeScreen': (context, {arguments}) => const EditRecipeScreen(),
                 },
                 home: const PinScreen(),
                 debugShowCheckedModeBanner: false,

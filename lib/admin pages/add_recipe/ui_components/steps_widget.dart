@@ -6,7 +6,7 @@ import '../../../model classes/steps_to_bake.dart';
 import '../../../provider classes/baking_steps_provider.dart';
 
 class StepsWidget extends StatelessWidget {
-  StepsWidget({Key? key}) : super(key: key);
+  const StepsWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

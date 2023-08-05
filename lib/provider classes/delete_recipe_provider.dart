@@ -7,15 +7,21 @@ import '../utils/dialogs.dart';
 
 class DeleteRecipeProvider with ChangeNotifier {
   List<String>deleteRecipeList = [];
+  Map editRecipe={};
 
   addToDeleteList(String recipeName, String category) {
     deleteRecipeList.add("$category/$recipeName");
     notifyListeners();
   }
 
+  addToEdit(Map recipe){
+    editRecipe=recipe;
+    notifyListeners();
+  }
 
   removeFromDeleteList(String recipeName) {
     deleteRecipeList.remove(recipeName);
+    editRecipe.clear();
     notifyListeners();
   }
 
@@ -26,9 +32,9 @@ class DeleteRecipeProvider with ChangeNotifier {
       List<String> parts = input.split('/');
       String category = parts[0];
       String name = parts[1];
-      print("Name: $name");
-      print("Category: $category");
-      print("path: $category/$name");
+      developer.log("Name: $name");
+      developer.log("Category: $category");
+      developer.log("path: $category/$name");
       await ref.child(category).child(name).remove().then((value) {
         ref.child("all").child(name).remove().then((value) {
           deleteDirectory("Recipe/$name");
@@ -37,15 +43,16 @@ class DeleteRecipeProvider with ChangeNotifier {
           Utils.showToast("$name is Removed ");
         }).onError((error, stackTrace){
           Utils.showToast("$name is not removed");
-          print(error.toString());
+          developer.log(error.toString());
         });
       }).catchError((error) {
-        print(error.toString());
+        developer.log(error.toString());
       });
     }
     deleteRecipeList.clear();
+    editRecipe.clear();
     notifyListeners();
-    print(deleteRecipeList.toString());
+    developer.log(deleteRecipeList.toString());
     //  10/06/23 Saturday
   }
   void deleteDirectory(String directoryPath) async {
@@ -57,12 +64,12 @@ class DeleteRecipeProvider with ChangeNotifier {
 
       for (Reference item in listResult.items) {
         await item.delete();
-        print('Item deleted: ${item.fullPath}');
+        developer.log('Item deleted: ${item.fullPath}');
       }
 
-      print('Directory and its contents deleted successfully.');
+      developer.log('Directory and its contents deleted successfully.');
     } catch (e) {
-      print('Error deleting directory: $e');
+      developer.log('Error deleting directory: $e');
     }
   }
 

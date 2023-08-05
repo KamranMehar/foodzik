@@ -273,12 +273,16 @@ class _AddRecipeDialogState extends State<AddRecipeDialog> {
 }
 
 class TimeInputButton extends StatefulWidget {
-  bool isThemeDark;
-  Size size;
-
+ final bool isThemeDark;
+ final Size size;
+   String text;
   void Function(String) onInputTimeDone;
-  TimeInputButton({Key? key,required this.isThemeDark,required this.size,
-  required this.onInputTimeDone}) : super(key: key);
+  TimeInputButton({Key? key,
+    required this.isThemeDark,
+    required this.size,
+  required this.onInputTimeDone,
+  this.text="Time To Bake"
+  }) : super(key: key);
 
   @override
   State<TimeInputButton> createState() => _TimeInputButtonState();
@@ -298,7 +302,7 @@ class _TimeInputButtonState extends State<TimeInputButton> {
               onTimeInputDone: (time ){
               widget.onInputTimeDone(time);
               setState(() {
-                timeToBake=time;
+                widget.text=time;
               });
               },),
           );
@@ -311,7 +315,7 @@ class _TimeInputButtonState extends State<TimeInputButton> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(timeToBake,
+                  Text(widget.text,
                     style: TextStyle(color: widget.isThemeDark?Colors.white70:Colors.black54,fontSize: 18),),
                   Icon(CupertinoIcons.time_solid,color: widget.isThemeDark?Colors.white70:Colors.black54,)
                 ],

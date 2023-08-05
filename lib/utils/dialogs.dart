@@ -217,3 +217,77 @@ final String text;
 }
 
 
+class MyAlertDialog extends StatelessWidget {
+  final String title;
+  final String message;
+
+  const MyAlertDialog({super.key, required this.title, required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider=Provider.of<ModelTheme>(context);
+    bool isThemeDark=themeProvider.isDark;
+
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      elevation: 0.0,
+      backgroundColor: Colors.transparent,
+      child: Container(
+        decoration: BoxDecoration(
+          color: isThemeDark?Colors.grey.shade800:Colors.grey.shade300,
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            Text(
+              message,
+              style: const TextStyle(fontSize: 16.0),
+            ),
+            const SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.grey,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  child: const Text("Cancel"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: greenPrimary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  child: Text("OK"),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
