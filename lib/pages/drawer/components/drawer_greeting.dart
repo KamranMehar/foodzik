@@ -63,7 +63,7 @@ class _DrawerGreetingTextState extends State<DrawerGreetingText> {
       Map<dynamic, dynamic> mapList = snap.value as dynamic;
       if (mapList.isNotEmpty) {
         MyUser user = MyUser.fromJson(mapList);
-        greetingList.add(user.firstName);
+        greetingList.add(user.firstName??"");
       }
     }
 

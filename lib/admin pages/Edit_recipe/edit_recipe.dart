@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzik/provider%20classes/delete_recipe_provider.dart';
 import 'package:foodzik/provider%20classes/theme_model.dart';
 import 'package:foodzik/utils/dialogs.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -56,11 +57,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
   String? category;
   String? difficulty;
   bool isLoading=false;
-
-
-
-
-
+  bool isInitialized=false;
 
   @override
   Widget build(BuildContext context) {
@@ -101,111 +98,14 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               ///Foreground Image
-              Stack(
-                children: [
-                  Consumer<ImageProviderClass>(
-                      builder: (context,imageProvider,_) {
-                        if(imageProvider.foregroundImagePath!=null) {
-                          return
-                            Container(
-                              height: size.height * 4 / 10,
-                              width: size.width,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: FileImage(File(imageProvider.foregroundImagePath.toString())),
-                                  fit: BoxFit.cover, // Set the desired BoxFit
-                                ),
-                                color: Colors.white,
-                                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(80)),
-                              ),
-                            );
-                        }else{
-                          return
-                            Container(
-                              height: size.height * 4 / 10,
-                              width: size.width,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(80)),
-                                  image: DecorationImage(
-                                    image: NetworkImage(_recipeMap!['imageForeground']),
-                                    fit: BoxFit.cover, // Set the desired BoxFit
-                                  )
-                              ),
-                            );
-                        }
-                      }
-                  ),
-                  Positioned(
-                      right: 0,
-                      bottom: 10,
-                      child: GetForegroundImgBtn()),
-                ],
-              ),
+              ForegroundRecipeImg(size: size),
               const SizedBox(height: 5,),
               ///image
-              SizedBox(
-                height: size.width* (3/5),
-                width: size.width* 9/10,
-                child: Consumer<ImageProviderClass>(
-                    builder: (context,imageProvider,_) {
-                      return Stack(
-                        children: [
-                          Positioned(
-                            right: 0,
-                            top: 20,
-                            bottom: 20,
-                            child: Container(
-                              padding: EdgeInsets.only(left: size.width* 1/3),
-                              height: size.width* 2/6,
-                              width: size.width* 4/6,
-                              decoration: const BoxDecoration(
-                                color: greenPrimary,
-                                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(80),topLeft: Radius.circular(80)),
-                              ),
-                              child: IconButton(onPressed: (){
-                                imageProvider.pickRecipeImage();
-                              },icon: Icon(CupertinoIcons.camera_fill,size: 35,color:isThemeDark?Colors.white:Colors.black,)),
-                            ),
-                          ),
-                          Positioned(
-                              left: 10,
-                              bottom: 0,
-                              top: 0,
-                              child:  Builder(
-                                  builder: (context) {
-                                    if(imageProvider.recipeImagePath!=null) {
-                                      return ClipOval(
-                                        child: Image(
-                                          image: FileImage(File(imageProvider.recipeImagePath ?? "")),
-                                          fit: BoxFit.contain,
-                                          width: 200,
-                                          height: 200,
-                                        ),
-                                      );
-
-                                    }else{
-                                      return  ClipOval(
-                                        child: Image(
-                                          image: NetworkImage(_recipeMap!['image']),
-                                          fit: BoxFit.contain,
-                                          width: 200,
-                                          height: 200,
-                                        ),
-                                      );
-                                    }
-                                  }
-                              )
-
-                          ),
-                        ],
-                      );
-                    }
-                ),
-              ),
+              RecipeImage(size: size,isThemeDark: isThemeDark,),
 
               Center(
                   child: Text("Add Ingredients",style: GoogleFonts.aBeeZee(fontSize: 21,fontWeight: FontWeight.bold))),
+              ///Ingredients
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: IngredientsListWidget(size: size,),
@@ -218,9 +118,11 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                   child:Padding(padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       children: [
+                        const Text('Name is Unchangeable'),
                         //name
                         MyEditText(
                           child: TextFormField(
+                            readOnly: true,
                             controller: nameController,
                             style: GoogleFonts.aBeeZee(color: isThemeDark?Colors.white:Colors.black,fontSize: 18),
                             decoration:   InputDecoration(
@@ -228,7 +130,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                               hintText: "Name",
                               hintStyle: TextStyle(color: isThemeDark?Colors.white70:Colors.black54,fontSize: 18),
                             ),
-                            textInputAction: TextInputAction.next,
+                            textInputAction: TextInputAction.done,
                             validator: (value){
                               if(nameController.text.isEmpty){
                                 return "   Name is Empty";
@@ -237,6 +139,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                             },
                           ),
                         ),
+                        const Text('Price'),
                         //price
                         MyEditText(
                             child: TextFormField(
@@ -248,7 +151,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                                 hintText: "Price",
                                 hintStyle: TextStyle(color: isThemeDark?Colors.white70:Colors.black54,fontSize: 18),
                               ),
-                              textInputAction: TextInputAction.next,
+                              textInputAction: TextInputAction.done,
                               validator: (value){
                                 if(priceController.text.isEmpty){
                                   return "   Price is Empty";
@@ -256,6 +159,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                                 return null;
                               },
                             )),
+                        const Text('For Number Of Persons'),
                         //Per Person
                         MyEditText(
                             child: TextFormField(
@@ -276,6 +180,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                               },
                             )),
                         //info about recipe
+                        const Text('about'),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           child: Container(
@@ -421,21 +326,27 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                 }),
               ),
               const SizedBox(height: 10,),
+              const Center(child: Text('Time To Bake')),
               TimeInputButton(
                 text: timeToBake??"Time To Bake",
                   isThemeDark: isThemeDark, size: size,
                   onInputTimeDone: (value){
                     timeToBake=value;
                   }),
+              const Center(child: Text('Difficulty')),
               ///Difficulty
               Center(
                 child: SizedBox(
                   width: size.width* 4.5/10,
                   child: MyEditText(
                       child: Center(child:
-                       DifficultyDropDownMenu(isThemeDark: isThemeDark, onChanged: (value){
+                       DifficultyDropDownMenu(
+                           isThemeDark: isThemeDark,
+                           onChanged: (value){
                         difficulty=value;
-                      }),)),
+                      },
+                       text: difficulty??"Select Difficulty",
+                       ),)),
                 ),
               ),
               ///ADD Button
@@ -445,14 +356,14 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                   shadowColor: Colors.transparent,
                   fontSize: 18.sp,
                   isLoading: isLoading,
-                  click: (){
+                  click: ()async{
                     if(_formKey.currentState!.validate()) {
                       final imageProviderClass = Provider.of<ImageProviderClass>(context, listen: false);
                       final ingredientProviderClass = Provider.of<IngredientsProvider>(context, listen: false);
                       final stepsProvider = Provider.of<BakingStepsProvider>(context, listen: false);
-                      if (imageProviderClass.recipeImagePath == null) {
+                      if (imageProviderClass.recipeImagePath .isEmpty ) {
                         Utils.showToast("Add Recipe Image");
-                      }else if(imageProviderClass.foregroundImagePath ==null){
+                      }else if(imageProviderClass.foregroundImagePath .isEmpty ){
                         Utils.showToast("Add Foreground Image");
                       }else if(timeToBake==null){
                         Utils.showToast("Add Time To Bake");
@@ -468,56 +379,69 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                         setState(() {
                           isLoading=true;
                         });
-                        String?  foregroundImageURL;
-                        String?  recipeImageURL;
-                        //Add Recipe to Database
-                        getImageUrl(imageProviderClass.foregroundImagePath??"",
-                            nameController.text,
-                            "${nameController.text}_foregroundIMG"
-                        ).then((value){
-                          foregroundImageURL=value;
-                          getImageUrl(imageProviderClass.recipeImagePath??"",
+                        try {
+                          String? foregroundImageURL;
+                          String? recipeImageURL;
+                          //Add Recipe to Database
+                          getImageUrl(
+                              imageProviderClass.foregroundImagePath ?? "",
                               nameController.text,
-                              "${nameController.text}_mainIMG").then((value)async{
-                            recipeImageURL=value;
-                            List<Ingredient>? ingredientList = ingredientProviderClass.ingredientList;
-                            List<Ingredient> ingredientListWithURL=[];
-                            // Recipe recipe=Recipe();
-                            await Future.forEach(ingredientList as Iterable<Ingredient>, (Ingredient ingredient) async {
-                              await getImageUrl(ingredient.image!,nameController.text,
-                                  "/ingredients/${ingredient.name!}_image").then((value){
-                                Ingredient _ingredeint=ingredient;
-                                _ingredeint.image=value;
-                                ingredientListWithURL.add(_ingredeint);
-                              });
+                              "${nameController.text}_foregroundIMG"
+                          ).then((value) {
+                            foregroundImageURL = value;
+                            getImageUrl(
+                                imageProviderClass.recipeImagePath ?? "",
+                                nameController.text,
+                                "${nameController.text}_mainIMG").then((
+                                value) async {
+                              recipeImageURL = value;
+                              List<
+                                  Ingredient>? ingredientList = ingredientProviderClass
+                                  .ingredientList;
+                              List<Ingredient> ingredientListWithURL = [];
+                              // Recipe recipe=Recipe();
+                              await Future.forEach(
+                                  ingredientList as Iterable<Ingredient>, (
+                                  Ingredient ingredient) async {
+                                await getImageUrl(
+                                    ingredient.image!, nameController.text,
+                                    "/ingredients/${ingredient.name!}_image")
+                                    .then((value) {
+                                  Ingredient _ingredeint = ingredient;
+                                  _ingredeint.image = value;
+                                  ingredientListWithURL.add(_ingredeint);
+                                });
+                              }).then((value) {
+                                //ADD All Data to DB
 
-                            }).then((value){
-                              //ADD All Data to DB
-
-                              List<StepsToBake>? bakingSteps=stepsProvider.stepsList;
-                              Recipe recipe=Recipe(
-                                name: nameController.text,
-                                category: category,
-                                timeToBake: timeToBake,
-                                image: recipeImageURL,
-                                imageForeground: foregroundImageURL,
-                                price: int.tryParse(priceController.text),
-                                ingredients: ingredientListWithURL,
-                                perPerson: int.tryParse(personsController.text),
-                                stepsToBakeList: bakingSteps,
-                                difficulty: difficulty,
-                                info: infoController.text,
-                              );
-                              addRecipeToDB(recipe);
-                            }).onError((error, stackTrace){
-                              developer.log(error.toString());
-                              setState(() {
-                                isLoading=false;
+                                List<StepsToBake>? bakingSteps = stepsProvider
+                                    .stepsList;
+                                Recipe recipe = Recipe(
+                                  name: nameController.text,
+                                  category: category,
+                                  timeToBake: timeToBake,
+                                  image: recipeImageURL,
+                                  imageForeground: foregroundImageURL,
+                                  price: int.tryParse(priceController.text),
+                                  ingredients: ingredientListWithURL,
+                                  perPerson: int.tryParse(
+                                      personsController.text),
+                                  stepsToBakeList: bakingSteps,
+                                  difficulty: difficulty,
+                                  info: infoController.text,
+                                );
+                                addRecipeToDB(recipe);
+                              }).onError((error, stackTrace) {
+                                developer.log(error.toString());
+                                setState(() {
+                                  isLoading = false;
+                                });
                               });
                             });
-
                           });
-                        });
+                        }catch(e){
+                          Utils.showToast("Something Went Wrong\nCheck Your Internet and Try again");
+                        }
                       }
                     }
                   }, text: "ADD",),
@@ -530,47 +454,64 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
 
   }
 
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _recipeMap = ModalRoute.of(context)?.settings.arguments as Map?;
-    if(_recipeMap!=null){
-     ingredients =
+    if(!isInitialized) {
+      isInitialized=true;
+      _recipeMap = ModalRoute
+          .of(context)
+          ?.settings
+          .arguments as Map?;
+      if (_recipeMap != null) {
+        ingredients =
         List<Map<dynamic, dynamic>>.from(_recipeMap!['ingredients']);
-     nameController.text=_recipeMap!['name'];
-     priceController.text=_recipeMap!['price'].toString();
-     personsController.text=_recipeMap!['perPerson'].toString();
-     infoController.text=_recipeMap!['info'].toString();
-     final ingredientProvider=Provider.of<IngredientsProvider>(context,listen: false);
-     List<Ingredient> extractedIngredients = [];
+        nameController.text = _recipeMap!['name'];
+        priceController.text = _recipeMap!['price'].toString();
+        personsController.text = _recipeMap!['perPerson'].toString();
+        infoController.text = _recipeMap!['info'].toString();
+        final ingredientProvider = Provider.of<IngredientsProvider>(
+            context, listen: false);
+        List<Ingredient> extractedIngredients = [];
 
-     List<Map<dynamic, dynamic>> recipeIngredients = List<Map<dynamic, dynamic>>.from(_recipeMap!['ingredients']);
+        List<Map<dynamic, dynamic>> recipeIngredients = List<
+            Map<dynamic, dynamic>>.from(_recipeMap!['ingredients']);
 
-     for (var ingredientMap in recipeIngredients) {
-       Ingredient ingredient = Ingredient(
-         image: ingredientMap['image'],
-         unit: ingredientMap['unit'],
-         quantity: ingredientMap['quantity'],
-         price: ingredientMap['price'],
-         name: ingredientMap['name'],
-       );
-       extractedIngredients.add(ingredient);
-     }
-     ingredientProvider.setAll(extractedIngredients);
-     final stepsProvider=Provider.of<BakingStepsProvider>(context,listen: false);
-     List<StepsToBake> extractedSteps = [];
-     List<Map<dynamic, dynamic>> recipeSteps = List<Map<dynamic, dynamic>>.from(_recipeMap!['steps']);
+        for (var ingredientMap in recipeIngredients) {
+          Ingredient ingredient = Ingredient(
+            image: ingredientMap['image'],
+            unit: ingredientMap['unit'],
+            quantity: ingredientMap['quantity'],
+            price: ingredientMap['price'],
+            name: ingredientMap['name'],
+          );
+          extractedIngredients.add(ingredient);
+        }
+        ingredientProvider.setAll(extractedIngredients);
+        final stepsProvider = Provider.of<BakingStepsProvider>(
+            context, listen: false);
+        List<StepsToBake> extractedSteps = [];
+        List<Map<dynamic, dynamic>> recipeSteps = List<
+            Map<dynamic, dynamic>>.from(_recipeMap!['steps']);
 
-     for (var stepsMap in recipeSteps) {
-       StepsToBake steps = StepsToBake(
-         title: stepsMap['title'],
-         details: stepsMap['details']
-       );
-       extractedSteps.add(steps);
-     }
-     stepsProvider.setAll(extractedSteps);
-      timeToBake=_recipeMap!['timeToBake'];
-      difficulty=_recipeMap!['difficulty'];
+        for (var stepsMap in recipeSteps) {
+          StepsToBake steps = StepsToBake(
+              title: stepsMap['title'],
+              details: stepsMap['details']
+          );
+          extractedSteps.add(steps);
+        }
+        stepsProvider.setAll(extractedSteps);
+        timeToBake = _recipeMap!['timeToBake'];
+        difficulty = _recipeMap!['difficulty'];
+        category = _recipeMap!['category'];
+
+        final imageProvider = Provider.of<ImageProviderClass>(
+            context, listen: false);
+        imageProvider.foregroundImagePath = _recipeMap!['imageForeground'];
+        imageProvider.recipeImagePath = _recipeMap!['image'];
+      }
     }
   }
 
@@ -598,6 +539,11 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
       stepsProvider.clearList();
 
       });
+      if(isLoading=true){
+        setState(() {
+          isLoading=false;
+        });
+      }
       Navigator.pop(context);
     }
 
@@ -605,37 +551,42 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
   }
 
   Future<String?> getImageUrl(String imagePath,String recipeName,String imageName) async {
-    String filePath = imagePath;
-    File file = File(filePath.toString());
-    String? downloadUrl;
-    try {
-      firebase_storage.Reference storageRef = firebase_storage
-          .FirebaseStorage.instance
-          .ref("Recipe/$recipeName/$imageName");
-      firebase_storage.UploadTask imageUploadTask = storageRef.putFile(
-        file.absolute,);
-      await Future.value(imageUploadTask).then((value) async {
-        downloadUrl = await storageRef.getDownloadURL();
-        return downloadUrl;
-      }).onError((error, stackTrace) {
-        setState(() {
-          isLoading=false;
+    if(imagePath.startsWith('http')) {
+      return imagePath;
+    }else{
+      String filePath = imagePath;
+      File file = File(filePath.toString());
+      String? downloadUrl;
+      try {
+        firebase_storage.Reference storageRef = firebase_storage
+            .FirebaseStorage.instance
+            .ref("Recipe/$recipeName/$imageName");
+        firebase_storage.UploadTask imageUploadTask = storageRef.putFile(
+          file.absolute,);
+        await Future.value(imageUploadTask).then((value) async {
+          downloadUrl = await storageRef.getDownloadURL();
+          return downloadUrl;
+        }).onError((error, stackTrace) {
+          setState(() {
+            isLoading = false;
+          });
+          developer.log(error.toString());
+          return null;
         });
-        developer.log(error.toString());
-        return null;
-      });
-      return downloadUrl;
-    }on FirebaseException catch (e){
-      Utils.showAlertDialog( e.message??"Something went wrong", context,(){
-        developer.log("call back pressed");
-      });
+        return downloadUrl;
+      } on FirebaseException catch (e) {
+        Utils.showAlertDialog(e.message ?? "Something went wrong", context, () {
+          developer.log("call back pressed");
+        });
+      }
     }
     return null;
   }
   addRecipeToDB(Recipe recipe)async{
+
     DatabaseReference ref=FirebaseDatabase.instance.ref("Recipes/${recipe.category}/${recipe.name}");
     try{
-      ref.set(recipe.toJson()).then((value){
+      ref.update(recipe.toJson()).then((value){
         //Also add to all Category
         DatabaseReference refAll=FirebaseDatabase.instance.ref("Recipes/all/${recipe.name}");
         refAll.set(recipe.toJson()).then((value){
@@ -645,11 +596,14 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
           final ingredientProvider=Provider.of<IngredientsProvider>(context,listen: false);
           final imageProvider=Provider.of<ImageProviderClass>(context,listen: false);
           final stepsProvider=Provider.of<BakingStepsProvider>(context,listen: false);
+
           ingredientProvider.clearIngredientList();
           imageProvider.clearImages();
           imageProvider.clearIngredientImage();
           stepsProvider.clearList();
           Utils.showToast("${recipe.name} is Added Successfully");
+
+          Navigator.pop(context);
         }).onError((error, stackTrace) {
           setState(() {
             isLoading=false;

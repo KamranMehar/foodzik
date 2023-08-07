@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzik/provider%20classes/theme_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:developer'as developer show log;
+
+import 'package:provider/provider.dart';
 
 class DetailRowRecipe extends StatelessWidget {
   final bool isThemeDark;

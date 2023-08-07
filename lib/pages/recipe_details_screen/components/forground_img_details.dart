@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodzik/const/colors.dart';
 import '../../home/ui_componets/shimmar_effect.dart';
 import 'bookmark.dart';
 
@@ -23,6 +24,11 @@ class ForegroundImageDetailPage extends StatelessWidget {
             child: Image.network(
               recipeMap!["imageForeground"],
               fit: BoxFit.cover,
+              errorBuilder: (context, object, stackTrace){
+                return Container(
+                    color: greenPrimary.withOpacity(0.4),
+                    child: const Icon(Icons.error_outline,color: Colors.red,));
+              },
               loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                 if (loadingProgress == null) {
                   return child;

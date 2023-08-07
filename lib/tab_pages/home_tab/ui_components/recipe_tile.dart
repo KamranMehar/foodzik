@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:developer' as developer show log;
 
 import 'package:provider/provider.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../pages/home/ui_componets/shimmar_effect.dart';
 
@@ -122,7 +123,13 @@ class RecipeTile extends StatelessWidget {
                               }
                             },
                             errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                              return const Icon(Icons.error); // Display an error icon if image fails to load
+                              return Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: isThemeDark?Colors.grey.shade600:Colors.grey.shade400
+                                  ),
+                                  child: Icon(Icons.error,color: Colors.red,size: 13.w,)); // Display an error icon if image fails to load
                             },
                           ),
                         ),

@@ -34,7 +34,7 @@ class _SignupPageState extends State<SignupPage> {
   TextEditingController passwordController=TextEditingController();
   TextEditingController pinController=TextEditingController();
   TextEditingController addressController=TextEditingController();
- late MyUser user;
+  MyUser user=MyUser();
   bool visiblePass=false;
   final picker = ImagePicker();
   File? titleImage;
@@ -134,7 +134,7 @@ class _SignupPageState extends State<SignupPage> {
                               if(value!.isEmpty){
                                 return "First Name is EMpty";
                               }else{
-                                user.firstName=firstNameController.text;
+                                user!.firstName=firstNameController.text;
                               }
                             },
                           ),
@@ -156,7 +156,7 @@ class _SignupPageState extends State<SignupPage> {
                             if(value!.isEmpty){
                               return "Last Name is Empty";
                             }else{
-                              user.lastName=lastNameController.text;
+                              user!.lastName=lastNameController.text;
                             }
                            },
                          ),
@@ -179,7 +179,7 @@ class _SignupPageState extends State<SignupPage> {
                               if(value!.isEmpty){
                                 return "Phone number is Empty";
                               }else{
-                                user.phoneNumber=phoneNumberController.text;
+                                user!.phoneNumber=phoneNumberController.text;
                               }
                             },
                           ),
@@ -202,7 +202,7 @@ class _SignupPageState extends State<SignupPage> {
                             if(value!.isEmpty){
                               return "Email is Empty";
                             }else{
-                              user.email=emailController.text;
+                              user!.email=emailController.text;
                             }
                            },
                          ),
@@ -264,7 +264,7 @@ class _SignupPageState extends State<SignupPage> {
                                     if(value!.isEmpty){
                                       return "Address is Empty";
                                     }else{
-                                      user.address=addressController.text;
+                                      user!.address=addressController.text;
                                     }
                                   },
                                 ),
@@ -274,8 +274,8 @@ class _SignupPageState extends State<SignupPage> {
                           const Spacer(),
                          InkWell(
                            onTap: (){
-                             getLatLong();
-                             setState(() {});
+                               getLatLong();
+                               setState(() {});
                            },
                            child: ClipRRect(
                              borderRadius: BorderRadius.circular(20),
@@ -325,7 +325,7 @@ class _SignupPageState extends State<SignupPage> {
                             }else if(value.length<4){
                               return "Enter 4 Digit Number !";
                             }else{
-                             user.pin=int.parse(pinController.text);
+                             user!.pin=int.parse(pinController.text);
                             }
                            },
                          ),
@@ -369,30 +369,33 @@ class _SignupPageState extends State<SignupPage> {
         //after user created uploading image to storage
       firebase_storage.Reference storageRef = firebase_storage
           .FirebaseStorage.instance
-          .ref("UsersImages/${user.firstName}_${user.lastName}");
+          .ref("UsersImages/${user!.firstName}_${user!.lastName}");
       firebase_storage.UploadTask imageUploadTask= storageRef.putFile(titleImage!.absolute);
       await Future.value(imageUploadTask).then((value) async{
         //after image uploaded get the getting the download url of the stored image
         var imageUrl = await storageRef.getDownloadURL();
-        user.imagePath=imageUrl;
+        user!.imagePath=imageUrl;
         //upload detail to database in the pending approval list for registration
         databaseRef.child(auth.currentUser!.uid.toString()).set({
           "userId": auth.currentUser!.uid,
           "email": email,
-          "firstName": user.firstName,
-          "lastName":user.lastName,
-          "address":user.address,
-          "phoneNumber":user.phoneNumber,
-          "pin":user.pin,
-          "imagePath":user.imagePath,
+          "firstName": user!.firstName,
+          "lastName":user!.lastName,
+          "address":user!.address,
+          "phoneNumber":user!.phoneNumber,
+          "pin":user!.pin,
+          "imagePath":user!.imagePath,
         }).then((value)async{
           //save pin Locally
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('pin', pinController.text).then((value) => print('pin saved locally'));
+          await prefs.setString('pin', pinController.text).then((value) {
+            Utils.showToast('pin saved locally');
+          });
           Utils.showToast("user Created Successfully");
           setState(() {
             loading=false;
           });
+
           Navigator.pushNamedAndRemoveUntil(context, '/mainScreen', (route) => false);
         })
             .onError((error, stackTrace){ Utils.showErrorDialog("Registration Error", error.toString(),context,
@@ -496,9 +499,11 @@ class _SignupPageState extends State<SignupPage> {
     List<Placemark> placemarks = await placemarkFromCoordinates(lat, long);
     setState(() {
       address =
-      "${placemarks[0].locality!},${placemarks[0].subAdministrativeArea!}, ${placemarks[0].administrativeArea}, ${placemarks[0].country}";
+      "${placemarks[0].locality!},${placemarks[0].subAdministrativeArea!},"
+          " ${placemarks[0].administrativeArea}, ${placemarks[0].country}";
       user.address=address;
       addressController.text=address;
+      user.coordinates="$lat,$long";
     });
 
     for (int i = 0; i < placemarks.length; i++) {

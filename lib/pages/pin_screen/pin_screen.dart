@@ -172,7 +172,6 @@ class _PinScreenState extends State<PinScreen> {
   Future<String?> getPinPref()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? value = prefs.getString('pin');
-    print(value);
     return value;
   }
 }

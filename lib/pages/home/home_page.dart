@@ -11,6 +11,7 @@ import 'package:foodzik/provider%20classes/is_admin_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../../admin pages/admin_orders/admin_orders_screen.dart';
 import '../../provider classes/delete_recipe_provider.dart';
 import '../../tab_pages/cart_tab/cart_tab.dart';
 import '../../tab_pages/favourit_tab/favourite_tab.dart';
@@ -89,14 +90,20 @@ class _HomePageState extends State<HomePage> {
                 }
               ),
               Expanded(
-                child: PageView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: _pageController,
-                  children: const [
-                    FavouriteTab(),
-                    HomeTab(),
-                    CartTab(),
-                  ],
+                child: Consumer<IsAdminProvider>(
+                  builder: (context,value,child) {
+                    return PageView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: _pageController,
+                      children:  [
+                        const FavouriteTab(),
+                        const HomeTab(),
+                        value.isAdmin?
+                            const AdminOrdersTab():
+                        const CartTab(),
+                      ],
+                    );
+                  }
                 ),
               ),
             ],
@@ -123,7 +130,7 @@ class _HomePageState extends State<HomePage> {
         Map<dynamic, dynamic> mapList = snapshot.value as dynamic;
         if (mapList.isNotEmpty) {
           MyUser myUser = MyUser.fromJson(mapList);
-          return myUser.imagePath;
+          return myUser.imagePath??"";
         } else {
           print("No user data found");
           return '';

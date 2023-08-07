@@ -44,10 +44,12 @@ class RecipeImage extends StatelessWidget {
                 top: 0,
                 child:  Builder(
                   builder: (context) {
-                    if(imageProvider.recipeImagePath!=null) {
+                    if(imageProvider.recipeImagePath.isNotEmpty) {
                       return ClipOval(
                         child: Image(
-                          image: FileImage(File(imageProvider.recipeImagePath ?? "")),
+                          image: imageProvider.recipeImagePath.startsWith('http')?
+                          NetworkImage(imageProvider.recipeImagePath):
+                          FileImage(File(imageProvider.recipeImagePath ?? "")) as ImageProvider,
                           fit: BoxFit.contain,
                           width: 200,
                           height: 200,

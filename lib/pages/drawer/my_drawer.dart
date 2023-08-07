@@ -41,12 +41,19 @@ class _MyDrawerState extends State<MyDrawer> {
                SizedBox(height: height,),
               DrawerTile(onTap: (){}, text: "Order History"),
                SizedBox(height: height,),
-              DrawerTile(onTap: (){
-                Utils.showAlertDialog("Are you Sure to Logout", context, ()async{
+              DrawerTile(onTap: ()async{
+                bool? confirmed = await showDialog(
+                  context: context,
+                  builder: (context) => const MyAlertDialog(
+                    title: "Logout",
+                    message: "Are You Sure To Logout ?",
+                  ),
+                );
+                if(confirmed??false){
                   await FirebaseAuth.instance.signOut().then((value){
                     Navigator.pushNamedAndRemoveUntil(context, "/firstScreen", (route) => false);
                   });
-                });
+                }
               }, text: "Logout"),
 
               Consumer<IsAdminProvider>(

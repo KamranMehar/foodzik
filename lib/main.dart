@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:foodzik/admin%20pages/Edit_recipe/edit_recipe.dart';
 import 'package:foodzik/admin%20pages/add_recipe/add_recipe_page.dart';
 import 'package:foodzik/admin%20pages/approval_pending_users.dart';
+import 'package:foodzik/admin%20pages/pending_order_details/pending_order_details.dart';
+import 'package:foodzik/pages/confirm_ordre_screen/confirm_order_screen.dart';
 import 'package:foodzik/pages/create_special_order/create_special_order.dart';
 import 'package:foodzik/pages/fisrt_screen.dart';
 import 'package:foodzik/pages/home/home_page.dart';
@@ -76,6 +78,8 @@ class MyApp extends StatelessWidget {
                   'recipeDetailPage': (context, {arguments}) =>  const RecipeDetailScreen(),
                   '/createSpecialOrder': (context, {arguments}) => const CreateSpecialOrderScreen(),
                   '/editRecipeScreen': (context, {arguments}) => const EditRecipeScreen(),
+                  '/confirmOrderScreen': (context, {arguments}) => const ConfirmOrderScreen(),
+                  '/pendingOrderDetailScreen': (context, {arguments}) => const PendingOrderDetails(),
                 },
                 home: const PinScreen(),
                 debugShowCheckedModeBanner: false,

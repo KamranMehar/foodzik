@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzik/const/colors.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider classes/image_provider.dart';
@@ -16,21 +17,25 @@ final  Size size;
     children: [
       Consumer<ImageProviderClass>(
             builder: (context,imageProvider,_) {
-               if(imageProvider.foregroundImagePath!=null) {
+               if(imageProvider.foregroundImagePath.isNotEmpty) {
                 return
                   Container(
                     height: size.height * 4 / 10,
                     width: size.width,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: FileImage(File(imageProvider.foregroundImagePath.toString())),
-                        fit: BoxFit.cover, // Set the desired BoxFit
+                        image: imageProvider.foregroundImagePath.toString().startsWith('http')
+                            ? NetworkImage(imageProvider.foregroundImagePath.toString(),)
+                            : FileImage(File(imageProvider.foregroundImagePath.toString())) as ImageProvider,
+                        fit: BoxFit.cover,
                       ),
                       color: Colors.white,
                       borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(80)),
                     ),
                   );
-              }else{
+
+
+               }else{
                 return
                   Container(
                     height: size.height * 4 / 10,
@@ -43,7 +48,7 @@ final  Size size;
               }
             }
         ),
-      Positioned(
+      const Positioned(
           right: 0,
           bottom: 10,
           child: GetForegroundImgBtn()),
@@ -54,7 +59,7 @@ final  Size size;
 }
 
 class GetForegroundImgBtn extends StatelessWidget {
-   GetForegroundImgBtn({Key? key}) : super(key: key);
+   const GetForegroundImgBtn({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +68,12 @@ class GetForegroundImgBtn extends StatelessWidget {
     return  Container(
       margin: const EdgeInsets.only(right: 10),
       decoration: BoxDecoration(
-          border: Border.all(color: isDarkTheme?Colors.white:Colors.black,width: 1),
+          border: Border.all(color: greenPrimary,width: 1),
           shape: BoxShape.circle
       ),
       child: IconButton(onPressed: (){
         imageProvider_.pickImageFromGallery();
-      }, icon: Icon(CupertinoIcons.camera_fill,size: 30,color: isDarkTheme?Colors.white:Colors.black,)),
+      }, icon: const Icon(CupertinoIcons.camera_fill,size: 30,color: greenPrimary,)),
     );
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:foodzik/const/colors.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class MainImageRecipeDetailPage extends StatelessWidget {
   const MainImageRecipeDetailPage({Key? key,
@@ -20,6 +22,12 @@ final String url;
       ),
       child: ClipOval(
         child: Image(
+          errorBuilder: (context,obj,stackTrace){
+            return Container(
+              padding: EdgeInsets.all(20.w),
+                color: greenPrimary,
+                child: const Icon(Icons.error_outline,color: Colors.red,));
+          },
           image: NetworkImage(url,),
           fit: BoxFit.contain,
           width: 200,

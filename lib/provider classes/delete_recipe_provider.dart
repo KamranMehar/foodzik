@@ -15,8 +15,10 @@ class DeleteRecipeProvider with ChangeNotifier {
   }
 
   addToEdit(Map recipe){
-    editRecipe=recipe;
-    notifyListeners();
+
+      editRecipe = recipe;
+      notifyListeners();
+
   }
 
   removeFromDeleteList(String recipeName) {
@@ -41,6 +43,7 @@ class DeleteRecipeProvider with ChangeNotifier {
           //Deleting second time with ingredients bcz Firebase storage does't have method to delete all under the path
           deleteDirectory("Recipe/$name/ingredients");
           Utils.showToast("$name is Removed ");
+
         }).onError((error, stackTrace){
           Utils.showToast("$name is not removed");
           developer.log(error.toString());

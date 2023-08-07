@@ -6,9 +6,12 @@ class ImageProviderClass with ChangeNotifier {
   String? _recipeImagePath;
   String? _ingredientImagePath;
 
-  String? get ingredientImagePath => _ingredientImagePath;
-  String? get recipeImagePath => _recipeImagePath;
-  String? get foregroundImagePath => _foregroundImagePath;
+
+  String get foregroundImagePath => _foregroundImagePath??"";
+
+  set foregroundImagePath(String value) {
+    _foregroundImagePath = value;
+  }
 
   Future<void> pickImageFromGallery() async {
     final picker = ImagePicker();
@@ -43,5 +46,17 @@ class ImageProviderClass with ChangeNotifier {
   void clearIngredientImage(){
     _ingredientImagePath=null;
     notifyListeners();
+  }
+
+  String get recipeImagePath => _recipeImagePath??"";
+
+  set recipeImagePath(String? value) {
+    _recipeImagePath = value;
+  }
+
+  String get ingredientImagePath => _ingredientImagePath??"";
+
+  set ingredientImagePath(String value) {
+    _ingredientImagePath = value;
   }
 }

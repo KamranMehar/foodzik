@@ -111,9 +111,9 @@ class _HomeTabState extends State<HomeTab> {
             Visibility(
               visible: !isRegistrationApproved,
               child: Expanded(
-                  child: FutureBuilder(
-                    future: ref.get(),
-                    builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
+                  child: StreamBuilder(
+                    stream: ref.onValue,
+                    builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot){
                       if(!snapshot.hasData){
                         //Shimmer effect of items
                         return  MediaQuery.removePadding(
@@ -137,7 +137,8 @@ class _HomeTabState extends State<HomeTab> {
                         return const Center(child: Text("Something went wrong\nTry again"),);
                       }else{
                         //if data found
-                        Map<dynamic, dynamic>? map = snapshot.data.value as Map<dynamic, dynamic>;
+                        Map<dynamic, dynamic>? map = snapshot.data!.snapshot
+                            .value as dynamic;
                         List<dynamic> list = [];
                         list.clear();
                         if(map!=null){
@@ -182,39 +183,42 @@ class _HomeTabState extends State<HomeTab> {
               children: [
                 const Spacer(),
                 ///edit
-                InkWell(
-                  onTap: (){
-                    if(deleteRecipeProvider.deleteRecipeList.length==1){
-                        Navigator.pushNamed(context,"/editRecipeScreen",
-                            arguments: deleteRecipeProvider.editRecipe);
+                Visibility(
+                  visible: deleteRecipeProvider.deleteRecipeList.isNotEmpty && deleteRecipeProvider.deleteRecipeList.length==1,
+                  child: InkWell(
+                    onTap: (){
+                      if(deleteRecipeProvider.deleteRecipeList.length==1){
+                          Navigator.pushNamed(context,"/editRecipeScreen",
+                              arguments: deleteRecipeProvider.editRecipe);
 
-                    }else{
-                      Utils.showToast("Only One Recipe is Editable at a time");
-                    }
-                  },
-                  child: Badge(
-                    alignment: Alignment.topLeft,
-                    label: Text(deleteRecipeProvider.deleteRecipeList.length.toString(),
-                      style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 16),),
-                    child: Container(
-                      margin: const EdgeInsets.all(10),
-                      padding: const EdgeInsets.all(10),
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white,width: 0.5),
-                          color: CupertinoColors.activeBlue,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                                color: CupertinoColors.activeBlue.withOpacity(0.5),
-                                offset: const Offset(0,0),
-                                blurRadius: 12,
-                                spreadRadius: 7
-                            )
-                          ]
+                      }else{
+                        Utils.showToast("Only One Recipe is Editable at a time");
+                      }
+                    },
+                    child: Badge(
+                      alignment: Alignment.topLeft,
+                      label: Text(deleteRecipeProvider.deleteRecipeList.length.toString(),
+                        style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 16),),
+                      child: Container(
+                        margin: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white,width: 0.5),
+                            color: CupertinoColors.activeBlue,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: CupertinoColors.activeBlue.withOpacity(0.5),
+                                  offset: const Offset(0,0),
+                                  blurRadius: 12,
+                                  spreadRadius: 7
+                              )
+                            ]
+                        ),
+                        child: const Icon(Icons.edit,color: Colors.white,),
                       ),
-                      child: const Icon(Icons.edit,color: Colors.white,),
                     ),
                   ),
                 ),

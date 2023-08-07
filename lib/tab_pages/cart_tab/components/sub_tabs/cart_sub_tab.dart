@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../../const/colors.dart';
+import '../../../../model classes/Recipe.dart';
 import '../../../../provider classes/cart_provider.dart';
 import '../cart_tile.dart';
 
@@ -46,14 +47,14 @@ class _CartSubTabState extends State<CartSubTab> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                      itemCount: CartProvider.recipeList.length,
+                      itemCount: cartProvider.recipeList!.length,
                       itemBuilder: (context, index) {
-                        if (index < CartProvider.recipeList.length - 1) {
+                        if (index < cartProvider.recipeList!.length - 1) {
                           return CartTile(onDelete: () {
                             cartProvider.removeFromCart(
-                                CartProvider.recipeList[index]);
+                                cartProvider.recipeList![index]);
                           },
-                              recipeMap: CartProvider.recipeList[index]
+                              recipeMap: cartProvider.recipeList![index]
                           );
                         } else {
                           return Column(
@@ -61,30 +62,35 @@ class _CartSubTabState extends State<CartSubTab> {
                               CartTile(
                                   onDelete: () {
                                     cartProvider.removeFromCart(
-                                        CartProvider.recipeList[index]);
+                                        cartProvider.recipeList[index]);
                                   },
-                                  recipeMap: CartProvider.recipeList[index]
+                                  recipeMap: cartProvider.recipeList[index]
                               ),
-                              Container(
-                                alignment: Alignment.center,
-                                width: 95.w,
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 5),
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: greenPrimary
+                              InkWell(
+                                onTap:(){
+                                  Navigator.pushNamed(context, "/confirmOrderScreen", arguments: cartProvider.recipeList);
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: 95.w,
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 5),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 5),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: greenPrimary
+                                  ),
+                                  child: Text("Place Order",
+                                    style: GoogleFonts.abel(fontSize: 18.sp),),
                                 ),
-                                child: Text("Place Order",
-                                  style: GoogleFonts.abel(fontSize: 18.sp),),
                               ),
                               SizedBox(height: 15.h,)
                             ],
                           );
                         }
                       }),
-                )
+                ),
               ],
             );
           }

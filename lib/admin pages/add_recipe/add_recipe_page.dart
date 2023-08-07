@@ -26,6 +26,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'dart:developer' as developer show log;
 
+import 'package:responsive_sizer/responsive_sizer.dart';
+
 class AddRecipePage extends StatefulWidget {
   const AddRecipePage({Key? key}) : super(key: key);
   static final GlobalKey<FormState> _formKey =  GlobalKey<FormState>();
@@ -252,182 +254,205 @@ class _AddRecipePageState extends State<AddRecipePage> {
     final modelTheme=Provider.of<ModelTheme>(context);
     bool isThemeDark=modelTheme.isDark;
     final stepsProvider=Provider.of<BakingStepsProvider>(context,listen: false);
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        elevation: 0,
-      leading:  BackLeadingBtn(),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-           ForegroundRecipeImg(size: size),
-            const SizedBox(height: 5,),
-            RecipeImage(size: size,isThemeDark: isThemeDark,),
-            Center(
-                child: Text("Add Ingredients",style: GoogleFonts.aBeeZee(fontSize: 21,fontWeight: FontWeight.bold))),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: IngredientsListWidget(size: size,),
+    return WillPopScope(
+      onWillPop: () async{
+        return _showDiscardDialog();
+      },
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          elevation: 0,
+        leading:   InkWell(
+          onTap: (){
+            _showDiscardDialog();
+          },
+          child: Container(
+            height: 30,
+            width: 90,
+            decoration:  const BoxDecoration(
+              color: greenPrimary,
+              borderRadius: BorderRadius.only(topRight: Radius.circular(50),bottomRight: Radius.circular(50)),
             ),
-            const Divider(color: Colors.grey,height: 1,thickness: 1),
-            const SizedBox(height: 10,),
-            Center(child: Text("Add Recipe Details",style: GoogleFonts.aBeeZee(fontSize: 21,fontWeight: FontWeight.bold))),
-            Form(
-              key: AddRecipePage._formKey,
-                child:Padding(padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  children: [
-                    //name
-                   nameEditText(),
-                    //price
-                    priceEditText(),
-                    //Per Person
-                    perPersonEditText(),
-                    //info about recipe
-                    infoEditText()
-                  ],
-                ),) ),
-            StepsWidget(),
-            Form(
-                key: AddRecipePage._formKeySec,
-                child:Padding(padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: const Icon(Icons.arrow_back_ios_new_rounded,size: 35,),
+          ),
+        ),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+             ForegroundRecipeImg(size: size),
+              const SizedBox(height: 5,),
+              RecipeImage(size: size,isThemeDark: isThemeDark,),
+              Center(
+                  child: Text("Add Ingredients",style: GoogleFonts.aBeeZee(fontSize: 21,fontWeight: FontWeight.bold))),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: IngredientsListWidget(size: size,),
+              ),
+              const Divider(color: Colors.grey,height: 1,thickness: 1),
+              const SizedBox(height: 10,),
+              Center(child: Text("Add Recipe Details",style: GoogleFonts.aBeeZee(fontSize: 21,fontWeight: FontWeight.bold))),
+              Form(
+                key: AddRecipePage._formKey,
+                  child:Padding(padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Column(
                     children: [
-                      Center(child: Text("Add Steps To Bake",style: GoogleFonts.aBeeZee(fontSize: 21,fontWeight: FontWeight.bold))),
-                      titleEditText(),
-                      descriptionEditText(),
+                      //name
+                     nameEditText(),
+                      //price
+                      priceEditText(),
+                      //Per Person
+                      perPersonEditText(),
+                      //info about recipe
+                      infoEditText()
                     ],
                   ),) ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 50),
-              child: LoadingButton(
-                  text: "Add Step", click: (){
-                if(AddRecipePage._formKeySec.currentState!.validate()){
-                  StepsToBake stepsToBake=StepsToBake(title: titleController.text,details: descriptionController.text);
-                   stepsProvider.addStep(stepsToBake);
-                   titleController.clear();
-                   descriptionController.clear();
-                }
-              }),
-            ),
-            const SizedBox(height: 10,),
-            TimeInputButton(
-                isThemeDark: isThemeDark, size: size,
-                onInputTimeDone: (value){
-                  timeToBake=value;
+              StepsWidget(),
+              Form(
+                  key: AddRecipePage._formKeySec,
+                  child:Padding(padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      children: [
+                        Center(child: Text("Add Steps To Bake",style: GoogleFonts.aBeeZee(fontSize: 21,fontWeight: FontWeight.bold))),
+                        titleEditText(),
+                        descriptionEditText(),
+                      ],
+                    ),) ),
+              Padding(
+                padding:  EdgeInsets.symmetric(horizontal: 20.w,vertical: 50),
+                child: LoadingButton(
+                  shadowColor: Colors.transparent,
+                    fontSize: 15.sp,
+                    text: "Add Step", click: (){
+                  if(AddRecipePage._formKeySec.currentState!.validate()){
+                    StepsToBake stepsToBake=StepsToBake(title: titleController.text,details: descriptionController.text);
+                     stepsProvider.addStep(stepsToBake);
+                     titleController.clear();
+                     descriptionController.clear();
+                  }
                 }),
-            ///Add Category
-            Center(
-              child: SizedBox(
-                width: size.width* 3/5,
-                child: MyEditText(
-                  child: Center(
-                    child: CategoryDropDownMenu(
-                      onChanged: (value){
-                       category=value;
-                      }, isThemeDark: isThemeDark,
+              ),
+              const SizedBox(height: 10,),
+              TimeInputButton(
+                  isThemeDark: isThemeDark, size: size,
+                  onInputTimeDone: (value){
+                    timeToBake=value;
+                  }),
+              ///Add Category
+              Center(
+                child: SizedBox(
+                  width: size.width* 3/5,
+                  child: MyEditText(
+                    child: Center(
+                      child: CategoryDropDownMenu(
+                        onChanged: (value){
+                         category=value;
+                        }, isThemeDark: isThemeDark,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            ///Difficulty
-            Center(
-              child: SizedBox(
-                width: size.width* 4.5/10,
-                child: MyEditText(
-                    child: Center(child:
-                      DifficultyDropDownMenu(isThemeDark: isThemeDark, onChanged: (value){
-                        difficulty=value;
-                      }),)),
+              ///Difficulty
+              Center(
+                child: SizedBox(
+                  width: size.width* 4.5/10,
+                  child: MyEditText(
+                      child: Center(child:
+                        DifficultyDropDownMenu(isThemeDark: isThemeDark, onChanged: (value){
+                          difficulty=value;
+                        }),)),
+                ),
               ),
-            ),
-            ///ADD Button
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 30),
-              child: LoadingButton(
-                  isLoading: isLoading,
-                  click: (){
-                if(AddRecipePage._formKey.currentState!.validate()) {
-                  final imageProviderClass = Provider.of<ImageProviderClass>(context, listen: false);
-                  final ingredientProviderClass = Provider.of<IngredientsProvider>(context, listen: false);
-                  final stepsProvider = Provider.of<BakingStepsProvider>(context, listen: false);
-                  if (imageProviderClass.recipeImagePath == null) {
-                   Utils.showToast("Add Recipe Image");
-                  }else if(imageProviderClass.foregroundImagePath ==null){
-                    Utils.showToast("Add Foreground Image");
-                  }else if(timeToBake==null){
-                    Utils.showToast("Add Time To Bake");
-                  }else if(category==null){
-                    Utils.showToast("Select Category");
-                  }else if(ingredientProviderClass.ingredientList==null){
-                    Utils.showToast("Add ingredients");
-                  }else if(stepsProvider.stepsList!.isEmpty){
-                    Utils.showToast("Add Steps To Bake");
-                  }else if(difficulty==null){
-                    Utils.showToast("Add Difficulty level");
-                  }else{
-                    setState(() {
-                      isLoading=true;
-                    });
-                   String?  foregroundImageURL;
-                   String?  recipeImageURL;
-                    //Add Recipe to Database
-                    getImageUrl(imageProviderClass.foregroundImagePath??"",
-                      nameController.text,
-                      "${nameController.text}_foregroundIMG"
-                    ).then((value){
-                      foregroundImageURL=value;
-                      getImageUrl(imageProviderClass.recipeImagePath??"",
-                          nameController.text,
-                          "${nameController.text}_mainIMG").then((value)async{
-                        recipeImageURL=value;
-                        List<Ingredient>? ingredientList = ingredientProviderClass.ingredientList;
-                        List<Ingredient> ingredientListWithURL=[];
-                       // Recipe recipe=Recipe();
-                        await Future.forEach(ingredientList as Iterable<Ingredient>, (Ingredient ingredient) async {
-                         await getImageUrl(ingredient.image!,nameController.text,
-                          "/ingredients/${ingredient.name!}_image").then((value){
-                            Ingredient _ingredeint=ingredient;
-                            _ingredeint.image=value;
-                            ingredientListWithURL.add(_ingredeint);
-                          });
-
-                        }).then((value){
-                          //ADD All Data to DB
-
-                        List<StepsToBake>? bakingSteps=stepsProvider.stepsList;
-                          Recipe recipe=Recipe(
-                              name: nameController.text,
-                              category: category,
-                              timeToBake: timeToBake,
-                              image: recipeImageURL,
-                              imageForeground: foregroundImageURL,
-                              price: int.tryParse(priceController.text),
-                              ingredients: ingredientListWithURL,
-                              perPerson: int.tryParse(personsController.text),
-                              stepsToBakeList: bakingSteps,
-                            difficulty: difficulty,
-                            info: infoController.text,
-                          );
-                          addRecipeToDB(recipe);
-                        }).onError((error, stackTrace){
-                          developer.log(error.toString());
-                          setState(() {
-                            isLoading=false;
-                          });
-                        });
-
+              ///ADD Button
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.w,vertical: 30),
+                child: LoadingButton(
+                    fontSize: 17.sp,
+                    spreadShadow: 0.2,
+                    blurShadow: 20,
+                    isLoading: isLoading,
+                    click: (){
+                  if(AddRecipePage._formKey.currentState!.validate()) {
+                    final imageProviderClass = Provider.of<ImageProviderClass>(context, listen: false);
+                    final ingredientProviderClass = Provider.of<IngredientsProvider>(context, listen: false);
+                    final stepsProvider = Provider.of<BakingStepsProvider>(context, listen: false);
+                    if (imageProviderClass.recipeImagePath.isEmpty) {
+                     Utils.showToast("Add Recipe Image");
+                    }else if(imageProviderClass.foregroundImagePath.isEmpty){
+                      Utils.showToast("Add Foreground Image");
+                    }else if(timeToBake==null){
+                      Utils.showToast("Add Time To Bake");
+                    }else if(category==null){
+                      Utils.showToast("Select Category");
+                    }else if(ingredientProviderClass.ingredientList==null){
+                      Utils.showToast("Add ingredients");
+                    }else if(stepsProvider.stepsList!.isEmpty){
+                      Utils.showToast("Add Steps To Bake");
+                    }else if(difficulty==null){
+                      Utils.showToast("Add Difficulty level");
+                    }else{
+                      setState(() {
+                        isLoading=true;
                       });
-                    });
+                     String?  foregroundImageURL;
+                     String?  recipeImageURL;
+                      //Add Recipe to Database
+                      getImageUrl(imageProviderClass.foregroundImagePath??"",
+                        nameController.text,
+                        "${nameController.text}_foregroundIMG"
+                      ).then((value){
+                        foregroundImageURL=value;
+                        getImageUrl(imageProviderClass.recipeImagePath??"",
+                            nameController.text,
+                            "${nameController.text}_mainIMG").then((value)async{
+                          recipeImageURL=value;
+                          List<Ingredient>? ingredientList = ingredientProviderClass.ingredientList;
+                          List<Ingredient> ingredientListWithURL=[];
+                         // Recipe recipe=Recipe();
+                          await Future.forEach(ingredientList as Iterable<Ingredient>, (Ingredient ingredient) async {
+                           await getImageUrl(ingredient.image!,nameController.text,
+                            "/ingredients/${ingredient.name!}_image").then((value){
+                              Ingredient _ingredeint=ingredient;
+                              _ingredeint.image=value;
+                              ingredientListWithURL.add(_ingredeint);
+                            });
+
+                          }).then((value){
+                            //ADD All Data to DB
+
+                          List<StepsToBake>? bakingSteps=stepsProvider.stepsList;
+                            Recipe recipe=Recipe(
+                                name: nameController.text,
+                                category: category,
+                                timeToBake: timeToBake,
+                                image: recipeImageURL,
+                                imageForeground: foregroundImageURL,
+                                price: int.tryParse(priceController.text),
+                                ingredients: ingredientListWithURL,
+                                perPerson: int.tryParse(personsController.text),
+                                stepsToBakeList: bakingSteps,
+                              difficulty: difficulty,
+                              info: infoController.text,
+                            );
+                            addRecipeToDB(recipe);
+                          }).onError((error, stackTrace){
+                            developer.log(error.toString());
+                            setState(() {
+                              isLoading=false;
+                            });
+                          });
+
+                        });
+                      });
+                    }
                   }
-                }
-              }, text: "ADD",),
-            ),
-          ],
+                }, text: "ADD",),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -496,5 +521,24 @@ class _AddRecipePageState extends State<AddRecipePage> {
       Utils.showAlertDialog(e.message??"Something went wrong", context,()=>Navigator.pop(context));
     }
 
+  }
+  Future<bool> _showDiscardDialog() async {
+    bool? confirmed = await showDialog(
+      context: context,
+      builder: (context) => const MyAlertDialog(
+        title: "Discard Add Recipe",
+        message: "Are You Sure To Discard Add Recipe ?",
+      ),
+    );
+
+    // Handle the case when 'confirmed' is null by assuming it's false
+    confirmed ??= false;
+
+    if (confirmed) {
+      FocusManager.instance.primaryFocus!.unfocus();
+      Navigator.pop(context);
+    }
+
+    return confirmed; //
   }
 }

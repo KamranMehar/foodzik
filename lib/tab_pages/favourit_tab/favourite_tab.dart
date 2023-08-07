@@ -5,7 +5,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzik/const/colors.dart';
 import 'package:foodzik/pages/recipe_details_screen/components/detail_row.dart';
+import 'package:foodzik/tab_pages/favourit_tab/components/icon_with_detail.dart';
 import 'package:foodzik/utils/dialogs.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -169,6 +171,7 @@ final Recipe recipe;
           width: 90.w,
             height: 20.h,
           decoration: BoxDecoration(
+            color: greenPrimary,
             borderRadius: BorderRadius.circular(20),
             image: DecorationImage(
               image: NetworkImage(recipe.imageForeground ?? ""),
@@ -188,6 +191,7 @@ final Recipe recipe;
                 style: GoogleFonts.aBeeZee(
                   fontSize: 23.sp,
                   fontWeight: FontWeight.bold,
+                  color: Colors.white
                 ),
               ),
               Text(
@@ -196,34 +200,35 @@ final Recipe recipe;
                 style: GoogleFonts.aBeeZee(
                   fontSize: 21.sp,
                   fontWeight: FontWeight.w300,
+                  color: Colors.white
                 ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   const Spacer(),
-                  IconUnderTextWidget(
+                  IconUnderTextWidgetFv(
                     icon: SizedBox(
                       height: 25,width: 25,
                       child: Image.asset("assets/chef_hat.png",color: Colors.white,),),
                     text: recipe.difficulty??"",
                   ),
                   const Spacer(),
-                  IconUnderTextWidget(
+                  IconUnderTextWidgetFv(
                     icon: const SizedBox(
                       height: 25,width: 25,
-                      child: Icon(CupertinoIcons.time,),),
+                      child: Icon(CupertinoIcons.time,color: Colors.white,),),
                     text: "${hours=="00"?"":"$hours hr"} ${minutes=="00"?"":"$minutes min"}",
                   ),
                   const Spacer(),
-                  IconUnderTextWidget(
+                  IconUnderTextWidgetFv(
                     icon: const SizedBox(
                       height: 25,width: 25,
-                      child: Icon(CupertinoIcons.person_2,),),
+                      child: Icon(CupertinoIcons.person_2,color: Colors.white,),),
                     text:"${recipe.perPerson??""}",
                   ),
                   const Spacer(),
-                  IconUnderTextWidget(
+                  IconUnderTextWidgetFv(
                     icon: SizedBox(
                       height: 25,width: 25,
                       child: Image.asset("assets/ingredient_no.png",color: Colors.white,),),

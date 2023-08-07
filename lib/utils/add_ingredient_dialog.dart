@@ -167,7 +167,7 @@ class _AddRecipeDialogState extends State<AddRecipeDialog> {
                   const SizedBox(height: 5,),
                     Consumer<ImageProviderClass>(
                     builder: (context, imageProvideClass, _) {
-                      if (imageProvideClass.ingredientImagePath == null) {
+                      if (imageProvideClass.ingredientImagePath.isEmpty) {
                         return InkWell(
                           onTap: () =>
                               imageProvideClass.pickIngredientImage(),
@@ -353,7 +353,7 @@ class _UnitDropDownButtonState extends State<UnitDropDownButton> {
           widget.onChanged!(_selectedOption);
         }
       },
-      items: <String>['Grams', 'KG', 'Ltr','ml']
+      items: <String>['Grams', 'KG', 'Ltr','ml','piece']
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,

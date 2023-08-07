@@ -1,41 +1,40 @@
 class MyUser {
-  String firstName;
-  String lastName;
-  String email;
-  String phoneNumber;
-  String imagePath;
-  String address;
-  String userId;
-  int pin;
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? phoneNumber;
+  String? imagePath;
+  String? address;
+  int? pin;
+  String? userId;
+  String? coordinates;
 
-  MyUser(
-      this.firstName,
-      this.lastName,
-      this.email,
-      this.phoneNumber,
-      this.imagePath,
-      this.address,
-      this.pin,
-      this.userId,
-      );
-
-  // Method to convert JSON data to MyUser object
-
+  MyUser({
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.phoneNumber,
+    this.imagePath,
+    this.address,
+    this.pin,
+    this.userId,
+    this.coordinates,
+  });
 
   factory MyUser.fromJson(Map<dynamic, dynamic> json) {
     return MyUser(
-      json['firstName'],
-      json['lastName'],
-      json['email'],
-      json['phoneNumber'],
-      json['imagePath'],
-      json['address'],
-      json['pin'],
-      json['userId'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      email: json['email'],
+      phoneNumber: json['phoneNumber'],
+      imagePath: json['imagePath'],
+      address: json['address'],
+      pin: json['pin'],
+      userId: json['userId'],
+      coordinates: json['coordinates'],
     );
   }
 
-  // Method to convert MyUser object to JSON data
   Map<String, dynamic> toJson() {
     return {
       'firstName': firstName,
@@ -46,6 +45,7 @@ class MyUser {
       'address': address,
       'pin': pin,
       'userId': userId,
+      'coordinates': coordinates,
     };
   }
 }

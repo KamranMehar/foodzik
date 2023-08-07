@@ -110,11 +110,14 @@ class IngredientExampleTile extends StatelessWidget {
                   child: Image.network(
                     ingredient.image!,
                     fit: BoxFit.contain,
+                    errorBuilder: (context,obh,st){
+                      return const Icon(Icons.error,color: Colors.red,);
+                    },
                   ),
                 )
                     : ClipRRect(
                   borderRadius: BorderRadius.circular(25),
-                  child: Image.file(
+                    child: Image.file(
                     File(ingredient.image!),
                     fit: BoxFit.contain,
                   ),

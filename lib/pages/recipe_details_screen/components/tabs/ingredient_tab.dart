@@ -108,7 +108,14 @@ class IngredientTabTile extends StatelessWidget {
                       ShimmerEffect(height: 90,
                         width: 90,isCircular: false,);
                   }
-                },),
+                },
+              errorBuilder: (context,obj,stackTrace){
+                return Container(
+                  padding: const EdgeInsets.all(10),
+                  child: const Icon(Icons.error,color: Colors.red,),
+                );
+              },
+              ),
             )
           ),
           Text(name,style: GoogleFonts.aBeeZee(fontSize: 14,fontWeight: FontWeight.bold),overflow: TextOverflow.ellipsis,),
