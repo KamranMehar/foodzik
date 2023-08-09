@@ -17,14 +17,14 @@ class UserApprovalTile extends StatelessWidget {
     required this.phoneNumber,
     required this.address,
     required this.email,
-     required this.approve
+     required this.approve,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(15),
-      padding: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(15),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: greenPrimary,
         borderRadius: BorderRadius.circular(20),),

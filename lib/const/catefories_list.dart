@@ -1,5 +1,4 @@
 
-
 const List<String> categories = [
   "Select Category", // Added "Select Category" as the first item
   "Snacks",

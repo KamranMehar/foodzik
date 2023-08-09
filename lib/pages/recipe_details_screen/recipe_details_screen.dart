@@ -199,7 +199,8 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> with SingleTick
                       InfoTab(size: size, info: recipeMap!['info'], isThemeDark: isThemeDark),
                       IngredientsTab(ingredients: List<Map<dynamic, dynamic>>.from(recipeMap!['ingredients']),
                         isThemeDark: isThemeDark, childScrollController: childScrollController, size: size,),
-                       HowToBakeTab(stepList: List<Map<dynamic, dynamic>>.from(recipeMap!['steps']),),
+                       HowToBakeTab(
+                         stepList: List<Map<dynamic, dynamic>>.from(recipeMap!['steps']),),
                 ],
               ),
             ),

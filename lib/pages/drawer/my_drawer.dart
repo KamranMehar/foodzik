@@ -39,7 +39,6 @@ class _MyDrawerState extends State<MyDrawer> {
               const DrawerGreetingText(),
               const SizedBox(height: 10,),
                 SizedBox(height: height,),
-              DrawerTile(onTap: (){}, text: "Notifications"),
                SizedBox(height: height,),
               Consumer<IsAdminProvider>(builder: (context,value,provider){
                 if(value.isAdmin){

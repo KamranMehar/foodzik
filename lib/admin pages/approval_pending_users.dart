@@ -84,7 +84,7 @@ class _UserApprovalPageState extends State<UserApprovalPage> {
               }
 
             }else{
-              return Center(child: CircularProgressIndicator(color: greenPrimary,),);
+              return const Center(child: CircularProgressIndicator(color: greenPrimary,),);
             }
       }),
     );

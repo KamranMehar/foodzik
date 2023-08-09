@@ -21,6 +21,7 @@ import '../../const/colors.dart';
 import '../../model classes/Recipe.dart';
 import '../../model classes/steps_to_bake.dart';
 import '../../utils/dialogs.dart';
+import '../../utils/sendNotification.dart';
 import 'components/cart_ingredient_tile.dart';
 
 
@@ -282,7 +283,7 @@ class _CartTabState extends State<CartTab> with SingleTickerProviderStateMixin{
           await getRef.remove().then((value) {
             isLoading=false;
             Utils.showToast("Order Received");
-            Navigator.pushNamed(context, "/mainScreen");
+            Navigator.pushNamedAndRemoveUntil(context, "/mainScreen", (route) => false);
           });
         });
         if (kDebugMode) {

@@ -44,7 +44,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   final fcmToken = await FirebaseMessaging.instance.getToken();
-  develper.log(fcmToken.toString());
+  develper.log("current token: $fcmToken");
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

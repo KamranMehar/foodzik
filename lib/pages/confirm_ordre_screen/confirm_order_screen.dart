@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'dart:developer'as developer show log;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
@@ -10,6 +10,7 @@ import 'package:foodzik/model%20classes/Recipe.dart';
 import 'package:foodzik/model%20classes/order_model.dart';
 import 'package:foodzik/my_widgets/my_button.dart';
 import 'package:foodzik/provider%20classes/cart_provider.dart';
+import 'package:foodzik/provider%20classes/is_admin_provider.dart';
 import 'package:foodzik/provider%20classes/special_order_cart_provider.dart';
 import 'package:foodzik/utils/sendNotification.dart';
 import 'package:geocoding/geocoding.dart';
@@ -37,21 +38,26 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
   bool isLoadingLoc=false;
   bool isLoading=false;
   Order order=Order();
+  //String adminFcm="";
 
   @override
   void initState() {
     super.initState();
     setUserDataToControllers();
+
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     orderList = (ModalRoute.of(context)?.settings.arguments as List<Map>?)!;
+  //  getAdminFcmToken();
   }
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -215,17 +221,18 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                         "phoneNumber": phoneController.text,
                         "userName":userName,
                         'totalPrice': totalPrice
-                      }).then((value){
+                      }).then((value)async{
                         Utils.showToast("Order Placed Successfully");
                         setState(() {
                           isLoading=false;
                         });
-                        SendPushNotification.sendNotification("New Order","${userName} is Placed Order");
-                        Future.delayed(const Duration(seconds: 2),(){
-                          final cartProvider=Provider.of<CartProvider>(context,listen: false);
-                          cartProvider.clearList();
-                          Navigator.pushNamed(context, "/mainScreen");
-                        });
+
+                          SendPushNotification.sendNotification("New Order","$userName is Placed Order",);
+                          Future.delayed(const Duration(seconds: 2),(){
+                            final cartProvider=Provider.of<CartProvider>(context,listen: false);
+                            cartProvider.clearList();
+                            Navigator.pushNamedAndRemoveUntil(context, "/mainScreen", (route) => false);
+                          });
 
                       }).onError((error, stackTrace){
                         Utils.showToast("Unable To place Order \nCheck our Internet And try Again");
@@ -370,5 +377,15 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
       }
     }
   }
+
+/*  Future<void> getAdminFcmToken() async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("admin_token/fcmToken");
+    ref.once().then((event) async {
+      final dataSnapshot = event.snapshot;
+
+      final adminFcm = dataSnapshot.value as String; // Treat it as a String
+      developer.log("Fetch Token: $adminFcm");
+    });
+  }*/
 
 }
