@@ -38,6 +38,7 @@ dependencies:
   google_fonts: ^4.0.3
   firebase_core: ^2.8.0
   firebase_database: ^10.0.16
+  firebase_messaging:
   firebase_auth: any
   image_picker: ^0.8.6
   fluttertoast: ^8.2.1
@@ -45,7 +46,7 @@ dependencies:
   geocoding: any
   awesome_dialog: ^3.0.2
   firebase_storage: ^11.0.16
-  http:
+  http: ^1.1.0
   shared_preferences:
   flutter_zoom_drawer: ^3.0.4+1
   package_info: ^2.0.0
@@ -56,6 +57,7 @@ dependencies:
   url_launcher:
   font_awesome_flutter: ^10.5.0
   permission_handler: ^10.4.3
+  flutter_local_notifications: ^9.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -10,6 +10,8 @@ import 'package:foodzik/model%20classes/Recipe.dart';
 import 'package:foodzik/model%20classes/order_model.dart';
 import 'package:foodzik/my_widgets/my_button.dart';
 import 'package:foodzik/provider%20classes/cart_provider.dart';
+import 'package:foodzik/provider%20classes/special_order_cart_provider.dart';
+import 'package:foodzik/utils/sendNotification.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -63,12 +65,24 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
       body: Column(
         children: [
           Consumer<CartProvider>(builder: (context, value, child) {
-            totalPrice=value.totalPrice.toString();
-            return Text(
-              "Total: ${value.totalPrice}",
-              style: GoogleFonts.aBeeZee(
-                  fontSize: 18.sp, fontWeight: FontWeight.bold),
-            );
+            if(value.totalPrice==0){
+              return Consumer<SpecialOrderCartProvider>(builder: (context,special,child){
+                totalPrice=special.totalPrice.toString();
+                return Text(
+                  "Total: ${special.totalPrice}",
+                  style: GoogleFonts.aBeeZee(
+                      fontSize: 18.sp, fontWeight: FontWeight.bold),
+                );
+              });
+            }else{
+              totalPrice=value.totalPrice.toString();
+              return Text(
+                "Total: ${value.totalPrice}",
+                style: GoogleFonts.aBeeZee(
+                    fontSize: 18.sp, fontWeight: FontWeight.bold),
+              );
+            }
+
           }),
           Column(
             children: [
@@ -206,6 +220,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                         setState(() {
                           isLoading=false;
                         });
+                        SendPushNotification.sendNotification("New Order","${userName} is Placed Order");
                         Future.delayed(const Duration(seconds: 2),(){
                           final cartProvider=Provider.of<CartProvider>(context,listen: false);
                           cartProvider.clearList();
@@ -254,7 +269,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
         if (userData.containsKey('firstName') || userData.containsKey('lastName')) {
           userName ="${userData['firstName'].toString()} ${userData['lastName'].toString()}";
         }
-        setState(() {});
+       // setState(() {});
       } else {
         return false;
         // The user data does not exist.

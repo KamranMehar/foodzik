@@ -112,7 +112,6 @@ class _HomePageState extends State<HomePage> {
             alignment: Alignment.bottomCenter,
               child: BNV(size: size, isThemeLight: theme.brightness==Brightness.light,
                 onPress: (value) {
-                print(value);
                 _pageController.jumpToPage(value);
                 },)),
         ],

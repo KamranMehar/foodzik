@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzik/pages/drawer/components/drawer_greeting.dart';
+import 'package:foodzik/provider%20classes/cart_provider.dart';
+import 'package:foodzik/provider%20classes/special_order_cart_provider.dart';
 import 'package:foodzik/provider%20classes/theme_model.dart';
 import 'package:foodzik/my_widgets/drawer_tile.dart';
 import 'package:foodzik/utils/dialogs.dart';
@@ -39,7 +41,18 @@ class _MyDrawerState extends State<MyDrawer> {
                 SizedBox(height: height,),
               DrawerTile(onTap: (){}, text: "Notifications"),
                SizedBox(height: height,),
-              DrawerTile(onTap: (){}, text: "Order History"),
+              Consumer<IsAdminProvider>(builder: (context,value,provider){
+                if(value.isAdmin){
+                 return DrawerTile(onTap: (){
+                    Navigator.pushNamed(context,  '/customerOrderScreen');
+                  }, text: "Customer Orders");
+                }else{
+                return  DrawerTile(onTap: (){
+
+                  }, text: "Order History");
+                }
+              }),
+
                SizedBox(height: height,),
               DrawerTile(onTap: ()async{
                 bool? confirmed = await showDialog(
@@ -50,7 +63,12 @@ class _MyDrawerState extends State<MyDrawer> {
                   ),
                 );
                 if(confirmed??false){
+
                   await FirebaseAuth.instance.signOut().then((value){
+                    final cartProvider=Provider.of<CartProvider>(context,listen: false);
+                     cartProvider.clearList();
+                     final specialCartProvider=Provider.of<SpecialOrderCartProvider>(context,listen: false);
+                    specialCartProvider.clearList();
                     Navigator.pushNamedAndRemoveUntil(context, "/firstScreen", (route) => false);
                   });
                 }

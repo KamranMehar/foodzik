@@ -22,8 +22,8 @@ class CartProvider with ChangeNotifier{
   }
 
   clearList(){
+    totalPrice=0;
     recipeList.clear();
-    notifyListeners();
   }
 
 }

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
@@ -385,6 +386,7 @@ class _SignupPageState extends State<SignupPage> {
           "phoneNumber":user!.phoneNumber,
           "pin":user!.pin,
           "imagePath":user!.imagePath,
+          'fcmToken':user!.fcmToken
         }).then((value)async{
           //save pin Locally
           SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -423,7 +425,6 @@ class _SignupPageState extends State<SignupPage> {
     }
 
   }
-
 
   pickImage() async {
     final pickerFile = await picker.pickImage(source: ImageSource.gallery,imageQuality: 40);
@@ -509,5 +510,16 @@ class _SignupPageState extends State<SignupPage> {
     for (int i = 0; i < placemarks.length; i++) {
       print("INDEX $i ${placemarks[i]}");
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+   user.fcmToken= getToken().toString();
+  }
+
+  Future<String?> getToken()async{
+      final fcmToken = await FirebaseMessaging.instance.getToken();
+    return fcmToken;
   }
 }

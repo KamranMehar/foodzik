@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../notificationservice/notificationservice.dart';
 import '../../utils/dialogs.dart';
 
 class PinScreen extends StatefulWidget {
@@ -36,6 +37,9 @@ class _PinScreenState extends State<PinScreen> {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     InputProvider inputProvider = Provider.of<InputProvider>(context, listen: false);
+
+    LocalNotificationService.initialize(context);
+
     //String input="";
     return Scaffold(
       appBar: AppBar(title: FoodzikTitle(),

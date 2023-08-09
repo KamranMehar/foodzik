@@ -27,7 +27,7 @@ class Recipe {
       required this.info,
     });
 
-  factory Recipe.fromJson(Map<String, dynamic> json) {
+  factory Recipe.fromJson(Map<dynamic, dynamic> json) {
     return Recipe(
       name: json['name'],
       imageForeground: json['imageForeground'],
@@ -44,6 +44,7 @@ class Recipe {
       info: json['info'],
     );
   }
+
 
   Map<String, dynamic> toJson() {
     return {

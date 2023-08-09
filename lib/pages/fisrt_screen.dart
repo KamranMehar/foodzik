@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:foodzik/my_widgets/my_button.dart';
 import 'package:foodzik/pages/home/home_page.dart';
 import 'package:foodzik/pages/home/ui_componets/foodzik_title.dart';

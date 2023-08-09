@@ -44,8 +44,6 @@ class RecipeTile extends StatelessWidget {
             }else{
               Navigator.pushNamedAndRemoveUntil(context, "/mainScreen", (route) => false);
             }
-            print(recipeMap);
-
           },
           onLongPress: () {
             if (adminProvider.isAdmin) {

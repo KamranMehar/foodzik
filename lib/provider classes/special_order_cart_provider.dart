@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 class SpecialOrderCartProvider with ChangeNotifier{
-
   int totalPrice=0;
-  static List<Map> recipeList=[];
+  List<Map> recipeList=[];
 
   addToCart(Map recipe){
     recipeList.add(recipe);
@@ -20,5 +19,9 @@ class SpecialOrderCartProvider with ChangeNotifier{
     return recipeList.any((item) => item['name'] == recipe['name']);
   }
 
+  clearList(){
+    totalPrice=0;
+    recipeList.clear();
+  }
 
 }

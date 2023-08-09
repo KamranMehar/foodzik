@@ -8,6 +8,7 @@ class MyUser {
   int? pin;
   String? userId;
   String? coordinates;
+  String? fcmToken;
 
   MyUser({
     this.firstName,
@@ -18,7 +19,7 @@ class MyUser {
     this.address,
     this.pin,
     this.userId,
-    this.coordinates,
+    this.coordinates, this. fcmToken,
   });
 
   factory MyUser.fromJson(Map<dynamic, dynamic> json) {
@@ -32,6 +33,7 @@ class MyUser {
       pin: json['pin'],
       userId: json['userId'],
       coordinates: json['coordinates'],
+      fcmToken: json['fcmToken']
     );
   }
 
@@ -46,6 +48,7 @@ class MyUser {
       'pin': pin,
       'userId': userId,
       'coordinates': coordinates,
+      'fcmToken': fcmToken
     };
   }
 }

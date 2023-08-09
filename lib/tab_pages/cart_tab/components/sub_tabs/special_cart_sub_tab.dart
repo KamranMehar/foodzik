@@ -18,8 +18,8 @@ class _SpecialCartSubTabState extends State<SpecialCartSubTab> {
   @override
   Widget build(BuildContext context) {
     return Consumer<SpecialOrderCartProvider>(
-        builder: (context,cartProvider,child) {
-          if(cartProvider.totalPrice==0){
+        builder: (context,specialProvider,child) {
+          if(specialProvider.totalPrice==0){
             return const Center(child: Text("Special Order Cart"),);
           }else {
             return Column(
@@ -39,22 +39,22 @@ class _SpecialCartSubTabState extends State<SpecialCartSubTab> {
                     children: [
                       Text(
                         "Total: ", style: GoogleFonts.abel(fontSize: 21.sp),),
-                      Text("${cartProvider.totalPrice}",
+                      Text("${specialProvider.totalPrice}",
                         style: GoogleFonts.abel(fontSize: 21.sp),),
                     ],
                   ),
                 ),
                 Expanded(
                   child: ListView.builder(
-                      itemCount: SpecialOrderCartProvider.recipeList.length,
+                      itemCount: specialProvider.recipeList.length,
                       itemBuilder: (context, index) {
                         if (index <
-                            SpecialOrderCartProvider.recipeList.length - 1) {
+                            specialProvider.recipeList.length - 1) {
                           return CartTile(onDelete: () {
-                            cartProvider.removeFromCart(
-                                SpecialOrderCartProvider.recipeList[index]);
+                            specialProvider.removeFromCart(
+                                specialProvider.recipeList[index]);
                           },
-                              recipeMap: SpecialOrderCartProvider
+                              recipeMap: specialProvider
                                   .recipeList[index]
                           );
                         } else {
@@ -62,26 +62,31 @@ class _SpecialCartSubTabState extends State<SpecialCartSubTab> {
                             children: [
                               CartTile(
                                   onDelete: () {
-                                    cartProvider.removeFromCart(
-                                        SpecialOrderCartProvider
+                                    specialProvider.removeFromCart(
+                                        specialProvider
                                             .recipeList[index]);
                                   },
-                                  recipeMap: SpecialOrderCartProvider
+                                  recipeMap: specialProvider
                                       .recipeList[index]
                               ),
-                              Container(
-                                alignment: Alignment.center,
-                                width: 95.w,
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 5),
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: greenPrimary
+                              InkWell(
+                                onTap:(){
+                                  Navigator.pushNamed(context, "/confirmOrderScreen", arguments: specialProvider.recipeList);
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: 95.w,
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 5),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 5),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: greenPrimary
+                                  ),
+                                  child: Text("Place Order",
+                                    style: GoogleFonts.abel(fontSize: 18.sp),),
                                 ),
-                                child: Text("Place Order",
-                                  style: GoogleFonts.abel(fontSize: 18.sp),),
                               ),
                               SizedBox(height: 15.h,)
                             ],

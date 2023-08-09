@@ -1,9 +1,12 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodzik/admin%20pages/Edit_recipe/edit_recipe.dart';
 import 'package:foodzik/admin%20pages/add_recipe/add_recipe_page.dart';
 import 'package:foodzik/admin%20pages/approval_pending_users.dart';
+import 'package:foodzik/admin%20pages/customer_order_screen/customer_order_screen.dart';
 import 'package:foodzik/admin%20pages/pending_order_details/pending_order_details.dart';
+import 'package:foodzik/firebase_options.dart';
 import 'package:foodzik/pages/confirm_ordre_screen/confirm_order_screen.dart';
 import 'package:foodzik/pages/create_special_order/create_special_order.dart';
 import 'package:foodzik/pages/fisrt_screen.dart';
@@ -26,11 +29,22 @@ import 'package:foodzik/provider%20classes/is_admin_provider.dart';
 import 'package:foodzik/provider%20classes/pin_input_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'notificationservice/notificationservice.dart';
 import 'provider classes/theme_model.dart';
+import 'dart:developer'as develper show log;
+
+Future<void> backgroundHandler(RemoteMessage message) async {
+  develper.log(message.data.toString());
+  develper.log(message.notification!.title.toString());
+}
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  develper.log(fcmToken.toString());
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -80,6 +94,7 @@ class MyApp extends StatelessWidget {
                   '/editRecipeScreen': (context, {arguments}) => const EditRecipeScreen(),
                   '/confirmOrderScreen': (context, {arguments}) => const ConfirmOrderScreen(),
                   '/pendingOrderDetailScreen': (context, {arguments}) => const PendingOrderDetails(),
+                  '/customerOrderScreen': (context, {arguments}) => const CustomerOrderScreen(),
                 },
                 home: const PinScreen(),
                 debugShowCheckedModeBanner: false,
