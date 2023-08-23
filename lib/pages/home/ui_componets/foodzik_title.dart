@@ -38,6 +38,6 @@ class SloganText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("Let\'s find\nWhat to cock today",style: GoogleFonts.viga(fontSize: fontSize,));
+    return Text("Let\'s find\nWhat to cook today",style: GoogleFonts.viga(fontSize: fontSize,));
   }
 }
