@@ -40,7 +40,6 @@ class _LoginPageState extends State<LoginPage> {
             },
             icon: const Icon(
               Icons.arrow_back_ios_rounded,
-              color: Colors.black,
               size: 30,
             )),
       ),

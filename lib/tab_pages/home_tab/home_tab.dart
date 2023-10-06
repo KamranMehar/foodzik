@@ -147,9 +147,11 @@ class _HomeTabState extends State<HomeTab> {
                             context: context,
                             removeTop: true,
                             child: GridView.builder(
-                                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                                gridDelegate:  const SliverGridDelegateWithMaxCrossAxisExtent(
                                   childAspectRatio: 1 / 1.7,
-                                  maxCrossAxisExtent: 180,
+                                  maxCrossAxisExtent: 200,
+                                  mainAxisExtent: 250
                                 ),
                                 itemCount: list.length,
                                 itemBuilder: (context,index){
