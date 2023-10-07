@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../utils/dialogs.dart';
+import '../utils/utils.dart';
 
 class CreateSpecialOrderProvider with ChangeNotifier{
   List<Map<dynamic, dynamic>> _ingredients=[];

@@ -7,7 +7,7 @@ import 'package:foodzik/my_widgets/my_button.dart';
 import 'package:foodzik/my_widgets/my_edit_text.dart';
 import 'package:foodzik/provider%20classes/image_provider.dart';
 import 'package:foodzik/const/colors.dart';
-import 'package:foodzik/utils/dialogs.dart';
+import 'package:foodzik/utils/utils.dart';
 import 'package:foodzik/utils/time_to_bake.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';

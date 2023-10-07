@@ -10,13 +10,14 @@ import 'package:foodzik/pages/home/ui_componets/user_profile.dart';
 import 'package:foodzik/provider%20classes/is_admin_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../admin pages/admin_orders/admin_orders_screen.dart';
 import '../../provider classes/delete_recipe_provider.dart';
 import '../../tab_pages/cart_tab/cart_tab.dart';
 import '../../tab_pages/favourit_tab/favourite_tab.dart';
 import '../../tab_pages/home_tab/home_tab.dart';
-import '../../utils/dialogs.dart';
+import '../../utils/utils.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -30,6 +31,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     final isAdminProvider=Provider.of<IsAdminProvider>(context,listen: false);
     isAdminProvider.checkUserIsAdmin();
+    getPin(FirebaseAuth.instance.currentUser!.uid);
     super.initState();
   }
   final PageController _pageController = PageController(initialPage: 1);
@@ -143,4 +145,23 @@ class _HomePageState extends State<HomePage> {
       return '';
     }
   }
+
+  Future<int?> getPin(String userID) async {
+    final DatabaseReference ref = FirebaseDatabase.instance.ref('Users/$userID/pin');
+    final DataSnapshot snapshot = await ref.get();
+
+    if (snapshot.exists) {
+      final dynamic value = snapshot.value;
+
+      if(value!=null){
+        SharedPreferences pref=await SharedPreferences.getInstance();
+        pref.setString("pin", value.toString());
+      }
+        return value;
+    } else {
+      return null;
+    }
+  }
+
+
 }

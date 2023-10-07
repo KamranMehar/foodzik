@@ -13,7 +13,7 @@ import '../../const/colors.dart';
 import '../../pages/home/ui_componets/foodzik_title.dart';
 import '../../provider classes/delete_recipe_provider.dart';
 import '../../provider classes/theme_model.dart';
-import '../../utils/dialogs.dart';
+import '../../utils/utils.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);

@@ -11,6 +11,7 @@ class CartIngredientTile extends StatelessWidget {
     required this.quantity,
     required this.image, required this.isThemeDark,
     required this.unit, required this.price,
+    this.showImage=true,
 
   }) : super(key: key);
   final bool isThemeDark;
@@ -19,6 +20,7 @@ class CartIngredientTile extends StatelessWidget {
   final String image;
   final String unit;
   final int price;
+  final showImage;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,9 @@ class CartIngredientTile extends StatelessWidget {
       padding: const EdgeInsets.all(3),
       margin: const EdgeInsets.all(5),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          if(showImage)
           SizedBox(
               height: 7.h,
               width: 7.h,

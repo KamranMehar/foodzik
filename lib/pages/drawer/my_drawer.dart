@@ -6,17 +6,17 @@ import 'package:foodzik/provider%20classes/cart_provider.dart';
 import 'package:foodzik/provider%20classes/special_order_cart_provider.dart';
 import 'package:foodzik/provider%20classes/theme_model.dart';
 import 'package:foodzik/my_widgets/drawer_tile.dart';
-import 'package:foodzik/utils/dialogs.dart';
+import 'package:foodzik/utils/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart';
-
+import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../provider classes/is_admin_provider.dart';
 
 
 class MyDrawer extends StatefulWidget {
-  bool isAdmin;
+ final bool isAdmin;
    MyDrawer({Key? key,this.isAdmin=false, }) : super(key: key);
 
   @override
@@ -47,7 +47,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   }, text: "Customer Orders");
                 }else{
                 return  DrawerTile(onTap: (){
-
+                    Navigator.pushNamed(context, "/orderHistory");
                   }, text: "Order History");
                 }
               }),
@@ -114,10 +114,32 @@ class _MyDrawerState extends State<MyDrawer> {
                   if (snapshot.hasData) {
                     return Text('Version : ${snapshot.data!.version}',style: GoogleFonts.aBeeZee(fontSize: 14),);
                   } else   {
-                    return Text('');
+                    return const Text('');
                   }
                 },
               ),
+              const Spacer(),
+              InkWell(
+                onTap: ()async{
+                  bool? result=await Utils.showAreYouSureDialog("Logout", "Are You Sure To Logout", context);
+                  if(result!=null && result==true){
+                    await FirebaseAuth.instance.signOut().then((value)async{
+                      SharedPreferences pref=await SharedPreferences.getInstance();
+                      pref.remove("pin").then((value){
+                          Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                      });
+                    }).onError((error, stackTrace) =>Utils.snackBar("Unable To Logout try Again Later", context,true));
+                  }
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  Icon(Icons.logout),
+                  Text("Logut"),
+                  ],
+                ),
+              ),
+              SizedBox(height: 5.h,),
             ],
           ),
         ),
@@ -154,14 +176,15 @@ class _ThemeChangeWidgetState extends State<ThemeChangeWidget> {
       duration: const Duration(milliseconds: 600),
       padding: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
-          color: modelTheme.isDark?Color(0xffD9D9D9):Color(0xff888282),
+          color: modelTheme.isDark?const Color(0xffD9D9D9):const Color(0xff888282),
           borderRadius: BorderRadius.circular(15)
       ),
      width: MediaQuery.of(context).size.width* 4/5,
       child: Row(
         children: [
           const SizedBox(width: 10,),
-          Icon(modelTheme.isDark==true?Icons.brightness_2:Icons.brightness_7,color: modelTheme.isDark?Colors.black:Colors.white,),
+          Icon(modelTheme.isDark==true?Icons.brightness_2:Icons.brightness_7,color:
+          modelTheme.isDark?Colors.black:Colors.white,),
           const Spacer(),
           SizedBox(
             child: CupertinoSwitch(

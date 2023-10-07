@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../notificationservice/notificationservice.dart';
-import '../../utils/dialogs.dart';
+import '../../utils/utils.dart';
 
 class PinScreen extends StatefulWidget {
   const PinScreen({Key? key}) : super(key: key);
@@ -51,7 +51,7 @@ class _PinScreenState extends State<PinScreen> {
         children: [
           Text("Enter The Pin You Have Set",style: GoogleFonts.aBeeZee(fontSize: 14),),
           SizedBox(width: MediaQuery.of(context).size.width,),
-          Spacer(),
+          const Spacer(),
        isLoading==true?const Center(child: LoadingPinRow(),):
        FutureBuilder<String?>(
           future: getPinPref(),
@@ -83,7 +83,7 @@ class _PinScreenState extends State<PinScreen> {
                               height: 50.0,
                               decoration:
                               BoxDecoration(
-                                 color: val.input.length>=1? color:Colors.transparent,
+                                 color: val.input.isNotEmpty? color:Colors.transparent,
                                   shape: BoxShape.circle,
                                   border: Border.all(color: theme.brightness==Brightness.light?Colors.black:Colors.white,width: 5)
                               ),

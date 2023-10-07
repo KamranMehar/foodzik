@@ -2,7 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:developer' as developer show log;
-import '../utils/dialogs.dart';
+import '../utils/utils.dart';
 
 
 class DeleteRecipeProvider with ChangeNotifier {

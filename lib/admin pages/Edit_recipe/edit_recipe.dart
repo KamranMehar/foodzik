@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzik/provider%20classes/delete_recipe_provider.dart';
 import 'package:foodzik/provider%20classes/theme_model.dart';
-import 'package:foodzik/utils/dialogs.dart';
+import 'package:foodzik/utils/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';

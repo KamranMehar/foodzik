@@ -4,13 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 
 class MyButton extends StatelessWidget {
-   MyButton({Key? key,required this.onTap,required this.title,this.fontSize=32.0,
+   const MyButton({Key? key,required this.onTap,required this.title,this.fontSize=32.0,
    this.padding=10,
    }) : super(key: key);
-VoidCallback onTap;
-String title;
-double fontSize;
-double padding;
+final VoidCallback onTap;
+final String title;
+final double fontSize;
+final double padding;
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +24,9 @@ double padding;
           border: Border.all(color: Colors.greenAccent,width: 1),
         boxShadow: const [
           BoxShadow(color: greenPrimary,
-          spreadRadius: 4,
-          blurRadius: 20,
-          offset: Offset(4, 4))
+          spreadRadius: 2,
+          blurRadius: 15,
+          offset: Offset(0, 0))
         ]
         ),
         child: Center(child: Text(title.toUpperCase(),style: GoogleFonts.aBeeZee(

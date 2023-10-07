@@ -59,6 +59,7 @@ dependencies:
   permission_handler: ^10.4.3
   flutter_local_notifications: ^9.2.0
   rive: ^0.9.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

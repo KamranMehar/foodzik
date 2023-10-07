@@ -21,7 +21,7 @@ import 'package:foodzik/provider%20classes/image_provider.dart';
 import 'package:foodzik/provider%20classes/ingredients_provider.dart';
 import 'package:foodzik/provider%20classes/theme_model.dart';
 import 'package:foodzik/utils/add_ingredient_dialog.dart';
-import 'package:foodzik/utils/dialogs.dart';
+import 'package:foodzik/utils/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'dart:developer' as developer show log;

@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../../utils/dialogs.dart';
+import '../../../utils/utils.dart';
 import 'dart:developer' as developer show log;
 class BookmarkRecipe extends StatefulWidget {
   const BookmarkRecipe({Key? key, required this.recipe}) : super(key: key);

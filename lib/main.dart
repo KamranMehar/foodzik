@@ -13,6 +13,7 @@ import 'package:foodzik/pages/fisrt_screen.dart';
 import 'package:foodzik/pages/home/home_page.dart';
 import 'package:foodzik/pages/login_page.dart';
 import 'package:foodzik/pages/main_screen.dart';
+import 'package:foodzik/pages/order_history_screen.dart';
 import 'package:foodzik/pages/pin_screen/pin_screen.dart';
 import 'package:foodzik/pages/recipe_details_screen/components/add_person_dialog.dart';
 import 'package:foodzik/pages/recipe_details_screen/recipe_details_screen.dart';
@@ -95,6 +96,7 @@ class MyApp extends StatelessWidget {
                   '/confirmOrderScreen': (context, {arguments}) => const ConfirmOrderScreen(),
                   '/pendingOrderDetailScreen': (context, {arguments}) => const PendingOrderDetails(),
                   '/customerOrderScreen': (context, {arguments}) => const CustomerOrderScreen(),
+                  '/orderHistory': (context, {arguments}) => const OrderHistoryScreen(),
                 },
                 home: const PinScreen(),
                 debugShowCheckedModeBanner: false,

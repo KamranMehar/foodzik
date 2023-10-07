@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,12 +14,10 @@ import 'package:foodzik/tab_pages/cart_tab/components/sub_tabs/special_cart_sub_
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'dart:developer'as developer show log;
 import '../../const/colors.dart';
 import '../../model classes/Recipe.dart';
 import '../../model classes/steps_to_bake.dart';
-import '../../utils/dialogs.dart';
-import '../../utils/sendNotification.dart';
+import '../../utils/utils.dart';
 import 'components/cart_ingredient_tile.dart';
 
 

@@ -12,7 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../provider classes/cart_provider.dart';
 import '../../provider classes/theme_model.dart';
-import '../../utils/dialogs.dart';
+import '../../utils/utils.dart';
 import 'components/main_image.dart';
 import 'components/tabs/bake_recipe.dart';
 

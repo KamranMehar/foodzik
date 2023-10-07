@@ -1,5 +1,3 @@
-
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -189,17 +187,32 @@ class Utils{
       );
     });
   }
-  static snackBar(String message, BuildContext context){
+  static snackBar(String message, BuildContext context,bool isError){
     return ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            backgroundColor: Colors.red,
-            content: Text(message ,style: GoogleFonts.poppins(),))
+            backgroundColor:isError? Colors.red:CupertinoColors.activeGreen,
+            content: Text(message ,style: GoogleFonts.poppins(color: Colors.white),))
     );
   }
 
   static void fieldFocusChange(BuildContext context , FocusNode current , FocusNode nextFocus){
     current.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
+  }
+
+  static Future<bool?> showAreYouSureDialog(String title, String question, BuildContext context) async {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return YesNoDialogWidget(
+          title: title,
+          question: question,
+          onSelect: (bool select) {
+            Navigator.pop(context, select);
+          },
+        );
+      },
+    );
   }
 
 }
@@ -274,7 +287,7 @@ class MyAlertDialog extends StatelessWidget {
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.grey,
+                    backgroundColor: Colors.grey,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -286,18 +299,47 @@ class MyAlertDialog extends StatelessWidget {
                     Navigator.of(context).pop(true);
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: greenPrimary,
+                    backgroundColor: greenPrimary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-                  child: Text("OK"),
+                  child: const Text("OK"),
                 ),
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class YesNoDialogWidget extends StatelessWidget {
+  const YesNoDialogWidget({Key? key, required this.title, required this.question, required this.onSelect});
+  final String title;
+  final String question;
+  final Function(bool) onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(title),
+      content: Text(question),
+      actions: [
+        ElevatedButton(
+          onPressed: () {
+            onSelect(true);
+          },
+          child: const Text("Yes"),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text("No"),
+        ),
+      ],
     );
   }
 }

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:foodzik/const/colors.dart';
 import 'package:foodzik/pages/recipe_details_screen/components/detail_row.dart';
 import 'package:foodzik/tab_pages/favourit_tab/components/icon_with_detail.dart';
-import 'package:foodzik/utils/dialogs.dart';
+import 'package:foodzik/utils/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'dart:developer'as developer show log ;

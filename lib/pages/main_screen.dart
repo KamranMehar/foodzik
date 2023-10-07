@@ -32,7 +32,7 @@ class _MainScreenState extends State<MainScreen> {
         style: DrawerStyle.defaultStyle,
         drawerShadowsBackgroundColor: greenPrimary,
         borderRadius: 35,
-        mainScreenTapClose: false,
+        mainScreenTapClose: true,
         slideWidth:  MediaQuery.of(context).size.width * 0.65,
         angle: 0.0,//180*(pi/180.0),
       ),

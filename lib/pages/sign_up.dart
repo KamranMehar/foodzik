@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:foodzik/my_widgets/my_button.dart';
 import 'package:foodzik/my_widgets/my_edit_text.dart';
 import 'package:foodzik/const/colors.dart';
-import 'package:foodzik/utils/dialogs.dart';
+import 'package:foodzik/utils/utils.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -63,7 +63,6 @@ class _SignupPageState extends State<SignupPage> {
             },
             icon: const Icon(
               Icons.arrow_back_ios_rounded,
-              color: Colors.black,
               size: 30,
             )),
       ),
@@ -135,8 +134,9 @@ class _SignupPageState extends State<SignupPage> {
                               if(value!.isEmpty){
                                 return "First Name is EMpty";
                               }else{
-                                user!.firstName=firstNameController.text;
+                                user.firstName=firstNameController.text;
                               }
+                              return null;
                             },
                           ),
                         ),
@@ -157,8 +157,9 @@ class _SignupPageState extends State<SignupPage> {
                             if(value!.isEmpty){
                               return "Last Name is Empty";
                             }else{
-                              user!.lastName=lastNameController.text;
+                              user.lastName=lastNameController.text;
                             }
+                            return null;
                            },
                          ),
                        ),
@@ -180,8 +181,9 @@ class _SignupPageState extends State<SignupPage> {
                               if(value!.isEmpty){
                                 return "Phone number is Empty";
                               }else{
-                                user!.phoneNumber=phoneNumberController.text;
+                                user.phoneNumber=phoneNumberController.text;
                               }
+                              return null;
                             },
                           ),
                         ),
@@ -203,8 +205,9 @@ class _SignupPageState extends State<SignupPage> {
                             if(value!.isEmpty){
                               return "Email is Empty";
                             }else{
-                              user!.email=emailController.text;
+                              user.email=emailController.text;
                             }
+                            return null;
                            },
                          ),
                        ),
@@ -228,7 +231,8 @@ class _SignupPageState extends State<SignupPage> {
                                      visiblePass=false;
                                    }
                                    setState(() {});
-                                 }, icon: visiblePass? const Icon(Icons.visibility_off,color: Colors.white,):  Icon(Icons.visibility,color: Colors.white,)),
+                                 }, icon: visiblePass? const Icon(Icons.visibility_off,color: Colors.white,):
+                             const Icon(Icons.visibility,color: Colors.white,)),
                              border: InputBorder.none,
                              hintText: "Password",
                              hintStyle: const TextStyle(color: Colors.white70,fontSize: 18),
@@ -240,6 +244,7 @@ class _SignupPageState extends State<SignupPage> {
                             }else{
                              // user.password=passwordController.text;
                             }
+                            return null;
                            },
                          ),
                        ),
@@ -265,8 +270,9 @@ class _SignupPageState extends State<SignupPage> {
                                     if(value!.isEmpty){
                                       return "Address is Empty";
                                     }else{
-                                      user!.address=addressController.text;
+                                      user.address=addressController.text;
                                     }
+                                    return null;
                                   },
                                 ),
                               ),
@@ -326,8 +332,9 @@ class _SignupPageState extends State<SignupPage> {
                             }else if(value.length<4){
                               return "Enter 4 Digit Number !";
                             }else{
-                             user!.pin=int.parse(pinController.text);
+                             user.pin=int.parse(pinController.text);
                             }
+                            return null;
                            },
                          ),
                        ),
@@ -370,23 +377,23 @@ class _SignupPageState extends State<SignupPage> {
         //after user created uploading image to storage
       firebase_storage.Reference storageRef = firebase_storage
           .FirebaseStorage.instance
-          .ref("UsersImages/${user!.firstName}_${user!.lastName}");
+          .ref("UsersImages/${user.firstName}_${user.lastName}");
       firebase_storage.UploadTask imageUploadTask= storageRef.putFile(titleImage!.absolute);
       await Future.value(imageUploadTask).then((value) async{
         //after image uploaded get the getting the download url of the stored image
         var imageUrl = await storageRef.getDownloadURL();
-        user!.imagePath=imageUrl;
+        user.imagePath=imageUrl;
         //upload detail to database in the pending approval list for registration
         databaseRef.child(auth.currentUser!.uid.toString()).set({
           "userId": auth.currentUser!.uid,
           "email": email,
-          "firstName": user!.firstName,
-          "lastName":user!.lastName,
-          "address":user!.address,
-          "phoneNumber":user!.phoneNumber,
-          "pin":user!.pin,
-          "imagePath":user!.imagePath,
-          'fcmToken':user!.fcmToken
+          "firstName": user.firstName,
+          "lastName":user.lastName,
+          "address":user.address,
+          "phoneNumber":user.phoneNumber,
+          "pin":user.pin,
+          "imagePath":user.imagePath,
+          'fcmToken':user.fcmToken
         }).then((value)async{
           //save pin Locally
           SharedPreferences prefs = await SharedPreferences.getInstance();

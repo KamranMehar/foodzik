@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:foodzik/model%20classes/user.dart';
 import 'package:foodzik/my_widgets/my_button.dart';
 import 'package:foodzik/my_widgets/my_edit_text.dart';
-import 'package:foodzik/utils/dialogs.dart';
+import 'package:foodzik/utils/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import '../const/colors.dart';
 
 
@@ -18,9 +19,19 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController=TextEditingController();
   TextEditingController passwordController=TextEditingController();
+  FocusNode emailFocus=FocusNode();
+  FocusNode passwordFocus=FocusNode();
   bool visiblePass=false;
-  late MyUser user;
+  late MyUser user=MyUser();
   bool loading=false;
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordFocus.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size=MediaQuery.of(context).size;
@@ -32,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
         centerTitle: true,
         title: Text(
           "Login",
-          style: GoogleFonts.aBeeZee(color: greenTextColor, fontSize: 30),
+          style: GoogleFonts.aBeeZee(color: greenTextColor, fontSize: 20.sp),
         ),
         leading: IconButton(
             onPressed: () {
@@ -56,86 +67,118 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Padding(
               padding: const EdgeInsets.all(10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(child: Text("Welcome back",style: GoogleFonts.aBeeZee(color: greenTextColor,fontSize: 15),),),
-                 SizedBox(height: size.height* 1/5,),
-                MyEditText(
-                  child:  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: TextFormField(
-                      autofillHints: const [AutofillHints.email],
-                      keyboardType: TextInputType.emailAddress,
-                      controller: emailController,
-                      style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 18),
-                      decoration:  const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Email Address",
-                        hintStyle: TextStyle(color: Colors.white70,fontSize: 18),
+              child: Form(
+                key: _key,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(child: Text("Welcome back",style: GoogleFonts.aBeeZee(color: greenTextColor,fontSize: 15),),),
+                   SizedBox(height: size.height* 1/5,),
+                  MyEditText(
+                    child:  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: TextFormField(
+                        focusNode: emailFocus,
+                        autofillHints: const [AutofillHints.email],
+                        keyboardType: TextInputType.emailAddress,
+                        controller: emailController,
+                        style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 18),
+                        decoration:  const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Email Address",
+                          hintStyle: TextStyle(color: Colors.white70,fontSize: 18),
+                        ),
+                        validator: (value){
+                          if(value!.isEmpty){
+                            return "  Email is Empty";
+                          }else{
+                            user.email=emailController.text;
+                          }
+                          return null;
+                        },
+                        minLines: 1,
+                        textInputAction: TextInputAction.next,
+                        onTapOutside: (_){
+                          FocusManager.instance.primaryFocus!.unfocus();
+                        },
+                        onFieldSubmitted: (_){
+                          Utils.fieldFocusChange(context, emailFocus, passwordFocus);
+                        },
                       ),
-                      validator: (value){
-                        if(value!.isEmpty){
-                          return "Email is Empty";
-                        }else{
-                          user.email=emailController.text;
-                        }
-                      },
                     ),
                   ),
-                ),
-                const SizedBox(height: 20,),
-                //set Password
-                MyEditText(
-                  child:  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: TextFormField(
-                      autofillHints: const [AutofillHints.password],
-                      obscureText: visiblePass? false:true,
-                      keyboardType: TextInputType.visiblePassword,
-                      controller: passwordController,
-                      style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 18),
-                      decoration:   InputDecoration(
-                        suffixIcon: IconButton(
-                            color: Colors.grey,
-                            onPressed: (){
-                              if(!visiblePass){
-                                visiblePass=true;
-                              }else{
-                                visiblePass=false;
-                              }
-                              setState(() {});
-                            }, icon: visiblePass? const Icon(Icons.visibility_off,color: Colors.white,):  Icon(Icons.visibility,color: Colors.white,)),
-                        border: InputBorder.none,
-                        hintText: "Password",
-                        hintStyle: const TextStyle(color: Colors.white70,fontSize: 18),
+                  const SizedBox(height: 20,),
+                  // Password
+                  MyEditText(
+                    child:  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: TextFormField(
+                        focusNode: passwordFocus,
+                        autofillHints: const [AutofillHints.password],
+                        obscureText: visiblePass? false:true,
+                        keyboardType: TextInputType.visiblePassword,
+                        controller: passwordController,
+                        style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 18),
+                        decoration:   InputDecoration(
+                          suffixIcon: IconButton(
+                              color: Colors.grey,
+                              onPressed: (){
+                                if(!visiblePass){
+                                  visiblePass=true;
+                                }else{
+                                  visiblePass=false;
+                                }
+                                setState(() {});
+                              }, icon: visiblePass? const Icon(Icons.visibility_off,color: Colors.white,):  const Icon(Icons.visibility,color: Colors.white,)),
+                          border: InputBorder.none,
+                          hintText: "Password",
+                          hintStyle: const TextStyle(color: Colors.white70,fontSize: 18),
+                        ),
+                        validator: (value){
+                          if(value!.isEmpty){
+                            return "  Password is Empty";
+                          }else{
+                           // user.password=passwordController.text;
+                          }
+                          return null;
+                        },
+                        textInputAction: TextInputAction.done,
+                        onTapOutside: (_){
+                          FocusManager.instance.primaryFocus!.unfocus();
+                        },
+                        onFieldSubmitted: (_){
+                          if(_key.currentState!.validate()){
+                            setState(() {
+                              loading=true;
+                            });
+                            loginUser(emailController.text, passwordController.text);
+                          }
+                        },
                       ),
-
-                      validator: (value){
-                        if(value!.isEmpty){
-                          return "Password is Empty";
-                        }else{
-                         // user.password=passwordController.text;
-                        }
-                      },
                     ),
                   ),
-                ),
-                  SizedBox(height: size.width* 3/5,),
-                  //Button
-                  LoadingButton(
-                    padding: 15,
-                    isLoading: loading,
-                      text: "Login",
-                      click: (){
-                      setState(() {
-                        loading=true;
-                      });
-                      loginUser(emailController.text, passwordController.text);
-                      }),
-                  SizedBox(height: size.width* 1/5,),
-              ],),
+                    SizedBox(height: size.width* 3/5,),
+                    //Button
+                    Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 20.w,vertical: 5.h),
+                      child: LoadingButton(
+                        padding: 15,
+                        isLoading: loading,
+                          fontSize: 17.sp,
+                          text: "Login",
+                          click: (){
+                          if(_key.currentState!.validate()){
+                            setState(() {
+                              loading=true;
+                            });
+                            loginUser(emailController.text, passwordController.text);
+                          }
+                          }),
+                    ),
+                    SizedBox(height: size.width* 1/5,),
+                ],),
+              ),
             )
           ],
         ),
@@ -149,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await auth.signInWithEmailAndPassword(email: email, password:password).then((value)
       =>{
-        Utils.showToast("Login Successfully"),
+        Utils.snackBar("Login Successfully",context,false),
       setState(() {
       loading=false;
       }),
