@@ -74,6 +74,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     });
                   });
                 }
+
               }, text: "Logout"),
 
               Consumer<IsAdminProvider>(
