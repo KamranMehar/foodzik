@@ -119,27 +119,6 @@ class _MyDrawerState extends State<MyDrawer> {
                 },
               ),
               const Spacer(),
-              InkWell(
-                onTap: ()async{
-                  bool? result=await Utils.showAreYouSureDialog("Logout", "Are You Sure To Logout", context);
-                  if(result!=null && result==true){
-                    await FirebaseAuth.instance.signOut().then((value)async{
-                      SharedPreferences pref=await SharedPreferences.getInstance();
-                      pref.remove("pin").then((value){
-                          Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
-                      });
-                    }).onError((error, stackTrace) =>Utils.snackBar("Unable To Logout try Again Later", context,true));
-                  }
-                },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                  Icon(Icons.logout),
-                  Text("Logut"),
-                  ],
-                ),
-              ),
-              SizedBox(height: 5.h,),
             ],
           ),
         ),

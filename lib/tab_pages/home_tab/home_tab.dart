@@ -143,28 +143,28 @@ class _HomeTabState extends State<HomeTab> {
                         list.clear();
                         if(map!=null){
                           list = map.values.toList();
-                          return MediaQuery.removePadding(
-                            context: context,
-                            removeTop: true,
-                            child: GridView.builder(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                                gridDelegate:  const SliverGridDelegateWithMaxCrossAxisExtent(
-                                  childAspectRatio: 1 / 1.7,
-                                  maxCrossAxisExtent: 200,
-                                  mainAxisExtent: 250
-                                ),
-                                itemCount: list.length,
-                                itemBuilder: (context,index){
-                                  return
-                                    RecipeTile(
-                                      recipeMap: list[index],
-                                      isThemeDark: isThemeDark,
-                                      name: list[index]!['name'],
-                                      price:list[index]!["price"],
-                                      image:list[index]!["image"],
-                                    );
-                                }),
-                          );
+                          return GridView.builder(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                              gridDelegate:  const SliverGridDelegateWithMaxCrossAxisExtent(
+                                childAspectRatio: 1 / 1.7,
+                                maxCrossAxisExtent: 200,
+                                mainAxisExtent: 250
+                              ),
+                              itemCount: list.length+2,
+                              itemBuilder: (context,index){
+                              if(index==list.length || index==list.length+1){
+                                return SizedBox(height: 15.h,);
+                              }else {
+                                return
+                                  RecipeTile(
+                                    recipeMap: list[index],
+                                    isThemeDark: isThemeDark,
+                                    name: list[index]!['name'],
+                                    price: list[index]!["price"],
+                                    image: list[index]!["image"],
+                                  );
+                              }
+                              });
                         }else{
                           return const Center(child: Text("No Recipe Found"),);
                         }

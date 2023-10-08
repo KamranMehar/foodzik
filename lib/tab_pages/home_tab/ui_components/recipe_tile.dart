@@ -132,21 +132,24 @@ class RecipeTile extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Text(
-                        name,
-                        style: GoogleFonts.aBeeZee(
-                          color: isThemeDark ? Colors.white : Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      Padding(
+                        padding:  EdgeInsets.symmetric(horizontal: 5.w),
+                        child: Text(
+                          name,
+                          style: GoogleFonts.aBeeZee(
+                            color: isThemeDark ? Colors.white : Colors.black,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
                         ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
                       ),
                       Text(
                         "Rs:/ $price",
                         style: GoogleFonts.aBeeZee(
                           color: isThemeDark ? Colors.white : Colors.black,
-                          fontSize: 18,
+                          fontSize: 15.sp,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -156,13 +159,13 @@ class RecipeTile extends StatelessWidget {
                           Icon(
                             CupertinoIcons.time_solid,
                             color: isThemeDark ? Colors.white : Colors.black,
-                            size: 20,
+                            size: 15.sp,
                           ),
                           Text(
                             " $timeToBake",
                             style: GoogleFonts.aBeeZee(
                               color: isThemeDark ? Colors.white : Colors.black,
-                              fontSize: 14,
+                              fontSize: 14.sp,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
