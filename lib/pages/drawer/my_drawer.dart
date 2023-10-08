@@ -63,12 +63,15 @@ class _MyDrawerState extends State<MyDrawer> {
                 );
                 if(confirmed??false){
 
-                  await FirebaseAuth.instance.signOut().then((value){
+                  await FirebaseAuth.instance.signOut().then((value)async{
                     final cartProvider=Provider.of<CartProvider>(context,listen: false);
                      cartProvider.clearList();
                      final specialCartProvider=Provider.of<SpecialOrderCartProvider>(context,listen: false);
                     specialCartProvider.clearList();
-                    Navigator.pushNamedAndRemoveUntil(context, "/firstScreen", (route) => false);
+                    SharedPreferences pref=await SharedPreferences.getInstance();
+                    pref.remove("pin").then((value){
+                      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                    });
                   });
                 }
               }, text: "Logout"),
@@ -180,3 +183,16 @@ class _ThemeChangeWidgetState extends State<ThemeChangeWidget> {
     );
   }
 }
+
+
+/*onTap: ()async{
+                  bool? result=await Utils.showAreYouSureDialog("Logout", "Are You Sure To Logout", context);
+                  if(result!=null && result==true){
+                    await FirebaseAuth.instance.signOut().then((value)async{
+                      SharedPreferences pref=await SharedPreferences.getInstance();
+                      pref.remove("pin").then((value){
+                          Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                      });
+                    }).onError((error, stackTrace) =>Utils.snackBar("Unable To Logout try Again Later", context,true));
+                  }
+                }*/
